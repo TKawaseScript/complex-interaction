@@ -1,5 +1,3 @@
-#gsubの略称に関してデーターシート元を編集して削除
-
 #libraryの読み込みとデータの読み込み
 library(rEDM)
 library(dplyr)
@@ -10,7 +8,6 @@ retioCount<-function(x){if(sum(x>0)/38>0.5){
   return(sum(x<0)/38)
 }
 }
-
 
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
 
@@ -50,7 +47,6 @@ for(i in 1:length(effectlist00)){
 
 
 #結果側の種名の省略化
-
 effectlisttp0<-gsub("Cunningtonia_longiventralis","C_longiventralis",effectlisttp0)
 
 effectlisttp0<-gsub("Synodontis_multipunctatus","S_multipunctatus",effectlisttp0)
@@ -350,7 +346,7 @@ basedatatp0<-cbind(listtp0$cause,listtp0$effect,causemeantp0,effectmeantp0,cause
 colnames(basedatatp0)<-c("cause","effect","causemeantp0","effectmeantp0","causesdtp0","effectsdtp0","causehabtp0","effecthabtp0")
 #colnames(basedatatp0)<-c("cause","effect","strength","causepopmean","effectpopmean","causepopsd","effectpopsd","causehabitat","effecthabitat")
 
-#write.csv(basedatatp0,"basedatatp0.csv")
+write.csv(basedatatp0,"basedatatp0.csv")
 
 #種間相互作用の原因側のリストoutput
 causetp0count<-vector()
@@ -611,164 +607,3 @@ for(i in 1:length(spsmaptp0)){
 
 
 names(sumsmap)<-names(spsmaptp0)
-
-#10/26編集
-#TRUEが正
-keystoneSign<-list()
-for(i in 1:length(sumsmap)){
-    keystoneSign[[i]]<-sumsmap[[i]]>0
-}
-
-for(i in 1:length(keystoneSign)){
-  keystoneSign[[i]]<-gsub("TRUE","Positive",keystoneSign[[i]])
-  keystoneSign[[i]]<-gsub("FALSE","Negative",keystoneSign[[i]]) 
-}
-
-
-smapsumabs<-NULL
-for(i in 1:length(sumsmap)){
-  smapsumabs[[i]]<-apply(as.data.frame(sumsmap[[i]]),MARGIN=2,abs)
-}
-
-keystoneSumAbs<-list()
-for(i in 1:length(smapsumabs)){
-  keystoneSumAbs[[i]]<-cbind(smapsumabs[[i]],keystoneSign[[i]])
-}
-
-names(sumsmap)<-names(spsmaptp0)
-
-write.csv(capture.output(sumsmap),"sumsmap.csv")
-
-names(keystoneSumAbs)<-names(spsmaptp0)
-
-#sdの計算
-smapsd<-NULL
-for(i in 1:length(spsmaptp0)){
-  smapsd[[i]]<-apply(as.data.frame(spsmaptp0[[i]][[1]]),MARGIN=2,sd,na.rm = TRUE)
-}
-
-#meanの計算
-smapmean<-NULL
-for(i in 1:length(spsmaptp0)){
-  smapmean[[i]]<-apply(as.data.frame(spsmaptp0[[i]][[1]]),MARGIN=2,mean,na.rm = TRUE)
-}
-
-
-keystoneRatioPN<-NULL
-for(i in 1:4){
-  keystoneRatioPN[[i]]<-apply(spsmaptp0[[i]][[1]][,c(-1,-ncol(spsmaptp0[[i]][[1]]))],2,retioCount)
-}
-
-keystoneRatioPN[[5]]<-retioCount(spsmaptp0[[5]][[1]][,c(-1,-ncol(spsmaptp0[[5]][[1]]))])
-
-for(i in 6:12){
-  keystoneRatioPN[[i]]<-apply(spsmaptp0[[i]][[1]][,c(-1,-ncol(spsmaptp0[[i]][[1]]))],2,retioCount)
-}
-
-
-keystoneRatioPN[[13]]<-retioCount(spsmaptp0[[13]][[1]][,c(-1,-ncol(spsmaptp0[[5]][[1]]))])
-
-
-for(i in 14:19){
-  keystoneRatioPN[[i]]<-apply(spsmaptp0[[i]][[1]][,c(-1,-ncol(spsmaptp0[[i]][[1]]))],2,retioCount)
-}
-
-keystoneRatioPN[[20]]<-retioCount(spsmaptp0[[20]][[1]][,c(-1,-ncol(spsmaptp0[[5]][[1]]))])
-
-for(i in 21:length(spsmaptp0)){
-  keystoneRatioPN[[i]]<-apply(spsmaptp0[[i]][[1]][,c(-1,-ncol(spsmaptp0[[i]][[1]]))],2,retioCount)
-}
-
-names(keystoneRatioPN)<-names(spsmaptp0)
-
-#結果側から見てSmap係数を各個体数で除した後の和が最大なものの抽出
-
-smapkeystonesumabsindex<-NULL
-for(i in 1:length(smapsumabs)){
-  smapkeystonesumabsindex[[i]]<-c(rownames(keystoneSumAbs[[i]])[which.max(keystoneSumAbs[[i]][,1])],keystoneSumAbs[[i]][which.max(keystoneSumAbs[[i]][,1]),],keystoneRatioPN[[i]][which.max(keystoneSumAbs[[i]][,1])])
-}
-
-names(smapkeystonesumabsindex)<-names(spsmaptp0)
-
-#character(0)がいるのでerrorが出る
-for(i in 1:12){
-  names(smapkeystonesumabsindex[[i]])<-c("cause","sumToAbs","sign","ratio")
-}
-
-#13個目はcharacter(0)
-names(smapkeystonesumabsindex[[14]])<-c("cause","sumToAbs","sign","ratio")
-
-#15個目はcharacter(0)
-
-for(i in 16:24){
-  names(smapkeystonesumabsindex[[i]])<-c("cause","sumToAbs","sign","ratio")
-}
-
-#25個目はcharacter(0)
-
-
-smapkeystonesumabsindex$L_lemairii[1]<-"A_dewindti"
-
-smapkeystonesumabsindex$L_labiatus[1]<-"L_attenuatus"
-
-
-causeabssum <-NULL
-effectabssum <-NULL
-strengthabssum <-NULL
-strengthsign<-NULL
-strengthratio<-NULL
-
-for(i in 1:length(smapkeystonesumabsindex)){
-  causeabssum[i]<- smapkeystonesumabsindex[[i]][1]
-  effectabssum[i]<-names(smapkeystonesumabsindex)[[i]]
-  strengthabssum[i]<- smapkeystonesumabsindex[[i]][2]
-  strengthsign[i]<- smapkeystonesumabsindex[[i]][3]
-  strengthratio[i]<- smapkeystonesumabsindex[[i]][4]
-  
-}
-
-strengthabssum<-as.numeric(strengthabssum)
-strengthratio<-as.numeric(strengthratio)
-
-
-
-
-
-
-dataframeabssumkeystoneindex<-data.frame("cause"=causeabssum,
-                                         "effect"=effectabssum,
-                                         "strength"=strengthabssum,
-                                         "sign"=strengthsign,
-                                         "ratio"=strengthratio)
-
-dataframeabssumkeystoneindex<-dataframeabssumkeystoneindex[!is.na(dataframeabssumkeystoneindex$cause),]
-table(dataframeabssumkeystoneindex$cause)
-
-
-abssumindexkeystoneCauseRename<-NULL
-for(i in 1:length(dataframeabssumkeystoneindex$cause)){
-  abssumindexkeystoneCauseRename[i]<-sp_food_coltp0[dataframeabssumkeystoneindex$cause[i]==sp_food_coltp0$cause,]$bindre.namesp
-}
-
-abssumindexkeystoneEffectRename<-NULL
-for(i in 1:length(dataframeabssumkeystoneindex$effect)){
-  abssumindexkeystoneEffectRename[i]<-sp_food_coltp0[dataframeabssumkeystoneindex$effect[i]==sp_food_coltp0$cause,]$bindre.namesp
-}
-
-dataframeabssumkeystoneindex$cause<-abssumindexkeystoneCauseRename
-
-dataframeabssumkeystoneindex$effect<-abssumindexkeystoneEffectRename
-
-write.csv(dataframeabssumkeystoneindex,"abssumindexkeystone.csv")
-
-
-keystoneCorrelationcolpositiveSign<-gsub("Positive","1",dataframeabssumkeystoneindex$sign)
-keystoneCorrelationcolpositiveSign<-gsub("Negative","0",keystoneCorrelationcolpositiveSign)
-
-keystoneCorrelationcolpositiveSign<-as.numeric(keystoneCorrelationcolpositiveSign)
-
-keystoneCorrelationcolnegativeSign<-gsub("Negative","1",dataframeabssumkeystoneindex$sign)
-keystoneCorrelationcolnegativeSign<-gsub("Positive","0",keystoneCorrelationcolnegativeSign)
-
-keystoneCorrelationcolnegativeSign<-as.numeric(keystoneCorrelationcolnegativeSign)
-

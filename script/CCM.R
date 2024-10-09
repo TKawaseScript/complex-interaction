@@ -2,24 +2,37 @@
 ###  読み込み ###
 #################
 
-#renv::snapshot() #libraryのバージョンを保存
-#renv::restore() #libraryのバージョンを管理(読み込んでもらう)
-
 library(rEDM)
 library(dplyr)
 par(family="Times")
 
 set.seed(1)
 
-
 Hori=read.csv("horikasengasensus_ccm_16May2021.csv",header=T)
+
+
+summary(Hori)
+View(Hori)
+
+summary(Hori)
 
 ######################
 ###種名と種数の確認###
 ######################
 
 SMLsize<-subset(Hori,Hori$size!="SSsize")
+table(SMLsize$size)
+View(SMLsize)
 sp_list<-unique(SMLsize$species_ccm)
+
+
+#sp_list=sp_list_all[c(-35)];length(sp_list)
+
+##############
+###年の確認###
+##############
+
+table(SMLsize$year);max(SMLsize$year);min(SMLsize$year)
 
 ############################################
 ### すべての種の年変動をタイムシリーズ化 ###
@@ -79,9 +92,7 @@ TN_west=ts(N,start=min(Hori_west$year),frequency=1)
 ###東と西を結合###
 TimeSeries_40a=cbind(rbind(TN_east,TN_west))
 
-write.csv(TimeSeries_40a,"TimeSeries_40a.csv")
-
-apply(TimeSeries_40a,2,sd)
+write.csv(TimeSeries_40a,"TimeSeries_40.csv")
 
 
 ###############################################
@@ -98,8 +109,6 @@ write.csv(colnames(TimeSeries_40a)[!TimeSeries_over10index],"less10popsp.csv")
 
 
 TimeSeries_40<-TimeSeries_40a[,colnames(TimeSeries_40a)[TimeSeries_over10index]]
-
-
 
 z<-scale(TimeSeries_40)
 
@@ -203,6 +212,8 @@ zzz_list<-CCM_list
 
 zzz_list<-cbind(c(1:length(zzz_list)),zzz_list)
 
+View(zzz_list)
+
 write.csv(CCM_list,"CCM_list.csv")
 
 
@@ -231,12 +242,14 @@ colnames(z)<-gsub("Xenotilapia_flavipinnis","X_flavipinnis",colnames(z))
 #CCMに適応するための時系列データの抽出
 zzz<-z[,CCM_list]
 scalesp_list<-CCM_list
+View(zzz)
 
 
 zzz_list<-colnames(zzz)
 
 zzz_list<-cbind(length(zzz_list),zzz_list)
 
+colnames(zzz)
 
 #埋め込み次元の選択
 E_with_MaxRHOs=c(rep(NA,ncol(zzz)))
@@ -353,6 +366,8 @@ stopCluster(cl)
 #CCMで推定された因果関係のリスト化
 cal.listtp0<-mapply(rep, 1:length(ccmalltp0),0)
 
+#8/28一旦CCMの内容を保存する
+
 
 for(f in 1:length(ccmalltp0)){
   for(S in 1:length(ccmalltp0[[f]])){
@@ -398,7 +413,7 @@ write.csv(listtp0,"listtp0.csv")
 countcausetp0<-t(table(listtp0[,1]))
 counteffecttp0<-t(table(listtp0[,2]))
 
-#バージョンを管理しているので不必要？
+
 #ver1.10.3の例
 z = read.csv("datascale.csv")
 
