@@ -2,6 +2,8 @@
 ###  読み込み ###
 #################
 
+renv::restore()
+
 library(rEDM)
 library(dplyr)
 par(family="Times")
