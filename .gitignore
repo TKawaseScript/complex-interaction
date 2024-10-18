@@ -52,3 +52,7 @@ renv/staging/
 
 # R documentation files
 man/*.Rd
+
+#R package recoader
+script/*
+!renv.lock

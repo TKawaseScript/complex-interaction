@@ -83,9 +83,8 @@ for(i in 1:length(names(eachunlist0))){
 #Smapを計算するための非線形性指標の計算
 spthetas<-list()
 for(i in 1:length(spdatasmap)){
-  spthetas[[i]]<-block_lnlp(spdatasmap[[i]],method="s-map",theta=c(0,1e-04,3e-04,0.001,0.003,0.01,0.03,0.1,0.3,0.5,0.75,1,1.5,2,3,4,6,8),silent=T,lib=c(matrix(c(1,20,21,40))),pred=c(matrix(c(1,20,21,40))))
+  spthetas[[i]]<-block_lnlp(spdatasmap[[i]],method="s-map",theta=c(0,1e-04,3e-04,0.001,0.003,0.01,0.03,0.1,0.3,0.5,0.75,1,1.5,2,3,4,6,8),silent=T,lib=c(matrix(c(1,20,21,40),ncol=2, byrow=T)),pred=c(matrix(c(1,20,21,40),ncol=2, byrow=T)))
 }
-
 #非線形性指標の最大値の抽出
 spbesttheta<-list()
 for(i in 1:length(spthetas)){
@@ -95,7 +94,7 @@ for(i in 1:length(spthetas)){
 #Smap係数の計算
 spdatasmaplnlp<-list()
 for(i in 1:length(spdatasmap)){
-  spdatasmaplnlp[[i]]<-block_lnlp(spdatasmap[[i]],method="s-map",theta=spbesttheta[[i]],pred = c(matrix(c(1,20,21,40))),silent=T,save_smap_coefficients=T)
+  spdatasmaplnlp[[i]]<-block_lnlp(spdatasmap[[i]],method="s-map",theta=spbesttheta[[i]],pred = c(matrix(c(1,20,21,40),ncol=2, byrow=T)),lib=c(matrix(c(1,20,21,40),ncol=2, byrow=T)),silent=T,save_smap_coefficients=T)
 }
 
 #Smap係数のリストのrename
