@@ -2,8 +2,13 @@
 ###  読み込み ###
 #################
 
-renv::restore()
+###Set R-4.2.3
+### install rEDM 0.6.9
+### install renv
 
+library(renv)
+
+renv::restore()
 library(rEDM)
 library(dplyr)
 par(family="Times")
@@ -307,7 +312,7 @@ foreach(f = 1 :length(colnames(zzz))) %do% {
   par(oma=c(3,3,3,0),mar=c(1,1,3,1),mgp=c(10,0.7,0),mfrow=c(5,6))
   foreach(S = 1:ncol(zzz)) %do% {
     lib.size <- c((as.numeric(E_list[S,2])+1):40)
-    cmxy <- ccm(zzz,E=as.numeric(E_list[S,2]),lib_column=colnames(zzz)[S],target_column=DD,lib_sizes=lib.size,lib=c(matrix(c(1,20,21,40))),tp=0,num_samples=1000,replace=F,RNGseed=1)
+    cmxy <- ccm(zzz,E=as.numeric(E_list[S,2]),lib_column=colnames(zzz)[S],target_column=DD,lib_sizes=lib.size,pred=c(matrix(c(1,20,21,40),ncol=2,byrow=T)),lib=c(matrix(c(1,20,21,40),ncol=2,byrow=T)),tp=0,num_samples=1000,replace=F,RNGseed=1)
     ccmeach[[S]]<-cmxy
     x_xmap_y_means <- ccm_means(cmxy,na.rm=T)
     cmxy_sd <-list()
