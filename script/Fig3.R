@@ -1,3 +1,4 @@
+#透明度の設定どうするか？
 library(caret)
 library(tools)
 library(dplyr)
