@@ -378,8 +378,8 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
              vertex.label.cex=0.7,
              vertex.label.family="Times",
              vertex.label.font=4,
-             edge.width=(correlation_Hori$ratio)*1.8,
-             edge.arrow.size=(correlation_Hori$ratio)*1.8,
+             edge.width=(correlation_Hori$ratio)*1,
+             edge.arrow.size=(correlation_Hori$ratio)*1,
              vertex.label.color="black",
              vertex.color=Hori_graph_col,
              vertex.label.dist=0,
@@ -390,9 +390,6 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
 
 par(family="Times")
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0posww8), col=unique(SPCOLtp0posww8),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
-
-pdf("Fig1.pdf")
-par(oma=c(0,0,0,0),mar=c(0,0,2,0),mgp=c(0,0,0),mfrow=c(2,2))
 
 
 

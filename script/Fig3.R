@@ -1,4 +1,3 @@
-#透明度の設定どうするか？
 library(caret)
 library(tools)
 library(dplyr)
@@ -132,28 +131,8 @@ igraph_ww8sscale<-scale(igraph_ww8SmapMeanAbs, center = igraph_ww8s_mean_min, sc
 
 
 pdf("Fig3.pdf")
-par(oma=c(0,0,0,0),mar=c(0,0,0,0),mgp=c(0,0,0),mfrow=c(1,2))
 
-#Fig3a(population Size)
-plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
-             vertex.frame.color=NA,
-             edge.curved=0.3,
-             vertex.label.cex=0.7,
-             vertex.label.family="Times",
-             vertex.label.font=4,
-             vertex.size=SPSIZEtp0ww8*0.2,
-             edge.width=igraph_ww8sscale,
-             edge.arrow.width=igraph_ww8sscale,
-             edge.arrow.size=0.2,
-             vertex.label.color="black",
-             vertex.color=SPCOLtp0ww8,
-             vertex.label.dist=0,
-             edge.color=rgb(igraph_allww8s$Neg,0,igraph_allww8s$Pos)
-             
-)
-
-
-#Fig3b(betweenness Size)
+#Fig3(betweenness Size)
 plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
              vertex.frame.color=NA,
              edge.curved=0.3,
@@ -161,15 +140,16 @@ plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
              vertex.label.family="Times",
              vertex.label.font=4,
              vertex.size=SPCOLtp0betww8*0.2,
-             edge.width=igraph_ww8sscale,
+             edge.width=log(igraph_ww8sscale),
              edge.arrow.width=igraph_ww8sscale,
              edge.arrow.size=0.2,
              vertex.label.color="black",
              vertex.color=SPCOLtp0ww8,
              vertex.label.dist=0,
-             edge.color=rgb(igraph_allww8s$Neg,0,igraph_allww8s$Pos)
+             edge.color=rgb(igraph_allww8s$Neg,0,igraph_allww8s$Pos,alpha=igraph_allww8s$ratio-min(igraph_allww8s$ratio)+0.1)
              
 )
 
+dev.off()
 
 
