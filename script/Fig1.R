@@ -81,7 +81,6 @@ igraph_negww8s<-subset(intertp0,intertp0$strength=="negative")
 
 igraphdatatp0posww8<-graph(t(cbind(igraph_posww8s$cause,igraph_posww8s$effect)))
 
-igraphdatatp0posww8<-igraph::simplify(igraphdatatp0posww8)
 
 SPCOLtp0posww8=NULL
 for(i in 1:length(V(igraphdatatp0posww8))){
@@ -101,6 +100,7 @@ for(i in 1:length(V(igraphdatatp0posww8))){
 }
 SPORDERtp0posww8
 
+#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
 SPCOLtp0nameposww8=NULL
 for(i in 1:length(V(igraphdatatp0posww8))){
   SPCOLtp0nameposww8=c(SPCOLtp0nameposww8,as.character(sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0posww8)$name[i],]$re.namesp))
@@ -113,7 +113,6 @@ for(i in 1:length(V(igraphdatatp0posww8))){
 }
 SPCOLtp0popposww8<-as.numeric(SPCOLtp0popposww8)
 SPCOLtp0popposww8
-
 
 SPCOLtp0nameposww8<-gsub(" ","\n",SPCOLtp0nameposww8)
 
@@ -161,8 +160,6 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
 
 igraphdatatp0negww8<-graph(t(cbind(igraph_negww8s$cause,igraph_negww8s$effect)))
 
-igraphdatatp0negww8<-igraph::simplify(igraphdatatp0negww8)
-
 SPCOLtp0negww8=NULL
 for(i in 1:length(V(igraphdatatp0negww8))){
   SPCOLtp0negww8=c(SPCOLtp0negww8,as.character(sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0negww8)$name[i],]$col7))
@@ -181,6 +178,7 @@ for(i in 1:length(V(igraphdatatp0negww8))){
 }
 SPORDERtp0negww8
 
+#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
 SPCOLtp0namenegww8=NULL
 for(i in 1:length(V(igraphdatatp0negww8))){
   SPCOLtp0namenegww8=c(SPCOLtp0namenegww8,as.character(sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0negww8)$name[i],]$re.namesp))
@@ -189,7 +187,7 @@ SPCOLtp0namenegww8
 
 
 SPCOLtp0popnegww8=NULL
-for(i in 1:length(V(igraphdatatp0posww8))){
+for(i in 1:length(V(igraphdatatp0negww8))){
   SPCOLtp0popnegww8=c(SPCOLtp0popnegww8,as.character(sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0negww8)$name[i],]$popmean))
 }
 SPCOLtp0popnegww8<-as.numeric(SPCOLtp0popnegww8)
@@ -220,20 +218,20 @@ igraph_negww8sscale<-scale(igraph_negww8s$ratio, center = igraph_negww8s_ratio_m
 
 #Fig1b
 plot.igraph2(igraphdatatp0negww8,layout=lay.crctp0negww8,
-             vertex.frame.color=NA,
-             edge.curved=0.3,
-             vertex.label.cex=0.7,
-             vertex.label.family="Times",
-             vertex.label.font=4,
-             vertex.size=SPCOLtp0popnegww8*0.2,
-             edge.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
-             edge.arrow.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
-             edge.arrow.size=0.2,
-             vertex.label.color="black",
-             vertex.color=SPCOLtp0negww8,
-             vertex.label.dist=0,
-             edge.color=rgb((igraph_negww8sscale),0,0,alpha =igraph_negww8sscale)
-             
+                    vertex.frame.color=NA,
+                    edge.curved=0.3,
+                    vertex.label.cex=0.7,
+                    vertex.label.family="Times",
+                    vertex.label.font=4,
+                    vertex.size=SPCOLtp0popnegww8*0.2,
+                    edge.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
+                    edge.arrow.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
+                    edge.arrow.size=0.2,
+                    vertex.label.color="black",
+                    vertex.color=SPCOLtp0negww8,
+                    vertex.label.dist=0,
+                    edge.color=rgb((igraph_negww8sscale),0,0,alpha =igraph_negww8sscale)
+                    
 )
 
 
@@ -294,19 +292,28 @@ lay.crctp0_Hori_foodweb<-layout_in_circle(hori_hoodweb_int_graph,order=order(Hor
 
 #Fig1c
 plot.igraph2(Agg_food_fig,layout=lay.crctp0_Hori_foodweb,
-             vertex.size=15,
-             vertex.frame.color=NA,
-             edge.curved=0.3,
-             vertex.label.cex=0.7,
-             vertex.label.family="Times",
-             vertex.label.font=4,
-             edge.width=as.numeric(dataframeHorifoodNonNode$ratio)*10,
-             edge.arrow.size=as.numeric(dataframeHorifoodNonNode$ratio)*10,
-             vertex.label.color="black",
-             vertex.color=Hori_graph_foodweb_col,
-             vertex.label.dist=0,
-             edge.color="red"
-             
+     vertex.size=15,
+     vertex.frame.color=NA,
+     edge.curved=0.3,
+     vertex.label.cex=0.7,
+     vertex.label.family="Times",
+     vertex.label.font=4,
+     edge.width=as.numeric(dataframeHorifoodNonNode$ratio)*10,
+     edge.arrow.size=as.numeric(dataframeHorifoodNonNode$ratio)*10,
+     vertex.label.color="black",
+     vertex.color=Hori_graph_foodweb_col,
+     vertex.label.dist=0,
+     #c("orange","green","red","green","red",
+     #              "white","yellow","skyblue","yellow","yellow4",
+     #             "yellow4","yellow","orange","pink","cyan",
+     #            "orange","orange","violet","green","grey",
+     #           "cyan","green","yellow","cyan","palegoldenrod",
+     #          "pink","darkgreen","darkgreen","cyan","pink",
+     #         "blue","red","green","cyan","grey",
+     #        "cyan","blue","pink")
+     #全部0.05なので統一
+     edge.color="red"
+     
 )
 
 
@@ -372,24 +379,28 @@ Agg_hori_fig_alpha <- predict(processHori, as.data.frame(correlation_Hori$ratio)
 
 #Fig1d
 plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
-             vertex.size=13,
-             vertex.frame.color=NA,
-             edge.curved=0.3,
-             vertex.label.cex=0.7,
-             vertex.label.family="Times",
-             vertex.label.font=4,
-             edge.width=(correlation_Hori$ratio)*1,
-             edge.arrow.size=(correlation_Hori$ratio)*1,
-             vertex.label.color="black",
-             vertex.color=Hori_graph_col,
-             vertex.label.dist=0,
-             edge.color=c(alpha("red",Agg_hori_fig_alpha$`correlation_Hori$ratio`))
-             
+     vertex.size=13,
+     vertex.frame.color=NA,
+     edge.curved=0.3,
+     vertex.label.cex=0.7,
+     vertex.label.family="Times",
+     vertex.label.font=4,
+     edge.width=(correlation_Hori$ratio)*1.3,
+     edge.arrow.size=(correlation_Hori$ratio)*1.3,
+     vertex.label.color="black",
+     vertex.color=Hori_graph_col,
+     vertex.label.dist=0,
+     edge.color=c(alpha("red",Agg_hori_fig_alpha$`correlation_Hori$ratio`))
+     
 )
 
 
 par(family="Times")
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0posww8), col=unique(SPCOLtp0posww8),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
+
+pdf("Fig1.pdf")
+par(mfrow = c(2, 2), mar = c(0, 0, 3, 0))
+dev.off()
 
 
 

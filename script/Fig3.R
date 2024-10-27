@@ -64,7 +64,6 @@ igraph_allww8s<-cbind(intertp0,forGray_data)
 
 igraphdatatp0ww8<-graph(t(cbind(igraph_allww8s$cause,igraph_allww8s$effect)))
 
-igraphdatatp0ww8<-igraph::simplify(igraphdatatp0ww8)
 
 SPCOLtp0ww8=NULL
 for(i in 1:length(V(igraphdatatp0ww8))){
