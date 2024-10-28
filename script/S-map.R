@@ -2,13 +2,6 @@
 library(rEDM)
 library(dplyr)
 
-retioCount<-function(x){if(sum(x>0)/38>0.5){
-  return(sum(x>0)/38)
-}else{
-  return(sum(x<0)/38)
-}
-}
-
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
 
 #zはdatascale.csvとしてCCM.RScriptにおいて保存している
@@ -101,15 +94,19 @@ for(i in 1:length(spdatasmap)){
 names(spdatasmaplnlp)<-names(eachunlist0)
 
 #SMAP係数のみを抽出
+#20行めは後半の最初のステップなのでNAを入れる
 spsmap<-list()
 for(i in 1:length(spdatasmaplnlp)){
-  spsmap[[i]]<-spdatasmaplnlp[[i]]$smap_coefficients
+  first<-spdatasmaplnlp[[i]]$smap_coefficients[[1]][c(1:19),]
+  end <- spdatasmaplnlp[[i]]$smap_coefficients[[1]][c(21:39),]
+  spsmap[[i]]<-rbind(first,NA,end)
 }
+
 
 
 #Smap係数の列名指定
 for(i in 1:length(spdatasmap)){
-  colnames(spsmap[[i]][[1]])<-c(eachunlist0[[i]],"b")
+  colnames(spsmap[[i]])<-c(eachunlist0[[i]],"b")
 }
 
 #listの命名,結果側のものが挿入
@@ -120,35 +117,17 @@ spsmaptp0<-spsmap
 spthetastp0<-spthetas
 
 renames<-gsub("_",".",sp_food_coltp0$cause)
+save(spsmap,file="spsmap.Rdata")
+
 
 #リストのラベル付
 
 
 for(i in 1:length(spsmaptp0)){
-  for(j in 1:length(colnames(spsmaptp0[[i]][[1]])[-length(colnames(spsmaptp0[[i]][[1]]))])){
-    colnames(spsmaptp0[[i]][[1]])[j]<-sp_food_coltp0$cause[sp_food_coltp0$cause==colnames(spsmaptp0[[i]][[1]])[j]]
+  for(j in 1:length(colnames(spsmaptp0[[i]])[-length(colnames(spsmaptp0[[i]]))])){
+    colnames(spsmaptp0[[i]])[j]<-sp_food_coltp0$cause[sp_food_coltp0$cause==colnames(spsmaptp0[[i]])[j]]
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #Smap係数のboxplot
 pdf("S_map_coef_tp0.pdf")
@@ -162,13 +141,6 @@ for(i in 1:length(spsmaptp0)){
 
 dev.off()
 
-#forsummarytp0<-list()
-
-#for(i in 1:length(spsmaptp0)){
-#  forsummarytp0[[i]]<-spsmaptp0[[i]][[1]][,-ncol(spsmaptp0[[i]][[1]])]
-#}
-
-#names(forsummarytp0)<-effectlist0
 
 
 #Smap係数の代表値の計算(min,max,3rd Qu...)
@@ -184,19 +156,45 @@ d6<-c("Min.   :","1st Qu.:","Median :","Mean   :","3rd Qu.:","Max.   :")
 
 ########2023/06/14編集
 
-for(i in 1:length(spsmap)){
-  d1<-data.frame(apply(spsmap[[i]][[1]],2,summary))
-  d<- rep(effectlisttp0[[i]],nrow(d1)*ncol(d1))
-  for(j in 1:ncol(spsmap[[i]][[1]])){
-    d3<-c(d3,rep(colnames(spsmap[[i]][[1]])[j],(nrow(d1))))
-    d5<-c(d5,d1[,j][1:(length(d1[,j]))])
+# 必要な初期化
+d <- data.frame() 
+d1 <- data.frame()  
+d2 <- data.frame() 
+d3 <- NULL 
+d5 <- NULL 
+d5tp0 <- list() 
+d6 <- c("Min.   :", "1st Qu.:", "Median :", "Mean   :", "3rd Qu.:", "Max.   :")  
+
+# ループ処理
+for(i in 1:length(spsmap)) {  
+  d1 <- data.frame(apply(spsmap[[i]], 2, summary))  # summaryを計算
+  
+  # effectのリピート回数を計算
+  d <- rep(effectlisttp0[[i]], nrow(d1) * ncol(d1))  
+  
+  for(j in 1:ncol(spsmap[[i]])) {    
+    d3 <- c(d3, rep(colnames(spsmap[[i]])[j], nrow(d1)))  # 各列名のリピート
+    d5 <- c(d5, d1[,j])  # 各列のデータを追加
   }
-  d2<- data.frame("effect"=d,"cause"=d3,"index"=rep(d6,ncol(d1)),"menas"=d5)
-  d5tp0[[i]]<-d2
-  d3<-NULL
-  d5<-NULL
-  #d3tp0<-rbind(d3,d2)
+  
+  # `index`のリピート回数を、他の列の長さに合わせる
+  index_length <- length(d)  # 他の列の長さと一致させる
+  d2 <- data.frame(
+    "effect" = d,
+    "cause" = d3,
+    "index" = rep(d6, length.out = index_length),  # 行数を`length.out`で調整
+    "menas" = d5
+  )
+  
+  # リストにデータを追加
+  d5tp0[[i]] <- d2 
+  
+  # 初期化
+  d3 <- NULL  
+  d5 <- NULL  
 }
+
+
 
 d7<-list()
 
@@ -441,10 +439,18 @@ names(meanstp0each3rd)<-names(d4tp0)
 
 names(meanstp0eachmax)<-names(d4tp0)
 
+
+
+
+
+
+
+
+
 #をそれぞの代表値一つのlistに格納、list名に結果側の種が入るようにrename
 Smaptp0summaryeachs<-list()
 for(i in 1:length(meanstp0eachmin)){
-  Smaptp0summaryeachs[[i]]<-cbind(unique(d4tp0[i][[1]]$effect),
+  Smaptp0summaryeachs[[i]]<-cbind(rep(unique(d4tp0[i][[1]]$effect),length(unique(d4tp0[i][[1]]$cause))),
                                   unique(d4tp0[i][[1]]$cause),
                                   meanstp0eachmin[i][[1]],
                                   meanstp0each1st[i][[1]],
@@ -474,25 +480,76 @@ Smaptp0summaryeach<-gsub(" ","",Smaptp0summaryeach)
 Smaptp0summaryeach<-as.data.frame(Smaptp0summaryeach)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #smap係数の切片bの削除
 #204行目#causeがbのものを削除で削除済み
 #Smaptp0summarychar<-Smaptp0summaryeach[-which(Smaptp0summaryeach$cause=="b"),]
 
-#Smap係数の正負の判断
+
+#ratioの計算
+retioCount<-function(x){if(sum(x>0,na.rm = T)/38>0.5){
+  return(sum(x>0)/38)
+}else{
+  return(sum(x<0)/38)
+}
+}
+
+forEdgeGrade <- function(x) {
+  cleaned <- x[complete.cases(x)]  # x の NA を除去
+  X <- retioCount(cleaned)         # ここで retioCount 関数を適用
+  return(X)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# リスト名を取得
+list_names <- names(spsmaptp0)
+
+# リスト名と列名を組み合わせてベクトルを作成
+result <- unlist(lapply(list_names, function(lst_name) {
+  # 各データフレームの列名を取得
+  col_names <- colnames(spsmaptp0[[lst_name]])
+  
+  # 列名が NULL でない場合にのみ処理を行う
+  if (!is.null(col_names) && length(col_names) > 0) {
+    # リスト名と列名を組み合わせて "リスト名_列名" の文字列を作成
+    #cause_effect
+    paste(col_names, lst_name, sep = "_")
+  } else {
+    NULL  # 列名がない場合は NULL を返してスキップ
+  }
+  }))
+
+# 結果を表示
+print(result)
+
+ratios<-list()
+for (i in 1:length(spsmaptp0)) {
+  ratios[[i]] <- apply(spsmaptp0[[i]], 2, forEdgeGrade)
+}
+
+ratios<-unlist(ratios)
+
+ratio_name<-cbind(ratios,result)
+
+#Smap係数の正負の判断(平均値)
 strengthTFtp0<-as.numeric(Smaptp0summaryeach$mean)>0
 
 #T,Fをpositive,negativeに変更
@@ -521,7 +578,13 @@ checktp0
 
 #keyを使って対応した順番で個体数とSmap係数のデータ統合,rename
 library(dplyr)
-GLMbasedatatp0 <- left_join(basedatatp0,Smaptp0summary, by = "cause_effect")
+GLMbasedata <- left_join(basedatatp0,Smaptp0summary, by = "cause_effect")
+
+ratio_name<-as.data.frame(ratio_name)
+
+colnames(ratio_name)<-c("ratio","cause_effect")
+GLMbasedatatp0<-left_join(GLMbasedata,ratio_name, by = "cause_effect")
+
 write.csv(GLMbasedatatp0,"GLMbasedatatp0.csv")
 View(GLMbasedatatp0)
 
@@ -557,10 +620,9 @@ colnames(TimeSeries_40renamesmappopbase)<-namespmaptimepop
 
 #Smap係数をその時の結果側の種の個体数で除す(個体当たりが受ける影響に変換)、rename
 
-
 dataframenames<-NULL
 for(i in 1:length(names(spsmaptp0))){
-  dataframenames[i]<-sp_food_coltp0[sp_food_coltp0$cause==names(spsmaptp0)[i],13]
+  dataframenames[i]<-sp_food_coltp0[sp_food_coltp0$cause==names(spsmaptp0)[i],]$re.namesp
 }
 dataframenames
 
@@ -572,9 +634,10 @@ colnames(TimeSeries_40)<-gsub("Variabilichromis_moorii","V_moorii",colnames(Time
 
 
 
+#観測個体が0のものがある
 devpopsmap<-NULL
 for(i in 1:length(spsmaptp0)){
-  devpopsmap[[i]]<-as.matrix(spsmaptp0[[i]][[1]])[,-ncol(spsmaptp0[[i]][[1]])] /as.data.frame(TimeSeries_40)[names(spsmaptp0)[i]][c(-20,-40),]
+  devpopsmap[[i]]<-as.matrix(spsmaptp0[[i]])[,-ncol(spsmaptp0[[i]])] /as.data.frame(TimeSeries_40)[names(spsmaptp0)[i]][-40,]
 }
 names(devpopsmap)<-names(spsmaptp0)
 
@@ -601,7 +664,7 @@ for(i in 1:ncol(devpopsmap[[3]])){
 #ここで種内競争のみのものはapplyできず結果の列名がdevpopsmap[[i]]となり以降そのまま
 sumsmap<-NULL
 for(i in 1:length(spsmaptp0)){
-  sumsmap[[i]]<-apply(as.data.frame(spsmaptp0[[i]][[1]]),MARGIN = 2,sum)[c(-1,-ncol(spsmaptp0[[i]][[1]]))]
+  sumsmap[[i]]<-apply(as.data.frame(spsmaptp0[[i]]),MARGIN = 2,sum)[c(-1,-ncol(spsmaptp0[[i]]))]
 }
 
 
