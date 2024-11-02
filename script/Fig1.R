@@ -50,6 +50,9 @@ for(i in 1:nrow(strengthtp0)){
   }
 }
 
+write.csv(intertp0,"interspecific_interaction.csv")
+
+
 #原因側と結果側のまとめ
 countcausetp0<-t(table(intertp0$cause))
 counteffecttp0<-t(table(intertp0$effect))
@@ -303,15 +306,6 @@ plot.igraph2(Agg_food_fig,layout=lay.crctp0_Hori_foodweb,
      vertex.label.color="black",
      vertex.color=Hori_graph_foodweb_col,
      vertex.label.dist=0,
-     #c("orange","green","red","green","red",
-     #              "white","yellow","skyblue","yellow","yellow4",
-     #             "yellow4","yellow","orange","pink","cyan",
-     #            "orange","orange","violet","green","grey",
-     #           "cyan","green","yellow","cyan","palegoldenrod",
-     #          "pink","darkgreen","darkgreen","cyan","pink",
-     #         "blue","red","green","cyan","grey",
-     #        "cyan","blue","pink")
-     #全部0.05なので統一
      edge.color="red"
      
 )
@@ -385,22 +379,91 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
      vertex.label.cex=0.7,
      vertex.label.family="Times",
      vertex.label.font=4,
-     edge.width=(correlation_Hori$ratio)*1.3,
-     edge.arrow.size=(correlation_Hori$ratio)*1.3,
+     edge.width=(correlation_Hori$ratio)+0.3,
+     edge.arrow.size=(correlation_Hori$ratio),
      vertex.label.color="black",
      vertex.color=Hori_graph_col,
      vertex.label.dist=0,
-     edge.color=c(alpha("red",Agg_hori_fig_alpha$`correlation_Hori$ratio`))
-     
+     edge.color=c(alpha("red",Agg_hori_fig_alpha$`correlation_Hori$ratio`)),
+     rescale=FALSE
 )
 
 
 par(family="Times")
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0posww8), col=unique(SPCOLtp0posww8),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
 
-pdf("Fig1.pdf")
-par(mfrow = c(2, 2), mar = c(0, 0, 3, 0))
-dev.off()
+
+#インタラクティブな図表の描画
+
+#Fig1a
+tkplot(igraphdatatp0posww8,layout=lay.crctp0posww8,
+             vertex.frame.color=NA,
+             edge.curved=0.3,
+             vertex.label.cex=0.7,
+             vertex.label.family="Times",
+             vertex.label.font=4,
+             vertex.size=SPCOLtp0popposww8*0.2,
+             edge.width=(log(igraph_posww8s$smapmean)+max(abs(log(igraph_posww8s$smapmean)))+1)*0.3,
+             edge.arrow.width=(log(igraph_posww8s$smapmean)+max(abs(log(igraph_posww8s$smapmean)))+1)*0.3,
+             edge.arrow.size=0.2,
+             vertex.label.color="black",
+             vertex.color=SPCOLtp0posww8,
+             vertex.label.dist=0,
+             edge.color=rgb(0,0,(igraph_posww8sscale),alpha =igraph_posww8sscale)
+             
+)
+
+
+#Fig1b
+tkplot(igraphdatatp0negww8,layout=lay.crctp0negww8,
+             vertex.frame.color=NA,
+             edge.curved=0.3,
+             vertex.label.cex=0.7,
+             vertex.label.family="Times",
+             vertex.label.font=4,
+             vertex.size=SPCOLtp0popnegww8*0.2,
+             edge.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
+             edge.arrow.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
+             edge.arrow.size=0.2,
+             vertex.label.color="black",
+             vertex.color=SPCOLtp0negww8,
+             vertex.label.dist=0,
+             edge.color=rgb((igraph_negww8sscale),0,0,alpha =igraph_negww8sscale)
+             
+)
+
+#Fig1c
+tkplot(Agg_food_fig,layout=lay.crctp0_Hori_foodweb,
+             vertex.size=15,
+             vertex.frame.color=NA,
+             edge.curved=0.3,
+             vertex.label.cex=0.7,
+             vertex.label.family="Times",
+             vertex.label.font=4,
+             edge.width=as.numeric(dataframeHorifoodNonNode$ratio)*10,
+             edge.arrow.size=as.numeric(dataframeHorifoodNonNode$ratio)*10,
+             vertex.label.color="black",
+             vertex.color=Hori_graph_foodweb_col,
+             vertex.label.dist=0,
+             edge.color="red"
+             
+)
+#Fig1d
+tkplot(Agg_hori_fig,layout=lay.crctp0_Hori,
+             vertex.size=13,
+             vertex.frame.color=NA,
+             edge.curved=0.3,
+             vertex.label.cex=0.7,
+             vertex.label.family="Times",
+             vertex.label.font=4,
+             edge.width=(correlation_Hori$ratio)+0.3,
+             edge.arrow.size=(correlation_Hori$ratio),
+             vertex.label.color="black",
+             vertex.color=Hori_graph_col,
+             vertex.label.dist=0,
+             edge.color=c(alpha("red",Agg_hori_fig_alpha$`correlation_Hori$ratio`)),
+             rescale=FALSE
+)
 
 
 
