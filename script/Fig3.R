@@ -83,6 +83,10 @@ for(i in 1:length(V(igraphdatatp0ww8))){
 }
 SPORDERtp0ww8
 
+SPCOLtp0betww8<-betweenness(igraphdatatp0ww8)
+
+write.csv(SPCOLtp0betww8,"betweenness.csv")
+
 #2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
 SPCOLtp0nameww8=NULL
 for(i in 1:length(V(igraphdatatp0ww8))){
@@ -96,7 +100,6 @@ for(i in 1:length(V(igraphdatatp0ww8))){
 }
 SPSIZEtp0ww8
 
-SPCOLtp0betww8<-betweenness(igraphdatatp0ww8)+0.01
 
 V(igraphdatatp0ww8)$name<-gsub(" ","\n",SPCOLtp0nameww8)
 
@@ -138,7 +141,7 @@ plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
              vertex.label.cex=0.7,
              vertex.label.family="Times",
              vertex.label.font=4,
-             vertex.size=SPCOLtp0betww8*0.2,
+             vertex.size=(SPCOLtp0betww8+0.01)*0.2,
              edge.width=log(igraph_ww8sscale),
              edge.arrow.width=igraph_ww8sscale,
              edge.arrow.size=0.2,

@@ -21,17 +21,18 @@ Hori=read.csv("horikasengasensus_ccm_16May2021.csv",header=T)
 summary(Hori)
 View(Hori)
 
-summary(Hori)
+All_sp_list<-unique(Hori$species)
+
+write.csv(gsub("_",".",All_sp_list),"all_species.csv")
 
 ######################
 ###種名と種数の確認###
 ######################
-
+SSsize<-subset(Hori,Hori$size=="SSsize")
 SMLsize<-subset(Hori,Hori$size!="SSsize")
 table(SMLsize$size)
 View(SMLsize)
 sp_list<-unique(SMLsize$species_ccm)
-
 
 #sp_list=sp_list_all[c(-35)];length(sp_list)
 
@@ -99,7 +100,7 @@ TN_west=ts(N,start=min(Hori_west$year),frequency=1)
 ###東と西を結合###
 TimeSeries_40a=cbind(rbind(TN_east,TN_west))
 
-write.csv(TimeSeries_40a,"TimeSeries_40.csv")
+write.csv(TimeSeries_40a,"TimeSeries_40.csv",row.names = FALSE)
 
 
 ###############################################
@@ -110,10 +111,11 @@ for(i in 1:ncol(TimeSeries_40a)){
   TimeSeries_over10index[i]<-max(TimeSeries_40a[,i])>9
 }
 
+TimeSeries_40a[,!TimeSeries_over10index]
+
 write.csv(colnames(TimeSeries_40a)[TimeSeries_over10index],"over10popsp.csv")
 
 write.csv(colnames(TimeSeries_40a)[!TimeSeries_over10index],"less10popsp.csv")
-
 
 TimeSeries_40<-TimeSeries_40a[,colnames(TimeSeries_40a)[TimeSeries_over10index]]
 
@@ -413,9 +415,6 @@ nodelisttp0cause<-unique(listtp0[,1])
 nodelisttp0effect<-unique(listtp0[,2])
 
 sort(nodelisttp0cause)==sort(nodelisttp0effect)
-
-write.csv(listtp0,"listtp0.csv")
-
 
 countcausetp0<-t(table(listtp0[,1]))
 counteffecttp0<-t(table(listtp0[,2]))
