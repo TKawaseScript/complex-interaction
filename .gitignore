@@ -55,5 +55,4 @@ renv/staging/
 man/*.Rd
 
 #R package recoader
-script/*
 !renv.lock
