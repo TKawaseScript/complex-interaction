@@ -144,17 +144,6 @@ dev.off()
 
 
 #Smap係数の代表値の計算(min,max,3rd Qu...)
-d <- data.frame()
-d1 <- data.frame()
-
-d2<-data.frame()
-d3<-NULL
-d5<-NULL
-d5tp0<-list()
-d6<-c("Min.   :","1st Qu.:","Median :","Mean   :","3rd Qu.:","Max.   :")
-
-
-########2023/06/14編集
 
 # 必要な初期化
 d <- data.frame() 
@@ -163,7 +152,7 @@ d2 <- data.frame()
 d3 <- NULL 
 d5 <- NULL 
 d5tp0 <- list() 
-d6 <- c("Min.   :", "1st Qu.:", "Median :", "Mean   :", "3rd Qu.:", "Max.   :")  
+d6 <- c("Min.   :", "1st Qu.:", "Median :", "Mean   :", "3rd Qu.:", "Max.   :","NA's  :")  
 
 # ループ処理
 for(i in 1:length(spsmap)) {  
@@ -440,13 +429,6 @@ names(meanstp0each3rd)<-names(d4tp0)
 names(meanstp0eachmax)<-names(d4tp0)
 
 
-
-
-
-
-
-
-
 #をそれぞの代表値一つのlistに格納、list名に結果側の種が入るようにrename
 Smaptp0summaryeachs<-list()
 for(i in 1:length(meanstp0eachmin)){
@@ -498,25 +480,6 @@ forEdgeGrade <- function(x) {
   X <- retioCount(cleaned)         # ここで retioCount 関数を適用
   return(X)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # リスト名を取得
