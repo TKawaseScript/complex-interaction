@@ -1,5 +1,6 @@
 library(dplyr)
 library(tidyr)
+library(tools)
 
 TimeSeries<-read.csv("TimeSeries_40.csv",header=T)
 
@@ -15,6 +16,8 @@ less10_pop_sp<-read.csv("less10popsp.csv",header=T)
 between<-read.csv("betweenness.csv",header=T)
 colnames(between)<-c("Species.name","Centrality betweenness")
 
+between$`Centrality betweenness`<-round(between$`Centrality betweenness`,digits = 2)
+
 #種名の表記名を統一
 All_sp_list$x<-gsub("Cunningtonia_longiventralis","C_longiventralis",All_sp_list$x)
 All_sp_list$x<-gsub("Mastacembelus_moorii","M_moorii",All_sp_list$x)
@@ -25,9 +28,8 @@ All_sp_list$x<-gsub("Xenotilapia_boulengeri","X_boulengeri",All_sp_list$x)
 All_sp_list$x<-gsub("Xenotilapia_sp","X_sp",All_sp_list$x)
 
 #9個体以下のもの
-less10_sp<-gsub("Variabilichromis_moorii","V_moorii",less10_sp)
-
 #種名の表記名を統一
+less10_sp<-gsub("Variabilichromis_moorii","V_moorii",less10_sp)
 less10_pop_sp<-gsub("Cunningtonia_longiventralis","C_longiventralis",less10_pop_sp)
 less10_pop_sp<-gsub("Xenotilapia_flavipinnis","X_flavipinnis",less10_pop_sp)
 less10_pop_sp<-gsub("Xenotilapia_boulengeri","X_boulengeri",less10_pop_sp)
@@ -76,5 +78,12 @@ TableS1data <- TableS1Basedata %>%
   left_join(between, by = "Species.name")%>%
   mutate(`Centrality betweenness` = as.character(`Centrality betweenness`)) %>%
   mutate(`Centrality betweenness` = replace_na(`Centrality betweenness`, "-"))
+
+
+for(i in 1:nrow(TableS1data)){
+  TableS1data$Species.name[i]<-sp_food_coltp0[TableS1data$Species.name==sp_food_coltp0$cause[i],]$SpFullName
+}
+
+TableS1data$Food.habit<-toTitleCase(TableS1data$Food.habit)
 
 write.csv(TableS1data,"TableS1.csv")
