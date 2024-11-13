@@ -147,12 +147,12 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              vertex.label.cex=0.7,
              vertex.label.family="Times",
              vertex.label.font=4,
-             vertex.size=SPCOLtp0popposww8*0.2,
+             vertex.size=SPCOLtp0popposww8*0.2+3,
              edge.width=(log(igraph_posww8s$smapmean)+max(abs(log(igraph_posww8s$smapmean)))+1)*0.3,
              edge.arrow.width=(log(igraph_posww8s$smapmean)+max(abs(log(igraph_posww8s$smapmean)))+1)*0.3,
              edge.arrow.size=0.2,
              vertex.label.color="black",
-             vertex.color=SPCOLtp0posww8,
+             vertex.color=alpha(SPCOLtp0posww8,0.5),
              vertex.label.dist=0,
              edge.color=rgb(0,0,(igraph_posww8sscale),alpha =igraph_posww8sscale)
              
@@ -226,12 +226,12 @@ plot.igraph2(igraphdatatp0negww8,layout=lay.crctp0negww8,
                     vertex.label.cex=0.7,
                     vertex.label.family="Times",
                     vertex.label.font=4,
-                    vertex.size=SPCOLtp0popnegww8*0.2,
+                    vertex.size=SPCOLtp0popnegww8*0.2+3,
                     edge.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
                     edge.arrow.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
                     edge.arrow.size=0.2,
                     vertex.label.color="black",
-                    vertex.color=SPCOLtp0negww8,
+                    vertex.color=alpha(SPCOLtp0negww8,0.5),
                     vertex.label.dist=0,
                     edge.color=rgb((igraph_negww8sscale),0,0,alpha =igraph_negww8sscale)
                     
@@ -304,7 +304,7 @@ plot.igraph2(Agg_food_fig,layout=lay.crctp0_Hori_foodweb,
      edge.width=as.numeric(dataframeHorifoodNonNode$ratio)*10,
      edge.arrow.size=as.numeric(dataframeHorifoodNonNode$ratio)*10,
      vertex.label.color="black",
-     vertex.color=Hori_graph_foodweb_col,
+     vertex.color=alpha(Hori_graph_foodweb_col,0.5),
      vertex.label.dist=0,
      edge.color="red"
      
@@ -380,9 +380,9 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
      vertex.label.family="Times",
      vertex.label.font=4,
      edge.width=(correlation_Hori$ratio)+0.3,
-     edge.arrow.size=(correlation_Hori$ratio),
+     edge.arrow.size=(correlation_Hori$ratio)*0.1+0.5,
      vertex.label.color="black",
-     vertex.color=Hori_graph_col,
+     vertex.color=alpha(Hori_graph_col,0.5),
      vertex.label.dist=0,
      edge.color=c(alpha("red",Agg_hori_fig_alpha$`correlation_Hori$ratio`)),
      rescale=FALSE
@@ -390,7 +390,7 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
 
 
 par(family="Times")
-legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0posww8), col=unique(SPCOLtp0posww8),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
+legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0posww8), col=alpha(unique(SPCOLtp0posww8),0.5),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
 
 
 #インタラクティブな図表の描画
