@@ -120,21 +120,14 @@ renames<-gsub("_",".",sp_food_coltp0$cause)
 save(spsmap,file="spsmap.Rdata")
 
 
-#リストのラベル付
 
-
-for(i in 1:length(spsmaptp0)){
-  for(j in 1:length(colnames(spsmaptp0[[i]])[-length(colnames(spsmaptp0[[i]]))])){
-    colnames(spsmaptp0[[i]])[j]<-sp_food_coltp0$cause[sp_food_coltp0$cause==colnames(spsmaptp0[[i]])[j]]
-  }
-}
 
 #Smap係数のboxplot
 pdf("S_map_coef_tp0.pdf")
 
 par(mgp=c(4,1,0),family="Times")
 for(i in 1:length(spsmaptp0)){
-  boxplot(spsmaptp0[[i]][[1]],cex.axis=0.8,xlab="Species",ylab="S-map coefficients",cex.names=0.5,main=names(spsmaptp0[i]),las=2,family="mono")
+  boxplot(spsmaptp0[[i]],cex.axis=0.8,xlab="Species",ylab="S-map coefficients",cex.names=0.5,main=names(spsmaptp0[i]),las=2,family="mono")
   
   abline(h=0,lty=2)
 }
