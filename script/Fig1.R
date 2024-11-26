@@ -50,7 +50,7 @@ for(i in 1:nrow(strengthtp0)){
   }
 }
 
-write.csv(intertp0,"interspecific_interaction.csv")
+write.csv(intertp0,"Interspecific_interaction.csv")
 
 
 #原因側と結果側のまとめ
@@ -141,6 +141,7 @@ igraph_posww8sscale<-scale(igraph_posww8s$ratio, center = igraph_posww8s_ratio_m
 
 
 #Fig1a
+pdf("Fig1a.pdf")
 plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              vertex.frame.color=NA,
              edge.curved=0.3,
@@ -158,7 +159,7 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              
 )
 
-
+dev.off()
 
 
 igraphdatatp0negww8<-graph(t(cbind(igraph_negww8s$cause,igraph_negww8s$effect)))
@@ -220,6 +221,7 @@ igraph_negww8sscale<-scale(igraph_negww8s$ratio, center = igraph_negww8s_ratio_m
 
 
 #Fig1b
+pdf("Fig1b.pdf")
 plot.igraph2(igraphdatatp0negww8,layout=lay.crctp0negww8,
                     vertex.frame.color=NA,
                     edge.curved=0.3,
@@ -237,7 +239,7 @@ plot.igraph2(igraphdatatp0negww8,layout=lay.crctp0negww8,
                     
 )
 
-
+dev.off()
 
 
 
@@ -294,6 +296,7 @@ V(Agg_food_fig)$name<-Agg_food_fig_name
 lay.crctp0_Hori_foodweb<-layout_in_circle(hori_hoodweb_int_graph,order=order(Hori_graph_foodweb_pos))
 
 #Fig1c
+pdf("Fig1c.pdf")
 plot.igraph2(Agg_food_fig,layout=lay.crctp0_Hori_foodweb,
      vertex.size=15,
      vertex.frame.color=NA,
@@ -310,7 +313,7 @@ plot.igraph2(Agg_food_fig,layout=lay.crctp0_Hori_foodweb,
      
 )
 
-
+dev.off()
 
 
 
@@ -372,6 +375,7 @@ processHori$rangeBounds<-c(0.8,1)
 Agg_hori_fig_alpha <- predict(processHori, as.data.frame(correlation_Hori$ratio))
 
 #Fig1d
+pdf("Fig1d.pdf")
 plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
      vertex.size=13,
      vertex.frame.color=NA,
@@ -391,7 +395,7 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
 
 par(family="Times")
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0posww8), col=alpha(unique(SPCOLtp0posww8),0.5),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
-
+dev.off()
 
 #インタラクティブな図表の描画
 
