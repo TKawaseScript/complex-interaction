@@ -187,7 +187,7 @@ pgls_data<-Fig2Dataframe[!Fig2Dataframe$spName %in% noPgls, ]
 pgls_result_a <- gls(
   effectPosCount ~ causePosCount,
   correlation = corBrownian(phy = anoleTree, form = ~ spName), 
-  data = pgls_data_a,
+  data = pgls_data,
   method = "ML"
 )
 
@@ -238,10 +238,6 @@ Fig2_a<-ggplot(data = Fig2Dataframe, aes(x = causePosCount,y=effectPosCount, col
            )
 
 cor_result_b<-cor.test(Fig2Dataframe$causeNegCount,Fig2Dataframe$effectPosCount)
-
-pgls_result_b <- gls(effectPosCount ~ causeNegCount, correlation=corBrownian(phy = anoleTree),
-                     data = corEffectData, method = "ML")
-
 
 pgls_result_b <- gls(
   effectPosCount ~ causeNegCount,
@@ -302,6 +298,7 @@ Fig2_b<-ggplot(data = Fig2Dataframe, aes(x = causeNegCount,y=effectPosCount, col
 
 cor_result_c<-cor.test(Fig2Dataframe$causeAllCount,Fig2Dataframe$effectPosCount)
 
+
 pgls_result_c <- gls(
   effectPosCount ~ causeAllCount,
   correlation = corBrownian(phy = anoleTree, form = ~ spName), 
@@ -358,6 +355,7 @@ Fig2_c<-ggplot(data = Fig2Dataframe, aes(x = causeAllCount,y=effectPosCount, col
   )
 
 cor_result_d<-cor.test(Fig2Dataframe$causePosCount,Fig2Dataframe$effectNegCount)
+
 
 pgls_result_d <- gls(
   effectNegCount ~ causePosCount,
@@ -650,10 +648,6 @@ Fig2_h<-ggplot(data = Fig2Dataframe, aes(x = causeNegCount,y=effectAllCount, col
 
 cor_result_i<-cor.test(Fig2Dataframe$causeAllCount,Fig2Dataframe$effectAllCount)
 
-pgls_result_i <- gls(effectAllCount ~ causeAllCount, correlation=corBrownian(phy = anoleTree),
-                     data = corEffectData, method = "ML")
-
-
 pgls_result_i <- gls(
   effectAllCount ~ causeAllCount,
   correlation = corBrownian(phy = anoleTree, form = ~ spName), 
@@ -708,7 +702,7 @@ Fig2_i<-ggplot(data = Fig2Dataframe, aes(x = causeAllCount,y=effectAllCount, col
            size = 5, hjust = 0, vjust = 1, family = "Times New Roman"
   )
 
-cor_result_j<-cor.test(causeNegCount$causePosCount,Fig2Dataframe$effectAllCount)
+cor_result_j<-cor.test(Fig2Dataframe$causePosCount,Fig2Dataframe$effectAllCount)
 
 pgls_result_j <- gls(
   effectAllCount ~ causeNegCount,
@@ -830,22 +824,16 @@ Fig2_f<-Fig2_f +coord_fixed(ratio = 1)
 Fig2_g<-Fig2_g +coord_fixed(ratio = 1)
 Fig2_h<-Fig2_h +coord_fixed(ratio = 1)
 Fig2_i<-Fig2_i +coord_fixed(ratio = 1)
-
-
-
-Fig2_1<-Fig2_a + Fig2_b + Fig2_c +
-  Fig2_d + Fig2_e + Fig2_f +
-  Fig2_g + Fig2_h + Fig2_i + plot_layout(ncol=3)
-
-CairoPDF("Fig2_1.pdf", width = 8.27, height = 11.69)
-print(Fig2_1)
-dev.off()
-
 Fig2_j<-Fig2_j +coord_fixed(ratio = 1)
 Fig2_k<-Fig2_k +coord_fixed(ratio = 1)
 
-Fig2_2<-Fig2_j + Fig2_k + plot_layout(ncol=2)
 
-CairoPDF("Fig2_2.pdf", width = 8.27, height = 11.69)
-print(Fig2_2)
+
+Fig2<-Fig2_a + Fig2_b + Fig2_c +
+  Fig2_d + Fig2_e + Fig2_f +
+  Fig2_g + Fig2_h + Fig2_i +
+  Fig2_j + Fig2_k + plot_layout(ncol=3)
+
+CairoPDF("Fig2.pdf", width = 8.27, height = 11.69)
+print(Fig2)
 dev.off()
