@@ -82,7 +82,21 @@ igraph_posww8s<-subset(intertp0,intertp0$strength=="positive")
 igraph_negww8s<-subset(intertp0,intertp0$strength=="negative")
 
 
-igraphdatatp0posww8<-graph(t(cbind(igraph_posww8s$cause,igraph_posww8s$effect)))
+#PosにあってNegにない種
+nonEdgeNodeNeg<-setdiff(unique(c(igraph_posww8s$cause,igraph_posww8s$effect)),unique(c(igraph_negww8s$cause,igraph_negww8s$effect)))
+
+#MegにあってPosにない種
+nonEdgeNodePos<-setdiff(unique(c(igraph_negww8s$cause,igraph_negww8s$effect)),unique(c(igraph_posww8s$cause,igraph_posww8s$effect)))
+
+
+igraph_posww8sadd<-rbind(igraph_posww8s,igraph_posww8s[c(1:2),])
+
+igraph_posww8sadd$cause[c(length(igraph_posww8sadd$cause)-1,length(igraph_posww8sadd$cause))]<-nonEdgeNodePos
+
+igraph_posww8sadd$effect[c(length(igraph_posww8sadd$effect)-1,length(igraph_posww8sadd$effect))]<-nonEdgeNodePos
+
+
+igraphdatatp0posww8<-graph(t(cbind(igraph_posww8sadd$cause,igraph_posww8sadd$effect)))
 
 
 SPCOLtp0posww8=NULL
@@ -149,9 +163,9 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              vertex.label.family="Times",
              vertex.label.font=4,
              vertex.size=SPCOLtp0popposww8*0.2+3,
-             edge.width=(log(igraph_posww8s$smapmean)+max(abs(log(igraph_posww8s$smapmean)))+1)*0.3,
-             edge.arrow.width=(log(igraph_posww8s$smapmean)+max(abs(log(igraph_posww8s$smapmean)))+1)*0.3,
-             edge.arrow.size=0.2,
+             edge.width=igraph_posww8sadd$smapmean,
+             edge.arrow.width=igraph_posww8sadd$smapmean,
+             edge.arrow.size=igraph_posww8sadd$smapmean,
              vertex.label.color="black",
              vertex.color=alpha(SPCOLtp0posww8,0.5),
              vertex.label.dist=0,
@@ -162,7 +176,16 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
 dev.off()
 
 
-igraphdatatp0negww8<-graph(t(cbind(igraph_negww8s$cause,igraph_negww8s$effect)))
+
+igraph_negww8sadd<-rbind(igraph_negww8s,igraph_negww8s[1,])
+
+igraph_negww8sadd$cause[length(igraph_negww8sadd$cause)]<-nonEdgeNodeNeg
+
+igraph_negww8sadd$effect[length(igraph_negww8sadd$effect)]<-nonEdgeNodeNeg
+
+
+igraphdatatp0negww8<-graph(t(cbind(igraph_negww8sadd$cause,igraph_negww8sadd$effect)))
+
 
 SPCOLtp0negww8=NULL
 for(i in 1:length(V(igraphdatatp0negww8))){
@@ -229,8 +252,8 @@ plot.igraph2(igraphdatatp0negww8,layout=lay.crctp0negww8,
                     vertex.label.family="Times",
                     vertex.label.font=4,
                     vertex.size=SPCOLtp0popnegww8*0.2+3,
-                    edge.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
-                    edge.arrow.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
+                    edge.width=abs(igraph_negww8s$smapmean),
+                    edge.arrow.width=abs(igraph_negww8s$smapmean),
                     edge.arrow.size=0.2,
                     vertex.label.color="black",
                     vertex.color=alpha(SPCOLtp0negww8,0.5),
@@ -396,79 +419,3 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
 par(family="Times")
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0posww8), col=alpha(unique(SPCOLtp0posww8),0.5),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
 dev.off()
-
-#インタラクティブな図表の描画
-
-#Fig1a
-tkplot(igraphdatatp0posww8,layout=lay.crctp0posww8,
-             vertex.frame.color=NA,
-             edge.curved=0.3,
-             vertex.label.cex=0.7,
-             vertex.label.family="Times",
-             vertex.label.font=4,
-             vertex.size=SPCOLtp0popposww8*0.2,
-             edge.width=(log(igraph_posww8s$smapmean)+max(abs(log(igraph_posww8s$smapmean)))+1)*0.3,
-             edge.arrow.width=(log(igraph_posww8s$smapmean)+max(abs(log(igraph_posww8s$smapmean)))+1)*0.3,
-             edge.arrow.size=0.2,
-             vertex.label.color="black",
-             vertex.color=SPCOLtp0posww8,
-             vertex.label.dist=0,
-             edge.color=rgb(0,0,(igraph_posww8sscale),alpha =igraph_posww8sscale)
-             
-)
-
-
-#Fig1b
-tkplot(igraphdatatp0negww8,layout=lay.crctp0negww8,
-             vertex.frame.color=NA,
-             edge.curved=0.3,
-             vertex.label.cex=0.7,
-             vertex.label.family="Times",
-             vertex.label.font=4,
-             vertex.size=SPCOLtp0popnegww8*0.2,
-             edge.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
-             edge.arrow.width=(log(-igraph_negww8s$smapmean)+max(abs(log(-igraph_negww8s$smapmean)))+1)*0.3,
-             edge.arrow.size=0.2,
-             vertex.label.color="black",
-             vertex.color=SPCOLtp0negww8,
-             vertex.label.dist=0,
-             edge.color=rgb((igraph_negww8sscale),0,0,alpha =igraph_negww8sscale)
-             
-)
-
-#Fig1c
-tkplot(Agg_food_fig,layout=lay.crctp0_Hori_foodweb,
-             vertex.size=15,
-             vertex.frame.color=NA,
-             edge.curved=0.3,
-             vertex.label.cex=0.7,
-             vertex.label.family="Times",
-             vertex.label.font=4,
-             edge.width=as.numeric(dataframeHorifoodNonNode$ratio)*10,
-             edge.arrow.size=as.numeric(dataframeHorifoodNonNode$ratio)*10,
-             vertex.label.color="black",
-             vertex.color=Hori_graph_foodweb_col,
-             vertex.label.dist=0,
-             edge.color="red"
-             
-)
-#Fig1d
-tkplot(Agg_hori_fig,layout=lay.crctp0_Hori,
-             vertex.size=13,
-             vertex.frame.color=NA,
-             edge.curved=0.3,
-             vertex.label.cex=0.7,
-             vertex.label.family="Times",
-             vertex.label.font=4,
-             edge.width=(correlation_Hori$ratio)+0.3,
-             edge.arrow.size=(correlation_Hori$ratio),
-             vertex.label.color="black",
-             vertex.color=Hori_graph_col,
-             vertex.label.dist=0,
-             edge.color=c(alpha("red",Agg_hori_fig_alpha$`correlation_Hori$ratio`)),
-             rescale=FALSE
-)
-
-
-
-
