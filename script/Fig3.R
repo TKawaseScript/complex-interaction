@@ -146,12 +146,12 @@ plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
              vertex.label.font=4,
              vertex.size=log(SPCOLtp0betww8+2)*5,
              edge.width=log(igraph_ww8sscale),
-             edge.arrow.width=(igraph_ww8sscale)*3,
-             edge.arrow.size=0.2,
+             edge.arrow.width=(igraph_ww8sscale)*1.5,
+             edge.arrow.size=(igraph_ww8sscale)*1.5,
              vertex.label.color="black",
              vertex.color=alpha(SPCOLtp0ww8,0.5),
              vertex.label.dist=0,
-             edge.color=rgb(igraph_allww8s$Neg,0,igraph_allww8s$Pos,alpha=igraph_allww8s$ratio-min(igraph_allww8s$ratio)+0.1)
+             edge.color=rgb(igraph_allww8s$Neg,0,igraph_allww8s$Pos,alpha=igraph_allww8s$ratio)
              
 )
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0ww8), col=unique(SPCOLtp0ww8),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)

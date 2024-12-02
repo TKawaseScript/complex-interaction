@@ -26,7 +26,7 @@ PMark <- function(x) {
 }
 
 #Typemiss AL_callipterus
-anoleTree <- read.tree("cichlidtree.nwk")
+cichlidTree <- read.tree("cichlidtree.nwk")
 
 interspecific_interaction<-read.csv("interspecific_interaction.csv",header=T)
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T,fileEncoding = "UTF-8")
@@ -172,7 +172,7 @@ FoodCol <- c(
 cor_result_a<-cor.test(Fig2Dataframe$causePosCount,Fig2Dataframe$effectPosCount)
 
 # 系統樹のタクソン名を確認
-tree_species <- anoleTree$tip.label
+tree_species <- cichlidTree$tip.label
 print(tree_species)
 
 # データフレームの種名を確認
@@ -186,7 +186,7 @@ pgls_data<-Fig2Dataframe[!Fig2Dataframe$spName %in% noPgls, ]
 
 pgls_result_a <- gls(
   effectPosCount ~ causePosCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -241,7 +241,7 @@ cor_result_b<-cor.test(Fig2Dataframe$causeNegCount,Fig2Dataframe$effectPosCount)
 
 pgls_result_b <- gls(
   effectPosCount ~ causeNegCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -301,7 +301,7 @@ cor_result_c<-cor.test(Fig2Dataframe$causeAllCount,Fig2Dataframe$effectPosCount)
 
 pgls_result_c <- gls(
   effectPosCount ~ causeAllCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -359,7 +359,7 @@ cor_result_d<-cor.test(Fig2Dataframe$causePosCount,Fig2Dataframe$effectNegCount)
 
 pgls_result_d <- gls(
   effectNegCount ~ causePosCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -417,7 +417,7 @@ cor_result_e<-cor.test(Fig2Dataframe$causeNegCount,Fig2Dataframe$effectNegCount)
 
 pgls_result_e <- gls(
   effectNegCount ~ causeNegCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -478,7 +478,7 @@ cor_result_f<-cor.test(Fig2Dataframe$causeAllCount,Fig2Dataframe$effectNegCount)
 
 pgls_result_f <- gls(
   effectNegCount ~ causeAllCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -533,7 +533,7 @@ cor_result_g<-cor.test(Fig2Dataframe$causePosCount,Fig2Dataframe$effectAllCount)
 
 pgls_result_g <- gls(
   effectAllCount ~ causePosCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -592,7 +592,7 @@ cor_result_h<-cor.test(Fig2Dataframe$causeNegCount,Fig2Dataframe$effectAllCount)
 
 pgls_result_h <- gls(
   effectAllCount ~ causeNegCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -650,7 +650,7 @@ cor_result_i<-cor.test(Fig2Dataframe$causeAllCount,Fig2Dataframe$effectAllCount)
 
 pgls_result_i <- gls(
   effectAllCount ~ causeAllCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -706,7 +706,7 @@ cor_result_j<-cor.test(Fig2Dataframe$causePosCount,Fig2Dataframe$effectAllCount)
 
 pgls_result_j <- gls(
   effectAllCount ~ causeNegCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
@@ -763,7 +763,7 @@ cor_result_k<-cor.test(Fig2Dataframe$effectPosCount,Fig2Dataframe$effectNegCount
 
 pgls_result_k <- gls(
   effectNegCount ~ effectPosCount,
-  correlation = corBrownian(phy = anoleTree, form = ~ spName), 
+  correlation = corBrownian(phy = cichlidTree, form = ~ spName), 
   data = pgls_data,
   method = "ML"
 )
