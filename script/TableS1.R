@@ -5,7 +5,6 @@ library(tools)
 TimeSeries<-read.csv("TimeSeries_40.csv",header=T)
 
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T,fileEncoding = "UTF-8")
-#C_furciferとP_paradoxusはHoriObservationでは出てこない(Hori 1993の行動観察には出てくる？)
 sp_food_coltp0 <- sp_food_coltp0 %>%
   filter(!is.na(No.))
 
