@@ -143,16 +143,13 @@ plot(lay.crctp0posww8)
 #変数の定義
 
 #最小値
-igraph_posww8s_ratio_min <- min(igraph_posww8s$ratio)
+igraph_posww8s_ratio_min <- min(igraph_posww8sadd$ratio)-0.2
 
 #最大値
-igraph_posww8s_ratio_max <- max(igraph_posww8s$ratio)
+igraph_posww8s_ratio_max <- max(igraph_posww8sadd$ratio)
 
 #正規化
-igraph_posww8sscale<-scale(igraph_posww8s$ratio, center = igraph_posww8s_ratio_min, scale = (igraph_posww8s_ratio_max - igraph_posww8s_ratio_min))
-
-
-
+igraph_posww8sscale<-scale(igraph_posww8sadd$ratio, center = igraph_posww8s_ratio_min, scale = (igraph_posww8s_ratio_max - igraph_posww8s_ratio_min))
 
 #Fig1a
 pdf("Fig1a.pdf")
@@ -164,13 +161,12 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              vertex.label.font=4,
              vertex.size=SPCOLtp0popposww8*0.2+3,
              edge.width=igraph_posww8sadd$smapmean,
-             #edge.arrow.width=igraph_posww8sadd$smapmean,
-             edge.arrow.size=igraph_posww8sadd$smapmean,
+             #edge.arrow.width=edgeArrowWidth,
+             edge.arrow.size=igraph_posww8sadd$smapmean+0.5,
              vertex.label.color="black",
              vertex.color=alpha(SPCOLtp0posww8,0.5),
              vertex.label.dist=0,
-             edge.color=rgb(0,0,(igraph_posww8sscale),alpha =igraph_posww8sscale)
-             
+             edge.color = rgb(0, 0, igraph_posww8sscale, alpha = 0.8)
 )
 
 dev.off()
@@ -232,7 +228,7 @@ plot(lay.crctp0negww8)
 #変数の定義
 
 #最小値
-igraph_negww8s_ratio_min <- min(igraph_negww8s$ratio)
+igraph_negww8s_ratio_min <- min(igraph_negww8s$ratio)-0.4
 
 #最大値
 igraph_negww8s_ratio_max <- max(igraph_negww8s$ratio)
@@ -245,22 +241,24 @@ igraph_negww8sscale<-scale(igraph_negww8s$ratio, center = igraph_negww8s_ratio_m
 
 #Fig1b
 pdf("Fig1b.pdf")
-plot.igraph2(igraphdatatp0negww8,layout=lay.crctp0negww8,
-                    vertex.frame.color=NA,
-                    edge.curved=0.3,
-                    vertex.label.cex=0.7,
-                    vertex.label.family="Times",
-                    vertex.label.font=4,
-                    vertex.size=SPCOLtp0popnegww8*0.2+3,
-                    #edge.width=abs(igraph_negww8s$smapmean),
-                    edge.arrow.width=abs(igraph_negww8s$smapmean),
-                    edge.arrow.size=0.2,
-                    vertex.label.color="black",
-                    vertex.color=alpha(SPCOLtp0negww8,0.5),
-                    vertex.label.dist=0,
-                    edge.color=rgb((igraph_negww8sscale),0,0,alpha =igraph_negww8sscale)
-                    
+plot.igraph(
+  igraphdatatp0negww8,
+  layout = lay.crctp0negww8,
+  vertex.frame.color = NA,
+  edge.curved = 0.3,
+  vertex.label.cex = 0.7,
+  vertex.label.family = "Times",
+  vertex.label.font = 4,
+  vertex.size = SPCOLtp0popnegww8 * 0.2 + 3,
+  edge.width = abs(igraph_negww8s$smapmean)+0.1,
+  #edge.arrow.width = abs(igraph_negww8s$smapmean)+0.5,
+  edge.arrow.size = abs(igraph_negww8s$smapmean)+0.5,
+  vertex.label.color = "black",
+  vertex.color = alpha(SPCOLtp0negww8, 0.5),
+  vertex.label.dist = 0,
+  edge.color = rgb((igraph_negww8sscale), 0, 0, alpha = 1)
 )
+
 
 dev.off()
 

@@ -29,11 +29,11 @@ All_sp_list$x<-gsub("Xenotilapia_sp","X_sp",All_sp_list$x)
 
 #9個体以下のもの
 #種名の表記名を統一
-less10_sp<-gsub("Variabilichromis_moorii","V_moorii",less10_sp)
-less10_pop_sp<-gsub("Cunningtonia_longiventralis","C_longiventralis",less10_pop_sp)
-less10_pop_sp<-gsub("Xenotilapia_flavipinnis","X_flavipinnis",less10_pop_sp)
-less10_pop_sp<-gsub("Xenotilapia_boulengeri","X_boulengeri",less10_pop_sp)
-less10_pop_sp<-gsub("Xenotilapia_sp","X_sp",less10_pop_sp)
+less10_sp<-gsub("Variabilichromis_moorii","V_moorii",less10_pop_sp$x)
+less10_sp<-gsub("Cunningtonia_longiventralis","C_longiventralis",less10_sp)
+less10_sp<-gsub("Xenotilapia_flavipinnis","X_flavipinnis",less10_sp)
+less10_sp<-gsub("Xenotilapia_boulengeri","X_boulengeri",less10_sp)
+less10_sp<-gsub("Xenotilapia_sp","X_sp",less10_sp)
 
 TimeSeries_mean<-apply(TimeSeries,MARGIN=2,mean)
 names(TimeSeries_mean)<-gsub("Cunningtonia_longiventralis","C_longiventralis",names(TimeSeries_mean))
@@ -69,7 +69,7 @@ TableS1data <- TableS1Basedata %>%
   left_join(TimeSeries_sd_df, by = "Species.name") %>%
   mutate(
     `Reasons to exclude from CCM` = case_when(
-      Species.name %in% less10_pop_sp ~ "Max. N < 10",
+      Species.name %in% less10_pop_sp$x ~ "Max. N < 10",
       Species.name %in% cantEmbedSPList$x ~ "Projection failed",
       Species.name %in% cantLinearSPList$x ~ "Linearity detected",
       TRUE ~ "(Passed)"
@@ -87,3 +87,4 @@ for(i in 1:nrow(TableS1data)){
 TableS1data$Food.habit<-toTitleCase(TableS1data$Food.habit)
 
 write.csv(TableS1data,"TableS1.csv")
+
