@@ -165,7 +165,7 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              vertex.label.color="black",
              vertex.color=alpha(SPCOLtp0posww8,0.5),
              vertex.label.dist=0,
-             edge.color = rgb(0, 0, igraph_posww8sscale, alpha = 0.8)
+             edge.color = rgb(0, 0, igraph_posww8sscale, alpha = igraph_posww8sadd$ratio)
 )
 
 dev.off()
@@ -254,7 +254,7 @@ plot.igraph(
   vertex.label.color = "black",
   vertex.color = alpha(SPCOLtp0negww8, 0.5),
   vertex.label.dist = 0,
-  edge.color = rgb((igraph_negww8sscale), 0, 0, alpha = 1)
+  edge.color = rgb((igraph_negww8sscale), 0, 0, alpha = igraph_negww8sadd$ratio)
 )
 
 
