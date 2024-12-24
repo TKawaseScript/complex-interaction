@@ -165,15 +165,13 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              vertex.label.color="black",
              vertex.color=alpha(SPCOLtp0posww8,0.5),
              vertex.label.dist=0,
-             edge.color = rgb(0, 0, igraph_posww8sscale, alpha = igraph_posww8sadd$ratio)
+             edge.color = rgb(0,0,igraph_posww8sadd$ratio, alpha = igraph_posww8sadd$ratio)
 )
 
 dev.off()
 
 
-#Fig1aにおいて色の濃さを入れ替えたもの
-#igraph_posww8sscaleの最大値が1なので1.1から引くようにする
-pdf("Fig1a_reverseCol.pdf")
+pdf("Fig1a.pdf")
 plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              vertex.frame.color=NA,
              edge.curved=0.3,
@@ -186,7 +184,25 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
              vertex.label.color="black",
              vertex.color=alpha(SPCOLtp0posww8,0.5),
              vertex.label.dist=0,
-             edge.color = rgb(0, 0, 1.1-igraph_posww8sscale, alpha = igraph_posww8sadd$ratio)
+             edge.color = rgb(igraph_posww8sadd$ratio, alpha = igraph_posww8sadd$ratio)
+)
+
+dev.off()
+
+pdf("Fig1a_white.pdf")
+plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
+             vertex.frame.color=NA,
+             edge.curved=0.3,
+             vertex.label.cex=0.7,
+             vertex.label.family="Times",
+             vertex.label.font=4,
+             vertex.size=SPCOLtp0popposww8*0.2+3,
+             edge.width=igraph_posww8sadd$smapmean,
+             edge.arrow.size=igraph_posww8sadd$smapmean+0.3,
+             vertex.label.color="black",
+             vertex.color=alpha(SPCOLtp0posww8,0.5),
+             vertex.label.dist=0,
+             edge.color = rgb(igraph_posww8sadd$ratio,igraph_posww8sadd$ratio,1, alpha = igraph_posww8sadd$ratio)
 )
 
 dev.off()
@@ -274,7 +290,7 @@ plot.igraph(
   vertex.label.color = "black",
   vertex.color = alpha(SPCOLtp0negww8, 0.5),
   vertex.label.dist = 0,
-  edge.color = rgb((igraph_negww8sscale), 0, 0, alpha = igraph_negww8sadd$ratio)
+  edge.color = rgb(igraph_negww8sscale, 0, 0, alpha = igraph_negww8sadd$ratio)
 )
 
 

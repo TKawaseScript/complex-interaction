@@ -108,30 +108,27 @@ lay.crctp0ww8<-layout_in_circle(igraphdatatp0ww8,order=order(SPORDERtp0ww8))
 
 plot(lay.crctp0ww8)
 
+scaleRatio<-(igraph_allww8s$ratio-min(igraph_allww8s$ratio))/(max(igraph_allww8s$ratio)-min(igraph_allww8s$ratio))
 
-#ratioの正規化
-#最小値
-igraph_ww8s_ratio_min <- min(igraph_allww8s$ratio)
-
-#最大値
-igraph_ww8s_ratio_max <- max(igraph_allww8s$ratio)
-
-#正規化
-igraph_ww8sscale<-scale(igraph_allww8s$ratio, center = igraph_ww8s_ratio_min, scale = (igraph_ww8s_ratio_max - igraph_ww8s_ratio_min))
-
-#矢印の太さを指定するために-を+にする
-igraph_ww8SmapMeanAbs<-abs(igraph_allww8s$smapmean)
-#abs(smapMean)の正規化
-#最小値
-igraph_ww8s_mean_min <- min(igraph_ww8SmapMeanAbs)
-
-#最大値
-igraph_ww8s_mean_max <- max(igraph_ww8SmapMeanAbs)
-
-#正規化
-igraph_ww8sscale<-scale(igraph_ww8SmapMeanAbs, center = igraph_ww8s_mean_min, scale = (igraph_ww8s_mean_max - igraph_ww8s_mean_min))
-
-
+edgeColor <- mapply(function(x, alpha) {
+  if (x < 0.5) {
+    # 赤系
+    r <- 1
+    g <- x / 0.5
+    b <- 0
+  } else if (x == 1) {
+    # 若干灰色を足す
+    r <- 0.95
+    g <- 0.95
+    b <- 0.95
+  } else {
+    # 青系
+    r <- (1 - x) / 0.5
+    g <- (1 - x) / 0.5
+    b <- 1
+  }
+  rgb(r, g, b, alpha = alpha)
+}, scaleRatio, igraph_allww8s$ratio)
 
 pdf("Fig3.pdf")
 
@@ -150,7 +147,7 @@ plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
              vertex.label.color="black",
              vertex.color=alpha(SPCOLtp0ww8,0.5),
              vertex.label.dist=0,
-             edge.color=rgb(igraph_allww8s$Neg,0,igraph_allww8s$Pos,alpha=igraph_allww8s$ratio)
+             edge.color=rgb(igraph_allww8s$Neg*abs(igraph_allww8s$ratio),0,igraph_allww8s$Pos*abs(igraph_allww8s$ratio),alpha=igraph_allww8s$ratio)
              
 )
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0ww8), col=unique(SPCOLtp0ww8),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
@@ -158,4 +155,28 @@ legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0ww8), col=un
 
 dev.off()
 
+pdf("Fig3_white.pdf")
+
+par(family = "Times")
+
+#Fig3(betweenness Size)
+plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
+             vertex.frame.color=NA,
+             edge.curved=0.3,
+             vertex.label.cex=0.7,
+             vertex.label.family="Times",
+             vertex.label.font=4,
+             vertex.size=log(SPCOLtp0betww8+2)*5,
+             edge.width=igraph_allww8s$smapmean+0.5,
+             edge.arrow.width=igraph_allww8s$smapmean+0.5,
+             vertex.label.color="black",
+             vertex.color=alpha(SPCOLtp0ww8,0.5),
+             vertex.label.dist=0,
+             edge.color=edgeColor
+             
+)
+legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0ww8), col=unique(SPCOLtp0ww8),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
+
+
+dev.off()
 
