@@ -171,6 +171,26 @@ plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
 dev.off()
 
 
+#Fig1aにおいて色の濃さを入れ替えたもの
+#igraph_posww8sscaleの最大値が1なので1.1から引くようにする
+pdf("Fig1a_reverseCol.pdf")
+plot.igraph2(igraphdatatp0posww8,layout=lay.crctp0posww8,
+             vertex.frame.color=NA,
+             edge.curved=0.3,
+             vertex.label.cex=0.7,
+             vertex.label.family="Times",
+             vertex.label.font=4,
+             vertex.size=SPCOLtp0popposww8*0.2+3,
+             edge.width=igraph_posww8sadd$smapmean,
+             edge.arrow.size=igraph_posww8sadd$smapmean+0.3,
+             vertex.label.color="black",
+             vertex.color=alpha(SPCOLtp0posww8,0.5),
+             vertex.label.dist=0,
+             edge.color = rgb(0, 0, 1.1-igraph_posww8sscale, alpha = igraph_posww8sadd$ratio)
+)
+
+dev.off()
+
 
 igraph_negww8sadd<-rbind(igraph_negww8s,igraph_negww8s[1,])
 
@@ -227,13 +247,13 @@ plot(lay.crctp0negww8)
 #変数の定義
 
 #最小値
-igraph_negww8s_ratio_min <- min(igraph_negww8s$ratio)-0.4
+igraph_negww8s_ratio_min <- min(igraph_negww8sadd$ratio)-0.4
 
 #最大値
-igraph_negww8s_ratio_max <- max(igraph_negww8s$ratio)
+igraph_negww8s_ratio_max <- max(igraph_negww8sadd$ratio)
 
 #正規化
-igraph_negww8sscale<-scale(igraph_negww8s$ratio, center = igraph_negww8s_ratio_min, scale = (igraph_negww8s_ratio_max - igraph_negww8s_ratio_min))
+igraph_negww8sscale<-scale(igraph_negww8sadd$ratio, center = igraph_negww8s_ratio_min, scale = (igraph_negww8s_ratio_max - igraph_negww8s_ratio_min))
 
 
 
