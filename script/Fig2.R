@@ -1,3 +1,5 @@
+renv::restore()
+
 library(igraph)
 library(dplyr)
 library(stringr)
