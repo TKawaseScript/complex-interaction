@@ -109,6 +109,8 @@ lay.crctp0ww8<-layout_in_circle(igraphdatatp0ww8,order=order(SPORDERtp0ww8))
 plot(lay.crctp0ww8)
 
 
+SPFoodtp0posww8
+
 pdf("Fig1a.pdf")
 
 par(family = "Times")
@@ -310,7 +312,7 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
 
 
 par(family="Times")
-legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0posww8), col=alpha(unique(SPCOLtp0posww8),0.5),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
+legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0ww8), col=alpha(unique(SPCOLtp0ww8),0.5),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
 dev.off()
 
 
