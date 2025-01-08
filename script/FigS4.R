@@ -10,28 +10,48 @@ sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
 PosList<-strengthtp0[strengthtp0$strength=="positive",]
 NegList<-strengthtp0[strengthtp0$strength=="negative",]
 
-PosListRecFood<-NULL
+intraInteractionPos<-NULL
+interInteractionPos<-NULL
 for(i in 1:nrow(PosList)){
-  PosListRecFood[i]<-sp_food_coltp0[PosList$effect[i]==sp_food_coltp0$cause,]$foodhabit7
+  if (PosList$cause[i]==PosList$effect[i]){
+    intraInteractionPos <- rbind(intraInteractionPos,PosList[i,])
+  }else{
+    interInteractionPos <- rbind(interInteractionPos,PosList[i,])
+  }
+}
+
+intraInteractionNeg<-NULL
+interInteractionNeg<-NULL
+for(i in 1:nrow(NegList)){
+  if (NegList$cause[i]==NegList$effect[i]){
+    intraInteractionNeg <- rbind(intraInteractionNeg,NegList[i,])
+  }else{
+    interInteractionNeg <- rbind(interInteractionNeg,NegList[i,])
+  }
+}
+
+PosListRecFood<-NULL
+for(i in 1:nrow(interInteractionPos)){
+  PosListRecFood[i]<-sp_food_coltp0[interInteractionPos$effect[i]==sp_food_coltp0$cause,]$foodhabit7
 }
 PosListRecCol<-NULL
-for(i in 1:nrow(PosList)){
-  PosListRecCol[i]<-sp_food_coltp0[PosList$effect[i]==sp_food_coltp0$cause,]$col7
+for(i in 1:nrow(interInteractionPos)){
+  PosListRecCol[i]<-sp_food_coltp0[interInteractionPos$effect[i]==sp_food_coltp0$cause,]$col7
 }
 
-PosListCause<-data.frame("spName"=PosList$cause,"RecipientFood"=PosListRecFood,"RecipientCol"=PosListRecCol)
+PosListCause<-data.frame("spName"=interInteractionPos$cause,"RecipientFood"=PosListRecFood,"RecipientCol"=PosListRecCol)
 
 NegListRecFood<-NULL
-for(i in 1:nrow(NegList)){
-  NegListRecFood[i]<-sp_food_coltp0[NegList$effect[i]==sp_food_coltp0$cause,]$foodhabit7
+for(i in 1:nrow(interInteractionNeg)){
+  NegListRecFood[i]<-sp_food_coltp0[interInteractionNeg$effect[i]==sp_food_coltp0$cause,]$foodhabit7
 }
 
 NegListRecCol<-NULL
-for(i in 1:nrow(NegList)){
-  NegListRecCol[i]<-sp_food_coltp0[NegList$effect[i]==sp_food_coltp0$cause,]$col7
+for(i in 1:nrow(interInteractionNeg)){
+  NegListRecCol[i]<-sp_food_coltp0[interInteractionNeg$effect[i]==sp_food_coltp0$cause,]$col7
 }
 
-NegListCause<-data.frame("spName"=NegList$cause,"RecipientFood"=NegListRecFood,"RecipientCol"=NegListRecCol)
+NegListCause<-data.frame("spName"=interInteractionNeg$cause,"RecipientFood"=NegListRecFood,"RecipientCol"=NegListRecCol)
 # PosListCauseとNegListCauseを結合
 PosListCause$Category <- "Positive"
 NegListCause$Category <- "Negative"
@@ -84,26 +104,26 @@ FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
 #(b)spName:種間相互作用の受け手側の名前、RecipientFood、RecipientCol：その種間相互用の原因側の食性と色
 
 PosListCauFood<-NULL
-for(i in 1:nrow(PosList)){
-  PosListCauFood[i]<-sp_food_coltp0[PosList$cause[i]==sp_food_coltp0$cause,]$foodhabit7
+for(i in 1:nrow(interInteractionPos)){
+  PosListCauFood[i]<-sp_food_coltp0[interInteractionPos$cause[i]==sp_food_coltp0$cause,]$foodhabit7
 }
 PosListCauCol<-NULL
-for(i in 1:nrow(PosList)){
-  PosListCauCol[i]<-sp_food_coltp0[PosList$cause[i]==sp_food_coltp0$cause,]$col7
+for(i in 1:nrow(interInteractionPos)){
+  PosListCauCol[i]<-sp_food_coltp0[interInteractionPos$cause[i]==sp_food_coltp0$cause,]$col7
 }
 
-PosListRec<-data.frame("spName"=PosList$effect,"CauseFood"=PosListCauFood,"CauseCol"=PosListCauCol)
+PosListRec<-data.frame("spName"=interInteractionPos$effect,"CauseFood"=PosListCauFood,"CauseCol"=PosListCauCol)
 
 NegListCauFood<-NULL
-for(i in 1:nrow(NegList)){
-  NegListCauFood[i]<-sp_food_coltp0[NegList$cause[i]==sp_food_coltp0$cause,]$foodhabit7
+for(i in 1:nrow(interInteractionNeg)){
+  NegListCauFood[i]<-sp_food_coltp0[interInteractionNeg$cause[i]==sp_food_coltp0$cause,]$foodhabit7
 }
 NegListCauCol<-NULL
-for(i in 1:nrow(NegList)){
-  NegListCauCol[i]<-sp_food_coltp0[NegList$cause[i]==sp_food_coltp0$cause,]$col7
+for(i in 1:nrow(interInteractionNeg)){
+  NegListCauCol[i]<-sp_food_coltp0[interInteractionNeg$cause[i]==sp_food_coltp0$cause,]$col7
 }
 
-NegListRec<-data.frame("spName"=NegList$effect,"CauseFood"=NegListCauFood,"CauseCol"=NegListCauCol)
+NegListRec<-data.frame("spName"=interInteractionNeg$effect,"CauseFood"=NegListCauFood,"CauseCol"=NegListCauCol)
 # PosListCauseとNegListCauseを結合
 PosListRec$Category <- "Positive"
 NegListRec$Category <- "Negative"
