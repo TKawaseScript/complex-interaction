@@ -75,72 +75,13 @@ interInteraction$match_reversed <- interInteraction$effect_cause %in% interInter
 # 結果の表示
 print(interInteraction$match_reversed)
 
-# match_reversed が TRUE 
-each_other_data <- interInteraction %>%
-  filter(match_reversed == TRUE)
-
-for(i in 1:nrow(each_other_data)){
-  each_other_data$cause.x[i]<-sp_food_coltp0[each_other_data$cause.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-  each_other_data$effect.x[i]<-sp_food_coltp0[each_other_data$effect.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-}
-
-
 # 結果の表示
-view(each_other_data)
-write.csv(each_other_data,"each_other_data.csv")
+view(interInteraction)
+write.csv(interInteraction,"TableS2.csv")
 
 #FigS2
-tableS3_each<-each_other_data %>%
-  filter(!(match_type =="No Match" | rmatch_type =="No Match"))
+tableS3<-interInteraction %>%
+  filter(match_type !="No Match" | rmatch_type !="No Match")
 
-write.csv(tableS3_each,"tableS3_a.csv")
-
-
-# 空のデータフレームとして初期化
-same_strength_each_other <- data.frame()
-notsame_strength_each_other <- data.frame()
-
-# ループ処理
-for (i in 1:nrow(each_other_data)) {
-  # フィルタリングの条件を確認
-  current_cause <- each_other_data$cause.x[i]
-  current_effect <- each_other_data$effect.x[i]
-  
-  # 同じ「cause-effect」のペアを探す
-  matched_row <- each_other_data[
-    each_other_data$cause.x == current_effect & 
-      each_other_data$effect.x == current_cause, 
-  ]
-  
-  # 条件を満たす場合
-  if (nrow(matched_row) > 0 && each_other_data$strength[i] == matched_row$strength) {
-    same_strength_each_other <- rbind(same_strength_each_other, each_other_data[i, ])
-  } else {
-    notsame_strength_each_other <- rbind(notsame_strength_each_other, each_other_data[i, ])
-  }
-}
-
-# match_reversed が FALSE
-
-alternative_data <- interInteraction %>%
-  filter(match_reversed == FALSE)
-
-for(i in 1:nrow(alternative_data)){
-  alternative_data$cause.x[i]<-sp_food_coltp0[alternative_data$cause.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-  alternative_data$effect.x[i]<-sp_food_coltp0[alternative_data$effect.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-}
-
-
-# 結果の表示
-view(alternative_data)
-write.csv(alternative_data,"alternative_data.csv")
-
-#TableS2
-tableS3_b<-alternative_data %>%
-  filter(!(match_type =="No Match" | rmatch_type =="No Match"))
-
-write.csv(tableS3_alter,"tableS3_b.csv")
-
-write.csv(alternative_data[alternative_data$strength=="positive",],"Pos-None.csv")
-write.csv(alternative_data[alternative_data$strength=="negative",],"Neg-None.csv")
+write.csv(tableS3,"tableS3.csv")
 
