@@ -52,119 +52,83 @@ interInteraction$rmatch_type <- "No Match"  # 初期値として "No Match" を�
 
 # hori_foodweb_interaction_with_key との一致を確認し、該当する行の 'match_type' に "Prey-Predator" を記録
 interInteraction$match_type[interInteraction$cause_effect %in% hori_foodweb_interaction_with_key$cause_effect] <- "Predator-Prey"
-interInteraction$rmatch_type[interInteraction$effect_cause %in% hori_foodweb_interaction_with_key$effect_cause] <- "Prey-Predator"
+interInteraction$rmatch_type[interInteraction$effect_cause %in% hori_foodweb_interaction_with_key$cause_effect] <- "Prey-Predator"
 
 # correlation_Hori_with_key との一致を確認し、該当する行の 'match_type' に "Aggressor-Victim" を記録
 interInteraction$match_type[interInteraction$cause_effect %in% correlation_Hori_with_key$cause_effect] <- "Aggressor-Victim"
-interInteraction$rmatch_type[interInteraction$effect_cause %in% correlation_Hori_with_key$effect_cause] <- "Victim-Aggressor"
+interInteraction$rmatch_type[interInteraction$effect_cause %in% correlation_Hori_with_key$cause_effect] <- "Victim-Aggressor"
 
 # 両方に一致する場合は "Prey-Predator, Aggressor-Victim" と記録
 interInteraction$match_type[interInteraction$cause_effect %in% hori_foodweb_interaction_with_key$cause_effect &
                               interInteraction$cause_effect %in% correlation_Hori_with_key$cause_effect] <- "Predator-Prey, Aggressor-Victim"
 
-interInteraction$rmatch_type[interInteraction$effect_cause %in% hori_foodweb_interaction_with_key$effect_cause &
-                              interInteraction$effect_cause %in% correlation_Hori_with_key$effect_cause] <- "Prey-Predator, Victim-Aggressor"
+interInteraction$rmatch_type[interInteraction$effect_cause %in% hori_foodweb_interaction_with_key$cause_effect &
+                              interInteraction$effect_cause %in% correlation_Hori_with_key$cause_effect] <- "Prey-Predator, Victim-Aggressor"
 
 # 結果の表示
 print(interInteraction$match_type)
 print(interInteraction$rmatch_type)
 
-#cause_effectを入れ替えた文字列を生成
-interInteraction$reversed_cause_effect <- NULL
-  
-for(i in 1:length(interInteraction$cause.x)){
-  interInteraction$reversed_cause_effect[i]<-paste(interInteraction$effect.x[i],interInteraction$cause.x[i],sep="_")
-}
-
 # reversed_cause_effect と effect_cause が一致するかを確認し、新しい列 match_reversed に TRUE/FALSE を記録
-interInteraction$match_reversed <- interInteraction$reversed_cause_effect %in% interInteraction$cause_effect
+interInteraction$match_reversed <- interInteraction$effect_cause %in% interInteraction$cause_effect
 
 # 結果の表示
 print(interInteraction$match_reversed)
 
-# match_reversed が TRUE かつ strength が "positive" の行を抽出
-Pos_pos_data <- interInteraction %>%
-  filter(match_reversed == TRUE, strength == "positive")
+# match_reversed が TRUE 
+each_other_data <- interInteraction %>%
+  filter(match_reversed == TRUE)
 
-for(i in 1:nrow(Pos_pos_data)){
-  Pos_pos_data$cause.x[i]<-sp_food_coltp0[Pos_pos_data$cause.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-  Pos_pos_data$effect.x[i]<-sp_food_coltp0[Pos_pos_data$effect.x[i]==sp_food_coltp0$cause,]$bindre.namesp
+for(i in 1:nrow(each_other_data)){
+  each_other_data$cause.x[i]<-sp_food_coltp0[each_other_data$cause.x[i]==sp_food_coltp0$cause,]$bindre.namesp
+  each_other_data$effect.x[i]<-sp_food_coltp0[each_other_data$effect.x[i]==sp_food_coltp0$cause,]$bindre.namesp
 }
 
 
 # 結果の表示
-print(Pos_pos_data)
-write.csv(Pos_pos_data,"Pos_pos_data.csv")
+view(each_other_data)
+write.csv(each_other_data,"each_other_data.csv")
 
-# match_reversed が TRUE かつ strength が "negative" の行を抽出
+# 空のデータフレームとして初期化
+same_strength_each_other <- data.frame()
+notsame_strength_each_other <- data.frame()
 
-Neg_neg_data <- interInteraction %>%
-  filter(match_reversed == TRUE, strength == "negative")
+# ループ処理
+for (i in 1:nrow(each_other_data)) {
+  # フィルタリングの条件を確認
+  current_cause <- each_other_data$cause.x[i]
+  current_effect <- each_other_data$effect.x[i]
+  
+  # 同じ「cause-effect」のペアを探す
+  matched_row <- each_other_data[
+    each_other_data$cause.x == current_effect & 
+      each_other_data$effect.x == current_cause, 
+  ]
+  
+  # 条件を満たす場合
+  if (nrow(matched_row) > 0 && each_other_data$strength[i] == matched_row$strength) {
+    same_strength_each_other <- rbind(same_strength_each_other, each_other_data[i, ])
+  } else {
+    notsame_strength_each_other <- rbind(notsame_strength_each_other, each_other_data[i, ])
+  }
+}
 
-for(i in 1:nrow(Neg_neg_data)){
-  Neg_neg_data$cause.x[i]<-sp_food_coltp0[Neg_neg_data$cause.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-  Neg_neg_data$effect.x[i]<-sp_food_coltp0[Neg_neg_data$effect.x[i]==sp_food_coltp0$cause,]$bindre.namesp
+# match_reversed が FALSE
+
+alternative_data <- interInteraction %>%
+  filter(match_reversed == FALSE)
+
+for(i in 1:nrow(alternative_data)){
+  alternative_data$cause.x[i]<-sp_food_coltp0[alternative_data$cause.x[i]==sp_food_coltp0$cause,]$bindre.namesp
+  alternative_data$effect.x[i]<-sp_food_coltp0[alternative_data$effect.x[i]==sp_food_coltp0$cause,]$bindre.namesp
 }
 
 
 # 結果の表示
-print(Neg_neg_data)
-write.csv(Neg_neg_data,"Neg_neg_data.csv")
-
-Pos_None_data <- interInteraction %>%
-  filter(match_reversed == FALSE, strength == "positive")
-
-# match_reversed が FALSE かつ strength が "positive" の行を抽出
-
-#Pos_None_dataはなし
-for(i in 1:nrow(Pos_None_data)){
-  Pos_None_data$cause.x[i]<-sp_food_coltp0[Pos_None_data$cause.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-  Pos_None_data$effect.x[i]<-sp_food_coltp0[Pos_None_data$effect.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-}
+view(alternative_data)
+write.csv(alternative_data,"alternative_data.csv")
 
 
-# 結果の表示
-print(Pos_None_data)
-write.csv(Pos_None_data,"Pos_None_data.csv")
-
-# match_reversed が FALSE かつ strength が "negative" の行を抽出
-
-Neg_None_data <- interInteraction %>%
-  filter(match_reversed == FALSE, strength == "negative")
-
-# 結果の表示
-
-for(i in 1:nrow(Neg_None_data)){
-  Neg_None_data$cause.x[i]<-sp_food_coltp0[Neg_None_data$cause.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-  Neg_None_data$effect.x[i]<-sp_food_coltp0[Neg_None_data$effect.x[i]==sp_food_coltp0$cause,]$bindre.namesp
-}
-
-
-print(Neg_None_data)
-write.csv(Neg_None_data,"Neg_None_data.csv")
-
-#4つのデータで漏れがないか確認
-# 4つの抽出結果を結合して除外対象データを作成
-# First, filter out matching rows from the first dataset
-filtered_data <- interInteraction %>%
-  anti_join(Pos_pos_data, by = c("cause.x", "effect.x", "causemeantp0", "effectmeantp0", "causesdtp0", "effectsdtp0", "causehabtp0"))
-
-# Then filter out matching rows from the second dataset
-filtered_data <- filtered_data %>%
-  anti_join(Neg_neg_data, by = c("cause.x", "effect.x", "causemeantp0", "effectmeantp0", "causesdtp0", "effectsdtp0", "causehabtp0"))
-
-# Finally, filter out matching rows from the third dataset
-filtered_data <- filtered_data %>%
-  anti_join(Pos_None_data, by = c("cause.x", "effect.x", "causemeantp0", "effectmeantp0", "causesdtp0", "effectsdtp0", "causehabtp0"))
-
-filtered_data <- filtered_data %>%
-  anti_join(Neg_None_data, by = c("cause.x", "effect.x", "causemeantp0", "effectmeantp0", "causesdtp0", "effectsdtp0", "causehabtp0"))
-
-# View the resulting filtered data
-print(filtered_data)
-
-#Pos-Neg,Neg-Posのようなデータはいないのか？の確認
-# 元のデータから除外対象データを取り除いたデータを作成
-filtered_data <- anti_join(interInteraction, filtered_data)
-
+write.csv(alternative_data[alternative_data$strength=="positive",],"Pos-None.csv")
+write.csv(alternative_data[alternative_data$strength=="negative",],"Neg-None.csv")
 
