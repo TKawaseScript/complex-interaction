@@ -90,8 +90,10 @@ view(each_other_data)
 write.csv(each_other_data,"each_other_data.csv")
 
 #FigS2
-each_other_data %>%
-  filter(rmatch_type !="No Match")
+tableS3_each<-each_other_data %>%
+  filter(!(match_type =="No Match" | rmatch_type =="No Match"))
+
+write.csv(tableS3_each,"tableS3_a.csv")
 
 
 # 空のデータフレームとして初期化
@@ -134,9 +136,10 @@ view(alternative_data)
 write.csv(alternative_data,"alternative_data.csv")
 
 #TableS2
-alternative_data %>%
-       filter(rmatch_type !="No Match")
+tableS3_b<-alternative_data %>%
+  filter(!(match_type =="No Match" | rmatch_type =="No Match"))
 
+write.csv(tableS3_alter,"tableS3_b.csv")
 
 write.csv(alternative_data[alternative_data$strength=="positive",],"Pos-None.csv")
 write.csv(alternative_data[alternative_data$strength=="negative",],"Neg-None.csv")
