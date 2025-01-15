@@ -89,6 +89,11 @@ for(i in 1:nrow(each_other_data)){
 view(each_other_data)
 write.csv(each_other_data,"each_other_data.csv")
 
+#FigS2
+view(each_other_data %>%
+  filter(rmatch_type !="No Match"))
+
+
 # 空のデータフレームとして初期化
 same_strength_each_other <- data.frame()
 notsame_strength_each_other <- data.frame()
@@ -127,6 +132,10 @@ for(i in 1:nrow(alternative_data)){
 # 結果の表示
 view(alternative_data)
 write.csv(alternative_data,"alternative_data.csv")
+
+#TableS2
+view(alternative_data %>%
+       filter(rmatch_type !="No Match"))
 
 
 write.csv(alternative_data[alternative_data$strength=="positive",],"Pos-None.csv")
