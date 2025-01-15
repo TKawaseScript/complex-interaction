@@ -1,0 +1,126 @@
+"","cause.x","effect.x","causehabtp0","min","mean","max","strength","ratio","match_type","rmatch_type","match_reversed"
+"2","A_compressiceps","J_ornatus","Shrimp_feeder",-0.379552792866364,0.705321333208973,2.73408921480735,"positive",0.815789473684211,"No Match","No Match",FALSE
+"3","A_compressiceps","N_fasciatus","Shrimp_feeder",-0.291749192333921,0.143542022590602,0.489222653351218,"positive",0.763157894736842,"No Match","No Match",FALSE
+"4","A_compressiceps","O_ventralis","Shrimp_feeder",-0.466613814590374,-0.0754990537821406,0.338388403957123,"negative",0.657894736842105,"No Match","No Match",FALSE
+"6","A_dewindti","I_loocki","Detritus_feeder",-0.603405600685737,-0.231685976100237,0.0914477260150243,"negative",0.973684210526316,"No Match","No Match",TRUE
+"7","A_dewindti","L_callipterus","Detritus_feeder",-0.723548400719315,0.235296771684571,2.31509632627562,"positive",0.552631578947368,"No Match","No Match",FALSE
+"8","A_dewindti","L_lemairii","Detritus_feeder",-7.20518542695341,1.34227289287883,8.05247128198013,"positive",0.631578947368421,"No Match","No Match",FALSE
+"9","A_dewindti","N_fasciatus","Detritus_feeder",-1.11990031363902,-0.122269701403292,0.384384507354645,"negative",0.552631578947368,"No Match","No Match",TRUE
+"10","A_dewindti","N_sexfasciatus","Detritus_feeder",-0.171817494312742,0.112113234530357,0.56542638382316,"positive",0.763157894736842,"No Match","No Match",TRUE
+"11","A_dewindti","O_ventralis","Detritus_feeder",-0.110985915298169,0.192526408159695,0.384871745623967,"positive",0.947368421052632,"No Match","No Match",TRUE
+"12","A_dewindti","P_microlepis","Detritus_feeder",-1.55826844050919,-0.345332974492838,1.35476162384552,"negative",0.868421052631579,"No Match","No Match",TRUE
+"13","A_dewindti","P_trewavasae","Detritus_feeder",-5.57175860257285,-0.671148985282279,2.71643457366478,"negative",0.605263157894737,"No Match","No Match",TRUE
+"14","A_dewindti","T_vittatus","Detritus_feeder",-0.295373393424973,0.179631531588015,0.498503646385446,"positive",0.868421052631579,"No Match","No Match",FALSE
+"15","G_pfefferi","A_compressiceps","Shrimp_feeder",-0.0394952723558443,0.201849627779029,0.471777179588461,"positive",0.947368421052632,"No Match","No Match",FALSE
+"17","G_pfefferi","L_dardennii","Shrimp_feeder",-5.2267886552243,-0.251255218821848,5.04463540102746,"negative",0.5,"No Match","No Match",FALSE
+"18","G_pfefferi","L_elongatus","Shrimp_feeder",-1.08211568723947,1.14405471412877,5.92039094148081,"positive",0.789473684210526,"No Match","No Match",FALSE
+"19","G_pfefferi","N_sexfasciatus","Shrimp_feeder",-0.474527508566284,0.0679967613599497,0.422175702629018,"positive",0.736842105263158,"No Match","No Match",FALSE
+"20","G_pfefferi","O_ventralis","Shrimp_feeder",0.134466411908486,0.541492825844446,1.00362874992348,"positive",1,"No Match","No Match",FALSE
+"21","G_pfefferi","P_microlepis","Shrimp_feeder",-1.33744027334622,0.032017055854784,1.41212184399964,"positive",0.552631578947368,"Aggressor-Victim","Prey-Predator",FALSE
+"23","H_microlepis","Paracyprichromisspp","Fry_feeder",-0.362661087574958,-0.280465819799647,-0.0714862633526051,"negative",1,"No Match","No Match",FALSE
+"24","I_loocki","A_dewindti","Unicellular_algae_feeder",0.222856869207547,0.388169908547537,0.785783514855506,"positive",1,"No Match","No Match",TRUE
+"26","I_loocki","N_fasciatus","Unicellular_algae_feeder",-0.509446242430508,0.124767745681,0.576109922119078,"positive",0.684210526315789,"No Match","No Match",TRUE
+"27","I_loocki","O_ventralis","Unicellular_algae_feeder",-0.808591612419095,-0.370074785450008,0.0194425523529726,"negative",0.973684210526316,"No Match","No Match",TRUE
+"28","I_loocki","T_moorii","Unicellular_algae_feeder",-0.618778235347742,-0.251802203565492,0.14326556773366,"negative",0.842105263157895,"No Match","No Match",TRUE
+"29","J_ornatus","A_dewindti","Sponge_feeder",-0.445788684852124,0.13198919997132,0.817005546220117,"positive",0.736842105263158,"No Match","No Match",FALSE
+"31","J_ornatus","L_callipterus","Sponge_feeder",-1.14185434674291,0.240757808991223,1.60855503651613,"positive",0.631578947368421,"No Match","No Match",FALSE
+"32","J_ornatus","N_fasciatus","Sponge_feeder",-0.85392521021053,0.379350886993733,1.60784851674702,"positive",0.736842105263158,"No Match","No Match",FALSE
+"33","J_ornatus","N_sexfasciatus","Sponge_feeder",-0.858761359054761,0.120696660169729,0.698113775867107,"positive",0.815789473684211,"No Match","No Match",FALSE
+"34","J_ornatus","O_ventralis","Sponge_feeder",-0.536461124926721,0.172706374708867,0.738186712402996,"positive",0.736842105263158,"No Match","No Match",TRUE
+"35","J_ornatus","P_microlepis","Sponge_feeder",-1.63599609339041,-0.213500180614341,1.0452336924214,"negative",0.605263157894737,"No Match","No Match",TRUE
+"36","J_ornatus","T_moorii","Sponge_feeder",-0.343108893100779,0.109758958164604,0.950643617496666,"positive",0.710526315789474,"No Match","No Match",FALSE
+"37","J_ornatus","T_vittatus","Sponge_feeder",-0.532270593335131,0.268238698735947,1.10612494988943,"positive",0.842105263157895,"No Match","No Match",FALSE
+"39","L_attenuatus","L_callipterus","Fry_feeder",-1.29328213216419,0.583600187319336,2.40288217673534,"positive",0.763157894736842,"No Match","No Match",FALSE
+"40","L_attenuatus","L_labiatus","Fry_feeder",-6.15878730308981,0.145024387012198,10.2657321124249,"positive",0.657894736842105,"No Match","No Match",FALSE
+"41","L_attenuatus","L_tanganicanus","Fry_feeder",-0.0233981556177143,1.30396641187903,1.97816055959034,"positive",0.973684210526316,"No Match","No Match",FALSE
+"42","L_attenuatus","X_papilio","Fry_feeder",-1.03979636335474,1.54138209034654,4.25160674547729,"positive",0.947368421052632,"No Match","No Match",FALSE
+"43","L_callipterus","A_compressiceps","Shrimp_feeder",0.119071439975513,0.61382971444931,1.04970071298034,"positive",1,"No Match","No Match",FALSE
+"44","L_callipterus","I_loocki","Shrimp_feeder",-0.762854345612183,-0.35542700635265,0.00966819572961961,"negative",0.973684210526316,"No Match","No Match",FALSE
+"46","L_callipterus","L_dardennii","Shrimp_feeder",-5.66651021853533,0.166786453679429,8.2980052739593,"positive",0.552631578947368,"No Match","No Match",FALSE
+"47","L_callipterus","L_tanganicanus","Shrimp_feeder",-0.297113508063696,0.103512880123563,0.788009136286501,"positive",0.578947368421053,"No Match","No Match",FALSE
+"48","L_callipterus","N_fasciatus","Shrimp_feeder",-1.25498333266098,-0.0750890078596974,0.709616446235158,"negative",0.552631578947368,"No Match","No Match",FALSE
+"49","L_callipterus","O_ventralis","Shrimp_feeder",-0.644613051195102,-0.207530566035656,0.283339759390573,"negative",0.789473684210526,"No Match","No Match",FALSE
+"50","L_callipterus","P_microlepis","Shrimp_feeder",-2.03678050263056,-0.407400030995674,0.653141674015276,"negative",0.736842105263158,"No Match","Prey-Predator",FALSE
+"51","L_callipterus","T_moorii","Shrimp_feeder",-0.208448124607181,0.362487938390315,0.923599903190071,"positive",0.921052631578947,"No Match","Victim-Aggressor",FALSE
+"52","L_callipterus","X_papilio","Shrimp_feeder",-2.85907321769449,-0.488084155109407,0.943806561543218,"negative",0.763157894736842,"No Match","No Match",FALSE
+"53","L_dardennii","A_dewindti","Unicellular_algae_feeder",0.124440680430569,0.263352916435333,0.382140713240232,"positive",1,"No Match","No Match",FALSE
+"55","L_dardennii","L_tanganicanus","Unicellular_algae_feeder",-0.389438570574203,-0.0387500372666881,0.331172450845125,"negative",0.657894736842105,"No Match","No Match",FALSE
+"56","L_dardennii","T_vittatus","Unicellular_algae_feeder",-0.294099618648183,0.0891902176551235,0.45237342814378,"positive",0.657894736842105,"No Match","No Match",FALSE
+"57","L_dardennii","V_moorii","Unicellular_algae_feeder",-2.47276631368035,-0.640573277969189,0.737153200422787,"negative",0.710526315789474,"No Match","No Match",FALSE
+"59","L_elongatus","T_temporalis","Fish_feeder",-4.79022697364682,-0.361401657557099,5.83306542831018,"negative",0.578947368421053,"Predator-Prey","Victim-Aggressor",FALSE
+"60","L_elongatus","V_moorii","Fish_feeder",-2.55649684644274,-0.347356226740902,1.48776363422975,"negative",0.657894736842105,"No Match","No Match",TRUE
+"61","L_labiatus","A_compressiceps","Zoobenthos_feeder",-0.213545370261963,-0.0511810532970624,0.261612773746949,"negative",0.736842105263158,"No Match","No Match",FALSE
+"63","L_labiatus","T_moorii","Zoobenthos_feeder",-0.520745176953854,-0.300010435270483,-0.0445435223723012,"negative",1,"No Match","No Match",FALSE
+"65","L_lemairii","Paracyprichromisspp","Fish_feeder",-0.138261536137001,-0.0880131108390975,-0.021490294280788,"negative",1,"No Match","No Match",FALSE
+"66","L_tanganicanus","I_loocki","Unicellular_algae_feeder",-0.287578680697578,0.256030728722033,0.751916223659232,"positive",0.842105263157895,"No Match","No Match",FALSE
+"68","L_tanganicanus","P_microlepis","Unicellular_algae_feeder",-1.66464293001362,0.0645202559769775,0.825516939913907,"positive",0.552631578947368,"No Match","Prey-Predator",FALSE
+"69","L_tanganicanus","P_polyodon","Unicellular_algae_feeder",-2.55381449913518,0.241895910022561,2.78122042078144,"positive",0.5,"No Match","No Match",FALSE
+"70","L_tanganicanus","T_moorii","Unicellular_algae_feeder",-0.589971366439558,-0.303002509196455,0.0979386820356067,"negative",0.921052631578947,"No Match","No Match",FALSE
+"71","N_fasciatus","A_dewindti","Shrimp_feeder",-0.225354717726018,0.0941001347699719,0.350943747231042,"positive",0.736842105263158,"No Match","No Match",TRUE
+"72","N_fasciatus","I_loocki","Shrimp_feeder",-0.515437691723039,-0.21794213997549,0.132302986450378,"negative",0.894736842105263,"No Match","No Match",TRUE
+"74","N_fasciatus","O_ventralis","Shrimp_feeder",-1.02376520118412,-0.380998077707402,0.0880378095405117,"negative",0.921052631578947,"No Match","No Match",TRUE
+"75","N_fasciatus","P_microlepis","Shrimp_feeder",-0.610344003181223,0.104477061743846,1.86085256486914,"positive",0.578947368421053,"No Match","Prey-Predator",TRUE
+"76","N_fasciatus","S_multipunctatus","Shrimp_feeder",-1.96245301725723,-0.389732437757891,1.10190630818584,"negative",0.578947368421053,"No Match","No Match",TRUE
+"77","N_fasciatus","T_moorii","Shrimp_feeder",-0.350005292446474,-0.0600444071495525,0.343374166385019,"negative",0.684210526315789,"Predator-Prey","No Match",TRUE
+"78","N_fasciatus","T_vittatus","Shrimp_feeder",-0.561235523495479,0.0373204123866845,0.410097582192716,"positive",0.631578947368421,"No Match","No Match",FALSE
+"79","N_fasciatus","X_papilio","Shrimp_feeder",-1.64728748821273,-0.0450757365917429,1.42928114926835,"negative",0.526315789473684,"No Match","No Match",FALSE
+"80","N_sexfasciatus","A_compressiceps","Zoobenthos_feeder",-0.12980035080125,0.33712998593915,0.739328520578452,"positive",0.921052631578947,"No Match","No Match",FALSE
+"81","N_sexfasciatus","A_dewindti","Zoobenthos_feeder",-0.150746794123591,-0.0289476769418272,0.298276073242462,"negative",0.657894736842105,"No Match","No Match",TRUE
+"83","N_sexfasciatus","O_ventralis","Zoobenthos_feeder",-0.636225623341597,-0.21195035078207,0.194839416131528,"negative",0.842105263157895,"No Match","No Match",FALSE
+"84","N_sexfasciatus","S_multipunctatus","Zoobenthos_feeder",-0.783264320934659,0.585006774211184,2.0569241495151,"positive",0.815789473684211,"No Match","No Match",TRUE
+"85","N_sexfasciatus","T_moorii","Zoobenthos_feeder",-0.305328663947531,0.156559252616113,0.452281376769591,"positive",0.763157894736842,"No Match","No Match",TRUE
+"86","N_sexfasciatus","T_vittatus","Zoobenthos_feeder",-0.678215118791377,-0.173879998568898,0.375816624849729,"negative",0.789473684210526,"No Match","No Match",TRUE
+"87","O_ventralis","A_dewindti","Detritus_feeder",-0.574497464933945,-0.332707080625393,-0.129337235154854,"negative",1,"No Match","No Match",TRUE
+"88","O_ventralis","I_loocki","Detritus_feeder",-0.535303640059245,-0.223421446037922,0.132872173583297,"negative",0.815789473684211,"No Match","No Match",TRUE
+"89","O_ventralis","J_ornatus","Detritus_feeder",-2.10730713298258,0.427952971574231,2.27305766546789,"positive",0.789473684210526,"No Match","No Match",TRUE
+"90","O_ventralis","N_fasciatus","Detritus_feeder",-0.724796128985158,0.0970383703600147,0.801643751981462,"positive",0.684210526315789,"No Match","No Match",TRUE
+"92","O_ventralis","P_microlepis","Detritus_feeder",-0.209052334767531,0.562769902732457,1.49071018337314,"positive",0.921052631578947,"No Match","Prey-Predator",TRUE
+"93","O_ventralis","T_moorii","Detritus_feeder",-0.186210883107366,0.0149745133328846,0.274113731624702,"positive",0.552631578947368,"No Match","No Match",FALSE
+"94","O_ventralis","V_moorii","Detritus_feeder",-2.72000752177366,-0.2268703820215,1.97633943602775,"negative",0.526315789473684,"No Match","No Match",TRUE
+"95","Paracyprichromisspp","A_compressiceps","Zooplankton_feeder",-0.269655076815123,0.073948806226424,0.274414531048776,"positive",0.789473684210526,"No Match","No Match",FALSE
+"96","Paracyprichromisspp","N_fasciatus","Zooplankton_feeder",-0.832746419524304,0.0247798268675086,0.5346246751567,"positive",0.5,"No Match","No Match",FALSE
+"98","Paracyprichromisspp","T_moorii","Zooplankton_feeder",-0.0831100621303756,0.383055371315532,0.81960126079486,"positive",0.973684210526316,"No Match","No Match",FALSE
+"99","P_microlepis","A_compressiceps","Scale_feeder",-0.167799091364403,0.162997505332301,0.413896724475183,"positive",0.842105263157895,"No Match","No Match",FALSE
+"100","P_microlepis","A_dewindti","Scale_feeder",-0.63966966680757,-0.313793630836357,-0.0537154130323025,"negative",1,"No Match","No Match",TRUE
+"101","P_microlepis","J_ornatus","Scale_feeder",-3.85139140194671,-0.280973994186873,5.5970036586806,"negative",0.526315789473684,"No Match","No Match",TRUE
+"102","P_microlepis","N_fasciatus","Scale_feeder",-0.166336406238298,0.315342588558902,1.30902808712053,"positive",0.868421052631579,"Predator-Prey","No Match",TRUE
+"103","P_microlepis","N_sexfasciatus","Scale_feeder",-1.11995371552949,-0.445366829793228,0.0768053855779184,"negative",0.973684210526316,"No Match","No Match",FALSE
+"104","P_microlepis","O_ventralis","Scale_feeder",-0.30683001229702,-0.0372579824148894,0.270095375091778,"negative",0.631578947368421,"Predator-Prey","No Match",TRUE
+"106","P_microlepis","P_trewavasae","Scale_feeder",-3.02876882017924,-0.430345381638452,1.44054107467448,"negative",0.578947368421053,"Predator-Prey","Victim-Aggressor",FALSE
+"107","P_microlepis","T_moorii","Scale_feeder",-0.337896142538957,0.0720204466916965,0.407128120632332,"positive",0.631578947368421,"Predator-Prey","Victim-Aggressor",FALSE
+"108","P_polyodon","I_loocki","Unicellular_algae_feeder",-0.515654644742331,-0.134052188548006,0.305038742947454,"negative",0.789473684210526,"No Match","No Match",FALSE
+"109","P_polyodon","J_ornatus","Unicellular_algae_feeder",-0.927397187110243,0.675813983404409,7.45715894892927,"positive",0.684210526315789,"No Match","No Match",FALSE
+"111","P_trewavasae","A_dewindti","Unicellular_algae_feeder",-0.0831610475979176,0.203329759400196,0.479198019513449,"positive",0.973684210526316,"No Match","No Match",TRUE
+"112","P_trewavasae","L_attenuatus","Unicellular_algae_feeder",-0.435344987376664,0.294553228002279,1.35096190080273,"positive",0.710526315789474,"No Match","No Match",FALSE
+"113","P_trewavasae","O_ventralis","Unicellular_algae_feeder",-0.178790535208829,0.0938639157855643,0.445027602880888,"positive",0.736842105263158,"No Match","No Match",FALSE
+"115","P_trewavasae","T_moorii","Unicellular_algae_feeder",-0.13076554986767,0.142881555979306,0.394253654585396,"positive",0.894736842105263,"No Match","No Match",FALSE
+"116","S_multipunctatus","N_fasciatus","Microfilamentous_algae_feeder",-1.36573765992055,-0.57835732922037,0.153036573004903,"negative",0.947368421052632,"No Match","No Match",TRUE
+"117","S_multipunctatus","N_sexfasciatus","Microfilamentous_algae_feeder",-0.728997441474085,-0.217300651069603,0.132527046430017,"negative",0.894736842105263,"No Match","No Match",TRUE
+"119","S_multipunctatus","T_vittatus","Microfilamentous_algae_feeder",-0.324176479946998,0.119681204942446,0.486611313625006,"positive",0.736842105263158,"No Match","No Match",TRUE
+"120","T_moorii","A_dewindti","Filamentous_algae_feeder",-0.545179976644438,-0.371608518217264,0.0250547968220453,"negative",0.973684210526316,"No Match","No Match",FALSE
+"121","T_moorii","I_loocki","Filamentous_algae_feeder",-0.410499859005916,-0.0709460567751808,0.302950540830759,"negative",0.631578947368421,"No Match","No Match",TRUE
+"122","T_moorii","L_elongatus","Filamentous_algae_feeder",-1.02380728727553,0.831539872681233,3.07069170128502,"positive",0.736842105263158,"No Match","No Match",FALSE
+"123","T_moorii","N_fasciatus","Filamentous_algae_feeder",-0.413220032233881,0.189692919235553,0.595572847535101,"positive",0.789473684210526,"No Match","Prey-Predator",TRUE
+"124","T_moorii","N_sexfasciatus","Filamentous_algae_feeder",0.00963022774635949,0.300549698967567,0.750367700390745,"positive",1,"No Match","No Match",TRUE
+"126","T_moorii","V_moorii","Filamentous_algae_feeder",-1.98499520807762,0.00423038098339614,1.23102132185822,"positive",0.605263157894737,"No Match","No Match",FALSE
+"127","T_moorii","X_papilio","Filamentous_algae_feeder",-1.10408501883914,-0.101700383598735,0.899448485841594,"negative",0.5,"No Match","No Match",TRUE
+"128","T_temporalis","L_callipterus","Filamentous_algae_feeder",-2.11548678153379,-0.0111982512516259,0.969458344895531,"negative",0.605263157894737,"Aggressor-Victim","No Match",FALSE
+"130","T_vittatus","I_loocki","Filamentous_algae_feeder",-0.754665518534473,-0.00796765757191204,0.442648604222568,"negative",0.5,"No Match","No Match",FALSE
+"131","T_vittatus","N_sexfasciatus","Filamentous_algae_feeder",-0.888115845162779,-0.20921115234339,0.327620522939572,"negative",0.736842105263158,"No Match","No Match",TRUE
+"132","T_vittatus","P_polyodon","Filamentous_algae_feeder",-1.40379498236496,0.00206856665597753,1.08003632103336,"positive",0.526315789473684,"No Match","No Match",FALSE
+"133","T_vittatus","S_multipunctatus","Filamentous_algae_feeder",-3.6817358017805,-0.329908662413811,2.28366592730366,"negative",0.605263157894737,"No Match","No Match",TRUE
+"134","T_vittatus","T_moorii","Filamentous_algae_feeder",-0.478264162092884,0.379513159355054,1.00290802271997,"positive",0.763157894736842,"No Match","No Match",FALSE
+"136","T_vittatus","X_papilio","Filamentous_algae_feeder",-2.1976435974287,-0.399897766251649,1.23672733147157,"negative",0.815789473684211,"No Match","No Match",FALSE
+"137","V_moorii","A_dewindti","Microfilamentous_algae_feeder",0.210930586465841,0.50993985814446,0.902802372278108,"positive",1,"No Match","No Match",FALSE
+"138","V_moorii","L_elongatus","Microfilamentous_algae_feeder",-2.53569439936242,-0.161264242782117,3.79862784247977,"negative",0.605263157894737,"No Match","No Match",TRUE
+"139","V_moorii","N_sexfasciatus","Microfilamentous_algae_feeder",-0.649991842713149,-0.292612280482498,-0.027520536708925,"negative",1,"No Match","No Match",FALSE
+"140","V_moorii","O_ventralis","Microfilamentous_algae_feeder",-0.859411979012449,-0.503843372418891,-0.125668174693154,"negative",1,"No Match","No Match",TRUE
+"141","V_moorii","P_microlepis","Microfilamentous_algae_feeder",-1.21727117492346,-0.312345243840551,0.644222243378819,"negative",0.763157894736842,"No Match","No Match",FALSE
+"142","V_moorii","P_polyodon","Microfilamentous_algae_feeder",-0.647773743326423,-0.00379174655608525,0.4729310835235,"negative",0.552631578947368,"No Match","No Match",FALSE
+"144","V_moorii","X_papilio","Microfilamentous_algae_feeder",-0.500055060807416,0.158103506767036,1.08718792291388,"positive",0.605263157894737,"No Match","No Match",FALSE
+"145","X_papilio","A_dewindti","Filamentous_algae_feeder",-0.0138248868016832,0.21917818397224,0.430894358387697,"positive",0.973684210526316,"No Match","No Match",FALSE
+"146","X_papilio","J_ornatus","Filamentous_algae_feeder",-1.92744744874544,-0.0826108913341479,2.89311652746183,"negative",0.605263157894737,"No Match","No Match",FALSE
+"147","X_papilio","L_elongatus","Filamentous_algae_feeder",-2.41850060169025,0.12814537442608,2.6837770656824,"positive",0.578947368421053,"No Match","No Match",FALSE
+"148","X_papilio","P_microlepis","Filamentous_algae_feeder",-0.5672365628268,-0.0115793493865059,0.495926024645836,"negative",0.5,"No Match","No Match",FALSE
+"149","X_papilio","S_multipunctatus","Filamentous_algae_feeder",-0.865476100829577,0.219655273202154,1.30923504324874,"positive",0.684210526315789,"No Match","No Match",FALSE
+"150","X_papilio","T_moorii","Filamentous_algae_feeder",-0.344605886326445,-0.0795314115645389,0.238087472287386,"negative",0.736842105263158,"No Match","No Match",TRUE

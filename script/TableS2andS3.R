@@ -76,12 +76,15 @@ interInteraction$match_reversed <- interInteraction$effect_cause %in% interInter
 print(interInteraction$match_reversed)
 
 # 結果の表示
-view(interInteraction)
-write.csv(interInteraction,"TableS2.csv")
+View(interInteraction)
+
+TableS2<-interInteraction %>% select(cause.x,effect.x,causehabtp0,min,mean,max,strength,ratio,match_type,rmatch_type,match_reversed)
+
+write.csv(TableS2,"TableS2.csv")
 
 #FigS2
-tableS3<-interInteraction %>%
+tableS3<-TableS2 %>%
   filter(match_type !="No Match" | rmatch_type !="No Match")
 
-write.csv(tableS3,"tableS3.csv")
+write.csv(tableS3,"TableS3.csv")
 
