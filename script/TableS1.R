@@ -87,3 +87,18 @@ TableS1data$Food.habit<-toTitleCase(TableS1data$Food.habit)
 
 write.csv(TableS1data,"TableS1.csv")
 
+#媒介中心生モデルのものも追加して解析を行う
+
+glmAICdata <-subset(TableS1data,TableS1data$`Centrality betweenness`!= "-")
+
+glmAIC_dataFrame<-data.frame("centrality"=glmAICdata$`Centrality betweenness`,"popmean"=glmAICdata$mean,"food"=glmAICdata$Food.habit)
+
+glmAIC_dataFrame$centrality<-as.numeric(glmAIC_dataFrame$centrality)
+
+glmAIC_dataFrame$popmean<-as.numeric(glmAIC_dataFrame$popmean)
+
+glm_cent_Each_Other<-glm(centrality~popmean*food,data=glmAIC_dataFrame,family=Gamma(link = "inverse"))
+
+options(na.action = "na.fail")  # 欠損値がある場合にエラーを出す設定
+
+Each_all_cent_models <- dredge(glm_cent_Each_Other)

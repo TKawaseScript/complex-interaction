@@ -332,6 +332,22 @@ options(na.action = "na.fail")  # 欠損値がある場合にエラーを出す�
 
 Each_all_models <- dredge(glm_Each_Other)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # AICが最小のモデルを表示
 Each_best_model <- get.models(Each_all_models, subset = 1)[[1]]
 summary(Each_best_model)
@@ -393,7 +409,7 @@ summary(In_best_model)
 
 
 summary(glm(count~popmean,data=In_lm_data,family="poisson"))
-summary(glm(count~foods,data=In_lm_data,family="poisson"))
+summary(glm(count~food,data=In_lm_data,family="poisson"))
 
 
 

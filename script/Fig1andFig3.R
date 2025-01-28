@@ -319,7 +319,7 @@ dev.off()
 
 
 
-pdf("Fig3.pdf")
+pdf("Fig3.pdf",width = 11.69,height = 8.27)
 
 par(family = "Times")
 
@@ -330,7 +330,7 @@ plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
              vertex.label.cex=0.7,
              vertex.label.family="Times",
              vertex.label.font=4,
-             vertex.size=log(SPCOLtp0betww8+2)*5,
+             vertex.size=sqrt(SPCOLtp0betww8+2)*2,
              edge.width=abs(igraph_allww8s$smapmean)+0.5,
              edge.arrow.width=abs(igraph_allww8s$smapmean)+0.5,
              vertex.label.color="black",
