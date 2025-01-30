@@ -12,7 +12,7 @@ library(ape)
 library(nlme)
 library(tools)
 library(cowplot)
-library(MuMIn)
+
 
 
 #データの読み込みと整形
@@ -67,6 +67,7 @@ igraphdatatp0ww8<-graph(t(cbind(igraph_allww8s$cause,igraph_allww8s$effect)))
 #全ての因果関係についてのものを採用(sup)
 # ノードの次数を取得
 degree_dist_All_all_digdis <- igraph::degree(igraphdatatp0ww8,mode = "all")
+write.csv(degree_dist_All_all_digdis,"degree_dist_All_all_digdis.csv")
 
 # 次数の頻度分布を計算
 degree_freq <- table(degree_dist_All_all_digdis)
@@ -151,6 +152,7 @@ cat(sprintf("べき指数 γ: %.2f\n", gamma))
 #原因側の因果関係についてのものを採用(sup)
 # ノードの次数を取得
 degree_dist_out_digdis <- igraph::degree(igraphdatatp0ww8,mode = "out")
+write.csv(degree_dist_out_digdis,"degree_dist_out_digdis.csv")
 
 # 次数の頻度分布を計算
 degree_freq <- table(degree_dist_out_digdis)
@@ -232,7 +234,7 @@ cat(sprintf("べき指数 γ: %.2f\n", gamma))
 #結果側の因果関係についてのものを採用(sup)
 # ノードの次数を取得
 degree_dist_in_digdis <- igraph::degree(igraphdatatp0ww8,mode = "in")
-
+write.csv(degree_dist_in_digdis,"degree_dist_in_digdis.csv")
 # 次数の頻度分布を計算
 degree_freq <- table(degree_dist_in_digdis)
 N <- sum(degree_freq)
@@ -311,107 +313,4 @@ top_plot<-plot_grid(powera,ncol=1)
 bottom_plot<-plot_grid(powerb,powerc,ncol=2)
 combined_plot<-plot_grid(top_plot,bottom_plot,ncol=1,rel_heights = c(1,1))
 ggsave("FigS5.pdf",combined_plot,width = 8.27, height = 5.69, units = "in")
-
-##########種間相互作用数と平均個体数もしくは食性との関係
-#双方向リンクにおいての平均個体数と食性との関係
-popmeans<-NULL
-for(i in 1:length(names(degree_dist_All_all_digdis))){
-  popmeans[i]<-sp_food_coltp0[sp_food_coltp0$cause==names(degree_dist_All_all_digdis)[i],]$popmean
-}
-
-foods<-NULL
-for(i in 1:length(names(degree_dist_All_all_digdis))){
-  foods[i]<-sp_food_coltp0[sp_food_coltp0$cause==names(degree_dist_All_all_digdis)[i],]$foodhabit7
-}
-
-Each_Other_lm_data<-data.frame("count"=degree_dist_All_all_digdis,"popmean"=popmeans,"food"=foods)
-
-glm_Each_Other<-glm(count~popmean*food,data=Each_Other_lm_data,family="poisson")
-
-options(na.action = "na.fail")  # 欠損値がある場合にエラーを出す設定
-
-Each_all_models <- dredge(glm_Each_Other)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# AICが最小のモデルを表示
-Each_best_model <- get.models(Each_all_models, subset = 1)[[1]]
-summary(Each_best_model)
-
-
-summary(glm(count~popmean,data=Each_Other_lm_data,family="poisson"))
-summary(glm(count~foods,data=Each_Other_lm_data,family="poisson"))
-
-#原因側のリンクにおいての平均個体数と食性との関係
-
-popmeans<-NULL
-for(i in 1:length(names(degree_dist_out_digdis))){
-  popmeans[i]<-sp_food_coltp0[sp_food_coltp0$cause==names(degree_dist_out_digdis)[i],]$popmean
-}
-
-foods<-NULL
-for(i in 1:length(names(degree_dist_out_digdis))){
-  foods[i]<-sp_food_coltp0[sp_food_coltp0$cause==names(degree_dist_out_digdis)[i],]$foodhabit7
-}
-
-Out_lm_data<-data.frame("count"=degree_dist_out_digdis,"popmean"=popmeans,"food"=foods)
-
-
-glm_Out<-glm(count~popmean*food,data=Out_lm_data,family="poisson")
-
-
-Out_all_models <- dredge(glm_Out)
-
-# AICが最小のモデルを表示
-Out_best_model <- get.models(Out_all_models, subset = 1)[[1]]
-summary(Out_best_model)
-
-
-summary(glm(count~popmean,data=Out_lm_data,family="poisson"))
-summary(glm(count~foods,data=Out_lm_data,family="poisson"))
-
-#結果側のリンクにおいての平均個体数と食性との関係
-
-popmeans<-NULL
-for(i in 1:length(names(degree_dist_in_digdis))){
-  popmeans[i]<-sp_food_coltp0[sp_food_coltp0$cause==names(degree_dist_in_digdis)[i],]$popmean
-}
-
-foods<-NULL
-for(i in 1:length(names(degree_dist_in_digdis))){
-  foods[i]<-sp_food_coltp0[sp_food_coltp0$cause==names(degree_dist_in_digdis)[i],]$foodhabit7
-}
-
-In_lm_data<-data.frame("count"=degree_dist_in_digdis,"popmean"=popmeans,"food"=foods)
-
-glm_In<-glm(count~popmean*food,data=In_lm_data,family="poisson")
-
-
-In_all_models <- dredge(glm_In)
-
-# AICが最小のモデルを表示
-In_best_model <- get.models(In_all_models, subset = 1)[[1]]
-summary(In_best_model)
-
-
-summary(glm(count~popmean,data=In_lm_data,family="poisson"))
-summary(glm(count~food,data=In_lm_data,family="poisson"))
-
-
-
-
 
