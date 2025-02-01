@@ -1,23 +1,17 @@
-Exchange interaction,,,,,,
-Coefficients:,,,,,,
-,Estimate,Std. Error,z value,P value,,
-(Intercept),2.073347,0.084023,24.676,< 2.00E-16,***,
-popmean,0.005247,0.001334,3.933,8.39E-05,***,
-Recive intaraction,,,,,,
-Coefficients:,,,,,,
-,Estimate,Std. Error,z value,P value,,
-(Intercept),1.353751,0.119548,11.324,< 2.00E-16,***,
-popmean,0.005874,0.001849,3.177,0.00149,**,
-,,,,,,
-Causal interaction,,,,,,
-,Estimate,Std. Error,z value,P value,,
-(Intercept),1.40684,0.118133,11.909,<2e-16,***,
-popmean,0.004593,0.001928,2.382,0.0172,*,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
+Exchange interaction,,,,,
+Coefficients:,,,,,
+,Estimate,Std.Error,z value,P value,
+(Intercept):Cause,1.40684,0.118133,11.909,< 2.00E-16,***
+(Intercept):Recipient,1.353751,0.119548,11.324,< 2.00E-16,***
+popmean:Cause,0.004593,0.001928,2.382,0.01721,*
+popmean:Recipiemt,0.005874,0.001849,3.177,0.00149,**
+Recive intaraction,,,,,
+Coefficients:,,,,,
+,Estimate,Std. Error,z value,P value,
+(Intercept),1.353751,0.119548,11.324,< 2.00E-16,***
+popmean,0.005874,0.001849,3.177,0.00149,**
+,,,,,
+Causal interaction,,,,,
+,Estimate,Std. Error,z value,P value,
+(Intercept),1.40684,0.118133,11.909,<2e-16,***
+popmean,0.004593,0.001928,2.382,0.0172,*
