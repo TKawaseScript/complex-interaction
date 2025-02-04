@@ -1,0 +1,60 @@
+Species name,Tribe,Abbreviation,Food.habit,mean,sd,Reasons to exclude from CCM,Centrality betweenness
+Altolamprologus compressiceps,Ectodini,Alt.com,Shrimp-Eater,3.4,2.2,(Passed),14.8
+Aulonocranus dewindti,Ectodini,Aul.dew,Fry-Feeder,32.8,34.5,(Passed),135.79
+Ctenochromis horei,Perissodini,Chr.hor,Fry-Feeder,0.6,1.5,(Passed),-
+Cunningtonia longiventralis,Lamprologini,Cun.lon,Nodata,0.7,1.4,(Passed),-
+Cyathopharynx spp,Ectodini,Cya.spp,Omnivore,2.8,4.2,(Passed),-
+Cyprichromis sp,Tropheini,Cyp.spp,Omnivore,72.1,164,Linearity detected,-
+Eretmodus cyanostictus,Lamprologini,Ere.cya,Grazer,34,16.8,Linearity detected,-
+Gnathochromis pfefferi,Lamprologini,Gna.pfe,Shrimp-Eater,7.5,4.6,(Passed),0
+Haplotaxodon microlepis,Tropheini,Hap.mic,Omnivore,4.8,8.9,(Passed),0
+Interochromis loocki,Lamprologini,Int.loo,Omnivore,19.7,15.8,(Passed),12.72
+Julidochromis ornatus,Lamprologini,Jul.orn,Omnivore,23.3,16.5,(Passed),36.88
+Lamprichthys tanganicanus,Tropheini,Lam.tan,Omnivore,36.6,35.8,(Passed),6.94
+Lamprologus callipterus,Lamprologini,Lam.cal,Fry-Feeder,11.6,10.7,(Passed),71.53
+Lamprologus lemairii,Tropheini,Lam.lem,Piscivore,3.1,2.3,(Passed),23
+Lates spp.,non_cichlid,Lat.M,Piscivore,0.3,0.7,(Passed),-
+Lepidiolamprologus attenuatus,non_cichlid,Lep.att,Fry-Feeder,3.8,6.1,(Passed),27.49
+Lepidiolamprologus cunningtoni,Lamprologini,Lep.cun,Nodata,0.1,0.3,(Passed),-
+Lepidiolamprologus elongatus,Lamprologini,Lep.elo,Piscivore,12.3,10.4,(Passed),25.56
+Lepidiolamprologus kendalli,Lamprologini,Lep.ken,Piscivore,0.3,0.5,(Passed),-
+Lepidiolamprologus mimicus,Perissodini,Lep.mim,Piscivore,0.4,1,(Passed),-
+Lepidiolamprologus profundicola,Tropheini,Lep.pro,Piscivore,0.7,0.9,(Passed),-
+Limnotilapia dardennii,Lamprologini,Lim.dar,Omnivore,9.8,7,(Passed),6.26
+Lobochilotes labiatus,Ectodini,Lob.lab,Shrimp-Eater,9.9,3.3,(Passed),1.14
+Mastacembelus spp.,Tropheini,M.spp,Nodata,4.7,2.6,Projection failed,-
+Neolamprologus buescheri,Lamprologini,Neo.bus,Omnivore,0,0.2,(Passed),-
+Neolamprologus caudopunctatus,Lamprologini,Neo.cau,Omnivore,10.5,12.9,Projection failed,-
+Neolamprologus cylindricus,Lamprologini,Neo.cyl,Shrimp-Eater,3,1.9,(Passed),-
+Neolamprologus fasciatus,Ectodini,Neo.fas,Piscivore,64.1,16.7,(Passed),58.36
+Neolamprologus furcifer,Cyprichromini,Neo.fur,Shrimp-Eater,1,0.9,(Passed),-
+Neolamprologus mustax,Ectodini,Neo.mus,Shrimp-Eater,0.4,0.6,(Passed),-
+Neolamprologus obscurus,Lamprologini,Neo.obs,Shrimp-Eater,0.5,0.9,(Passed),-
+Neolamprologus petricola,Lamprologini,Neo.pet,Shrimp-Eater,0.6,0.9,(Passed),-
+Neolamprologus prochilus,Lamprologini,Neo.pro,Shrimp-Eater,0.7,0.9,(Passed),-
+Neolamprologus pulcher,Tropheini,Neo.pul,Omnivore,24.2,11,Linearity detected,-
+Neolamprologus savoryi,Perissodini,Neo.sav,Omnivore,31.6,13.9,Linearity detected,-
+Neolamprologus sexfasciatus,Lamprologini,Neo.sex,Shrimp-Eater,3.8,4,(Passed),23.88
+Neolamprologus tetracanthus,Lamprologini,Neo.tet,Fry-Feeder,0.4,0.7,(Passed),-
+Ophthalmotilapia ventralis,Ectodini,Oph.ven,Omnivore,78,37.4,(Passed),26.64
+Paracyprichromis spp,Cyprichromini,Par.spp,Omnivore,54.3,88,(Passed),45
+Perissodus microlepis,Perissodini,Per.mic,Scale-Eater,31,18.6,(Passed),49.34
+Petrochromis famula,Tropheini,Pet.fam,Grazer,1.4,1.6,(Passed),-
+Petrochromis fasciolatus,Tropheini,Pet.fas,Grazer,4.7,17,Projection failed,-
+Petrochromis horii,Tropheini,Pet.hor,Grazer,0.1,0.4,(Passed),-
+Petrochromis polyodon,Tropheini,Pet.pol,Grazer,7.8,4.4,(Passed),3.53
+Petrochromis trewavasae,Tropheini,Pet.tre,Grazer,24.7,8.1,(Passed),47.62
+Plecodus straeleni,Perissodini,Per.str,Scale-Eater,2.2,2.1,(Passed),-
+Pseudosimochromis curvifrons,Tropheini,Pse.cur,Browser,0.9,1.8,(Passed),-
+Simochromis diagramma,Tropheini,Sim.dia,Browser,18,17.4,Linearity detected,-
+Synodontis multipunctatus,non_cichlid,Syn.mul,Grazer,5.3,4.7,(Passed),1.97
+Telmatochromis temporalis,Lamprologini,Tel.tem,Browser,6.8,5.4,(Passed),4.16
+Telmatochromis vittatus,Lamprologini,Tel.vit,Browser,159.6,47.2,(Passed),19.03
+Tropheus moorii,Tropheini,Tro.moo,Browser,72.4,25.7,(Passed),88.04
+Variabilichromis moorii,Lamprologini,Var.moo,Omnivore,129.2,30.6,(Passed),31.68
+Xenotilapia boulengeri,Ectodini,Xen.bou,Nodata,0.2,0.6,(Passed),-
+Xenotilapia flavipinnis,Ectodini,Xen.fla,Omnivore,0.2,1,(Passed),-
+Xenotilapia papilio,Ectodini,Xen.pap,Omnivore,5.6,3.3,(Passed),26.64
+Xenotilapia sima,Ectodini,Xen.sim,Shrimp-Eater,0.3,0.8,(Passed),-
+Xenotilapia sp.,Ectodini,Xen.sp,Omnivore,0,0.3,(Passed),-
+Xenotilapia spiloptera,Ectodini,Xen.spi,Omnivore,26,12.4,Projection failed,-
