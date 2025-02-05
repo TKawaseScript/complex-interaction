@@ -23,20 +23,11 @@ Each_Other_lm_data<-data.frame("countCause"=degree_dist_out_digdis$x,"counteffec
 
 #igraphから抜き出している場合種名の順番が因果関係の原因側でも結果側でも同じため以下のような式になる
 glm_Each_Other_all<-vglm(cbind(Each_Other_lm_data$countCause,Each_Other_lm_data$counteffect)~popmean+food,data=Each_Other_lm_data,family=poissonff)
-glm_Each_Other_food<-vglm(cbind(Each_Other_lm_data$countCause,Each_Other_lm_data$counteffect)~food,data=Each_Other_lm_data,family=poissonff)
-glm_Each_Other_popmean<-vglm(cbind(Each_Other_lm_data$countCause,Each_Other_lm_data$counteffect)~popmean,data=Each_Other_lm_data,family=poissonff)
-AIC(glm_Each_Other_all)
-AIC(glm_Each_Other_food)
-AIC(glm_Each_Other_popmean)
-
-# AICが最小のモデルを表示
-summary(glm_Each_Other_popmean)
-
-write.csv(capture.output(summary(glm_Each_Other_popmean)),"Each_all_models_num_interact.csv")
 
 
-summary(glm(count~popmean,data=Each_Other_lm_data,family="poisson"))
-summary(glm(count~foods,data=Each_Other_lm_data,family="poisson"))
+summary(glm_Each_Other_all)
+
+write.csv(capture.output(summary(glm_Each_Other_all)),"Each_all_models_num_interact.csv")
 
 #原因側のリンクにおいての平均個体数と食性との関係
 
@@ -55,18 +46,11 @@ Out_lm_data<-data.frame("count"=degree_dist_out_digdis$x,"popmean"=popmeans,"foo
 
 glm_Out<-glm(count~popmean*food,data=Out_lm_data,family="poisson")
 
+summary(glm_Out)
 
-Out_all_models <- dredge(glm_Out)
-
-# AICが最小のモデルを表示
-Out_best_model <- get.models(Out_all_models, subset = 1)[[1]]
-summary(Out_best_model)
-
-write.csv(capture.output(summary(Out_best_model)),"Out_all_models_num_interact.csv")
+write.csv(capture.output(summary(glm_Out)),"Out_all_models_num_interact.csv")
 
 
-summary(glm(count~popmean,data=Out_lm_data,family="poisson"))
-summary(glm(count~foods,data=Out_lm_data,family="poisson"))
 
 #結果側のリンクにおいての平均個体数と食性との関係
 
@@ -84,21 +68,9 @@ In_lm_data<-data.frame("count"=degree_dist_in_digdis$x,"popmean"=popmeans,"food"
 
 glm_In<-glm(count~popmean*food,data=In_lm_data,family="poisson")
 
+summary(glm_In)
 
-In_all_models <- dredge(glm_In)
-
-
-
-# AICが最小のモデルを表示
-In_best_model <- get.models(In_all_models, subset = 1)[[1]]
-summary(In_best_model)
-
-write.csv(capture.output(summary(In_best_model)),"In_all_models_num_interact.csv")
-
-
-
-summary(glm(count~popmean,data=In_lm_data,family="poisson"))
-summary(glm(count~food,data=In_lm_data,family="poisson"))
+write.csv(capture.output(summary(glm_In)),"In_all_models_num_interact.csv")
 
 
 #TableS5 媒介中心生モデルのものも追加して解析を行う
@@ -130,13 +102,14 @@ mergeData_in_out<-merge(mergeData_in, degree_dist_out_digdis, by = "Abbreviation
 
 
 
-#0.000001のような小さい値を足す
+#0.000001のような小さい値を足す/
 mergeData_in_out$Centrality.betweenness<-as.numeric(mergeData_in_out$Centrality.betweenness)
 
 mergeData_in_out$mean<-as.numeric(mergeData_in_out$mean)
 
+options(na.action="na.fail")
+glm_Out_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,family="gaussian")
 
-glm_Out_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,family="gamma")
 
 
 Out_all_models_cent <- dredge(glm_Out_cent)
@@ -145,21 +118,13 @@ Out_best_model_cent <- get.models(Out_all_models_cent, subset = 1)[[1]]
 summary(Out_best_model_cent)
 
 
-glm_In_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,family="gamma")
+glm_In_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,family="gaussian")
 
+summary(glm_In_cent)
 
 In_all_models_cent <- dredge(glm_In_cent)
 
 In_best_model_cent <- get.models(In_all_models_cent, subset = 1)[[1]]
 summary(In_best_model_cent)
-
-
-
-glm_Each_Other_all_cent<-vglm(cbind(mergeData_in_out$out_count,mergeData_in_out$in_count)~mean+Food.habit,data=mergeData_in_out,family=)
-glm_Each_Other_food_cent<-vglm(cbind(mergeData_in_out$out_count,mergeData_in_out$in_count)~Food.habit,data=mergeData_in_out,family=)
-glm_Each_Other_popmean_cent<-vglm(cbind(mergeData_in_out$out_count,mergeData_in_out$in_count)~mean,data=mergeData_in_out,family=)
-AIC(glm_Each_Other_all_cent)
-AIC(glm_Each_Other_food_cent)
-AIC(glm_Each_Other_popmean_cent)
 
 
