@@ -122,9 +122,4 @@ glm_In_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,fa
 
 summary(glm_In_cent)
 
-In_all_models_cent <- dredge(glm_In_cent)
-
-In_best_model_cent <- get.models(In_all_models_cent, subset = 1)[[1]]
-summary(In_best_model_cent)
-
 
