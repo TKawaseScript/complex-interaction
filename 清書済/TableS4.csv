@@ -1,17 +1,20 @@
-Exchange interaction,,,,,
-Coefficients:,,,,,
-,Estimate,Std.Error,z value,P value,
-(Intercept):Cause,1.40684,0.118133,11.909,< 2.00E-16,***
-(Intercept):Recipient,1.353751,0.119548,11.324,< 2.00E-16,***
-popmean:Cause,0.004593,0.001928,2.382,0.01721,*
-popmean:Recipiemt,0.005874,0.001849,3.177,0.00149,**
-Recive intaraction,,,,,
+﻿VGLM(因果関係数~hood+popmean),,,,,
 Coefficients:,,,,,
 ,Estimate,Std. Error,z value,P value,
-(Intercept),1.353751,0.119548,11.324,< 2.00E-16,***
-popmean,0.005874,0.001849,3.177,0.00149,**
-,,,,,
-Causal interaction,,,,,
-,Estimate,Std. Error,z value,P value,
-(Intercept),1.40684,0.118133,11.909,<2e-16,***
-popmean,0.004593,0.001928,2.382,0.0172,*
+(Intercept): Causative number,0.884501,0.382864,2.31,0.02088,*
+(Intercept): Repicient number,1.34442,0.336033,4.001,6.31E-05,***
+popmean: Causative number,0.007027,0.002568,2.736,0.00621,**
+popmean: Repicient number,0.006043,0.002432,2.485,0.01296,*
+foodfry-feeder: Causative number,0.991443,0.412151,2.406,0.01615,*
+foodfry-feeder: Repicient number,0.229835,0.3955,0.581,0.56116,
+foodgrazer: Causative number,0.12378,0.490262,0.252,0.80067,
+foodgrazer: Repicient number,-0.323268,0.457294,-0.707,0.47962,
+foodomnivore: Causative number,0.379035,0.336997,1.125,0.2607,
+foodomnivore: Repicient number,-0.100812,0.301224,-0.335,0.73787,
+foodpiscivore: Causative number,0.210039,0.446492,0.47,0.63805,
+foodpiscivore: Repicient number,0.091211,0.383915,0.238,0.81221,
+foodscale-eater: Causative number,0.977287,0.484047,2.019,0.04349,*
+foodscale-eater: Repicient number,0.66562,0.438078,1.519,0.12866,
+foodshrimp-eater: Causative number,0.518934,0.44375,1.169,0.24223,
+foodshrimp-eater: Repicient number,-0.060039,0.415017,-0.145,0.88497,
+"P value: *** = 0, ** <0.001, * < 0.05 ",,,,,
