@@ -108,15 +108,9 @@ mergeData_in_out$Centrality.betweenness<-as.numeric(mergeData_in_out$Centrality.
 mergeData_in_out$mean<-as.numeric(mergeData_in_out$mean)
 
 options(na.action="na.fail")
-glm_Out_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,family="gaussian")
+glm_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,family="gaussian")
 
-write.csv(capture.output(summary(glm_Out_cent)),"Out_all_models_Cent.csv")
+write.csv(capture.output(summary(glm_cent)),"models_Cent.csv")
 
-
-glm_In_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,family="gaussian")
-
-summary(glm_In_cent)
-
-write.csv(capture.output(summary(glm_In_cent)),"In_all_models_Cent.csv")
 
 
