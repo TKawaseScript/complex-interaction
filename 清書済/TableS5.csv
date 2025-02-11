@@ -1,4 +1,4 @@
-﻿glm(媒介中心性~hood*popmean),,,,,
+﻿glm(媒介中心性~food*popmean),,,,,
 Coefficients: (1 not defined because of singular ities),,,,,
 ,Estimate,Std. Error,t value,P value,
 (Intercept),33.10967,19.58946,1.69,0.11482,
