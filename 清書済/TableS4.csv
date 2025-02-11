@@ -1,4 +1,4 @@
-﻿VGLM(因果関係数~hood+popmean),,,,,
+﻿VGLM(因果関係数~food+popmean),,,,,
 Coefficients:,,,,,
 ,Estimate,Std. Error,z value,P value,
 (Intercept): Causative number,0.884501,0.382864,2.31,0.02088,*
