@@ -1,5 +1,6 @@
 #FigS2
 library(gridExtra)
+library(ggplot2)
 
 load("spsmap.Rdata")
 
