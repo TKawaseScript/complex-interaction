@@ -134,7 +134,7 @@ FigS6<-ggplot(Each_Other_lm_data, aes(x = popmean)) +
   # 回帰曲線（countEffect）
   geom_line(aes(y = pred_countEffect, color = food), size = 1, linetype = "dashed") +
   # 軸ラベル
-  labs(x = "Pop Mean", y = "Count (Causative / recipient)") +
+  labs(x = "Pop Mean", y = "Count (Causative / Recipient)") +
   theme_minimal() +
   scale_shape_manual(values = c(16, 17)) +  # countCauseとcountEffectの形を異なるものに設定
   scale_color_manual(values = c('shrimp-eater' = 'pink', 'omnivore' = 'gray', 'piscivore' = 'red', 'fry-feeder' = 'royalblue1', 'scale-eater' = 'blueviolet', 'grazer' = 'lightgreen', 'browser' = 'darkorange')) # foodごとに色を設定
