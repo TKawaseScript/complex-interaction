@@ -103,7 +103,7 @@ degree_dist_in_digdis$X<-glm_dataFrame_Inname
 colnames(degree_dist_in_digdis)<-c("Abbreviation","in_count")
 colnames(degree_dist_out_digdis)<-c("Abbreviation","out_count")
 
-mergeData_in<-merge(glmdataCen[,-1], degree_dist_in_digdis, by = "Abbreviation", all.x = TRUE)
+mergeData_in<-merge(glmAICdataCen[,-1], degree_dist_in_digdis, by = "Abbreviation", all.x = TRUE)
 
 
 mergeData_in<-merge(glmdataCen, degree_dist_in_digdis, by = "Abbreviation", all.x = TRUE)
@@ -134,7 +134,7 @@ FigS6<-ggplot(Each_Other_lm_data, aes(x = popmean)) +
   # 回帰曲線（countEffect）
   geom_line(aes(y = pred_countEffect, color = food), size = 1, linetype = "dashed") +
   # 軸ラベル
-  labs(x = "Pop Mean", y = "Count (Causative / Recipient)") +
+  labs(x = "Pop Mean", y = "Count (Causative / recipient)") +
   theme_minimal() +
   scale_shape_manual(values = c(16, 17)) +  # countCauseとcountEffectの形を異なるものに設定
   scale_color_manual(values = c('shrimp-eater' = 'pink', 'omnivore' = 'gray', 'piscivore' = 'red', 'fry-feeder' = 'royalblue1', 'scale-eater' = 'blueviolet', 'grazer' = 'lightgreen', 'browser' = 'darkorange')) # foodごとに色を設定
