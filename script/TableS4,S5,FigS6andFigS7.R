@@ -103,7 +103,7 @@ degree_dist_in_digdis$X<-glm_dataFrame_Inname
 colnames(degree_dist_in_digdis)<-c("Abbreviation","in_count")
 colnames(degree_dist_out_digdis)<-c("Abbreviation","out_count")
 
-mergeData_in<-merge(glmAICdataCen[,-1], degree_dist_in_digdis, by = "Abbreviation", all.x = TRUE)
+mergeData_in<-merge(glmdataCen[,-1], degree_dist_in_digdis, by = "Abbreviation", all.x = TRUE)
 
 
 mergeData_in<-merge(glmdataCen, degree_dist_in_digdis, by = "Abbreviation", all.x = TRUE)
