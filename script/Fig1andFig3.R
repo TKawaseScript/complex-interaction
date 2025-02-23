@@ -37,6 +37,8 @@ for(i in 1:nrow(strengthtp0)){
   }
 }
 
+write.csv(intertp0,"interspecific_interaction.csv")
+
 #原因側と結果側のまとめ
 countcausetp0<-t(table(intertp0$cause))
 counteffecttp0<-t(table(intertp0$effect))
