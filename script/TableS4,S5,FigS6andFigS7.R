@@ -1,6 +1,7 @@
 library(VGAM)
 library(dplyr)
 library(ggplot2)
+library(gridExtra)
 
 
 #TableS4
@@ -124,26 +125,25 @@ write.csv(capture.output(summary(glm_cent)),"TableS5.csv")
 #VGAM(双方向の因果関係数~popmean+food)
 
 # グラフの作成
-FigS6<-ggplot(Each_Other_lm_data, aes(x = popmean)) +   # countCause の散布図
-  geom_point(aes(y = countCause, shape = "countCause", color = food), size = 3) +   # countEffect の散布図
-  geom_point(aes(y = counteffect, shape = "countEffect", color = food), size = 3) +   # 回帰曲線（countCause）
+FigS6_a<-ggplot(Each_Other_lm_data, aes(x = popmean)) +   # countCause の散布図
+  geom_point(aes(y = countCause, shape = "Cause", color = food), size = 3) +   # countEffect の散布図
+  geom_point(aes(y = counteffect, shape = "Recipietnt", color = food), size = 3) +   # 回帰曲線（countCause）
   geom_line(aes(y = pred_countCause, color = food), size = 1) +   # 回帰曲線（countEffect）
   geom_line(aes(y = pred_countEffect, color = food), size = 1, linetype = "dashed") +   # 軸ラベル
-  labs(x = "Pop Mean", y = "Count (Causative / Recipient)") + 
-  scale_shape_manual(values = c(16, 17)) +  # countCauseとcountEffectの形を異なるものに設定 
+  labs(x = "", y = "Count (Causative / Recipient)") + 
+  scale_shape_manual(values = c(16, 17),name = "Interaction type") +
   scale_color_manual(values = c('shrimp-eater' = 'pink', 
                                 'omnivore' = 'gray', 
                                 'piscivore' = 'red', 
                                 'fry-feeder' = 'royalblue1', 
                                 'scale-eater' = 'blueviolet', 
                                 'grazer' = 'lightgreen', 
-                                'browser' = 'darkorange')) + # foodごとに色を設定
+                                'browser' = 'darkorange'),
+                     guide = "none") + # foodごとに色を設定
   theme(panel.background = element_blank(),   # 背景を透明または白に設定
         plot.background = element_blank(),    # プロットエリアの背景を透明または白に設定
-        panel.grid = element_blank())         # グリッド線を消す
-
-
-ggsave("FigS6.pdf", plot = FigS6, width = 21, height = 29.7, units = "cm")
+        panel.grid = element_blank(),
+        axis.line = element_line(color = "black"))
 
 #原因側の因果関係数~popmean*food
 ggplot(Out_lm_data, aes(x = popmean, y = count)) +
@@ -172,7 +172,7 @@ ggplot(In_lm_data, aes(x = popmean)) +
 
 #媒介中心性~popmean*food
 
-FigS7<-ggplot(mergeData_in_out, aes(x = mean)) +   # Centrality.betweenness の散布図
+FigS6_b<-ggplot(mergeData_in_out, aes(x = mean)) +   # Centrality.betweenness の散布図
   geom_point(aes(y = Centrality.betweenness, color = Food.habit), size = 3) +   # Centrality.betweenness の回帰曲線（予測値に基づく）
   geom_line(aes(y = pred_centrality, color = Food.habit), size = 1) +   # 軸ラベル
   labs(x = "Population mean", y = "Centrality betweenness") + 
@@ -185,7 +185,11 @@ FigS7<-ggplot(mergeData_in_out, aes(x = mean)) +   # Centrality.betweenness の�
                                 'Browser' = 'darkorange')) +  # foodごとに色を設定
   theme(panel.background = element_blank(),   # 背景を透明または白に設定
         plot.background = element_blank(),    # プロットエリアの背景を透明または白に設定
-        panel.grid = element_blank())         # グリッド線を消す
+        panel.grid = element_blank(),
+        axis.line = element_line(color = "black"))
 
-ggsave("FigS7.pdf", plot = FigS7, width = 21, height = 29.7, units = "cm")
+FigS6 <- grid.arrange(FigS6_a, FigS6_b, ncol = 1)  # ncol = 1 は縦配置、nrow = 1 なら横配置
+
+ggsave("FigS6.pdf", plot = FigS6, width = 8, height = 6)
+
 
