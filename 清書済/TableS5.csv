@@ -1,18 +1,5 @@
-﻿glm(媒介中心性~food*popmean),,,,,
-Coefficients: (1 not defined because of singular ities),,,,,
-,Estimate,Std. Error,t value,P value,
-(Intercept),33.10967,19.58946,1.69,0.11482,
-mean,0.04984,0.19346,0.258,0.80074,
-Food.habitFry-Feeder,-12.46465,27.97168,-0.446,0.6632,
-Food.habitGrazer,-46.22571,29.04896,-1.591,0.13556,
-Food.habitOmnivore,-18.90351,22.01304,-0.859,0.40604,
-Food.habitPiscivore,-13.31341,25.94517,-0.513,0.61646,
-Food.habitScale-Eater,14.68539,25.97748,0.565,0.58149,
-Food.habitShrimp-Eater,-3.50885,32.6791,-0.107,0.91613,
-mean:Food.habitFry-Feeder,3.53678,1.00692,3.512,0.00382, **
-mean:Food.habitGrazer,2.39641,1.41846,1.689,0.11496,
-mean:Food.habitOmnivore,0.1298,0.26394,0.492,0.63107,
-mean:Food.habitPiscivore,0.54804,0.49068,1.117,0.28426,
-mean:Food.habitScale-Eater,NA,NA,NA,NA,
-mean:Food.habitShrimp-Eater,-3.24428,3.90121,-0.832,0.42064,
-"P value: *** = 0, ** <0.001, * < 0.05 ",,,,,
+,Df,Sum Sq,Mean Sq,F value,P value,
+Population mean,1,1268.627,1268.627,2.884,0.113,
+Food habit,6,10510.333,1751.722,3.983,0.018,*
+Population mean: Food habit,5,7217.064,1443.413,3.282,0.039,*
+Residuals,13,5717.692,439.822,NA,NA,
