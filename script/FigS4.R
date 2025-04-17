@@ -13,7 +13,7 @@ NegList<-strengthtp0[strengthtp0$strength=="negative",]
 intraInteractionPos<-NULL
 interInteractionPos<-NULL
 for(i in 1:nrow(PosList)){
-  if (PosList$cause[i]==PosList$effect[i]){
+  if (PosList$cause.x[i]==PosList$effect.x[i]){
     intraInteractionPos <- rbind(intraInteractionPos,PosList[i,])
   }else{
     interInteractionPos <- rbind(interInteractionPos,PosList[i,])
@@ -23,7 +23,7 @@ for(i in 1:nrow(PosList)){
 intraInteractionNeg<-NULL
 interInteractionNeg<-NULL
 for(i in 1:nrow(NegList)){
-  if (NegList$cause[i]==NegList$effect[i]){
+  if (NegList$cause.x[i]==NegList$effect.x[i]){
     intraInteractionNeg <- rbind(intraInteractionNeg,NegList[i,])
   }else{
     interInteractionNeg <- rbind(interInteractionNeg,NegList[i,])
@@ -32,26 +32,26 @@ for(i in 1:nrow(NegList)){
 
 PosListRecFood<-NULL
 for(i in 1:nrow(interInteractionPos)){
-  PosListRecFood[i]<-sp_food_coltp0[interInteractionPos$effect[i]==sp_food_coltp0$cause,]$foodhabit7
+  PosListRecFood[i]<-sp_food_coltp0[interInteractionPos$effect.x[i]==sp_food_coltp0$cause,]$foodhabit7
 }
 PosListRecCol<-NULL
 for(i in 1:nrow(interInteractionPos)){
-  PosListRecCol[i]<-sp_food_coltp0[interInteractionPos$effect[i]==sp_food_coltp0$cause,]$col7
+  PosListRecCol[i]<-sp_food_coltp0[interInteractionPos$effect.x[i]==sp_food_coltp0$cause,]$col7
 }
 
-PosListCause<-data.frame("spName"=interInteractionPos$cause,"RecipientFood"=PosListRecFood,"RecipientCol"=PosListRecCol)
+PosListCause<-data.frame("spName"=interInteractionPos$cause.x,"RecipientFood"=PosListRecFood,"RecipientCol"=PosListRecCol)
 
 NegListRecFood<-NULL
 for(i in 1:nrow(interInteractionNeg)){
-  NegListRecFood[i]<-sp_food_coltp0[interInteractionNeg$effect[i]==sp_food_coltp0$cause,]$foodhabit7
+  NegListRecFood[i]<-sp_food_coltp0[interInteractionNeg$effect.x[i]==sp_food_coltp0$cause,]$foodhabit7
 }
 
 NegListRecCol<-NULL
 for(i in 1:nrow(interInteractionNeg)){
-  NegListRecCol[i]<-sp_food_coltp0[interInteractionNeg$effect[i]==sp_food_coltp0$cause,]$col7
+  NegListRecCol[i]<-sp_food_coltp0[interInteractionNeg$effect.x[i]==sp_food_coltp0$cause,]$col7
 }
 
-NegListCause<-data.frame("spName"=interInteractionNeg$cause,"RecipientFood"=NegListRecFood,"RecipientCol"=NegListRecCol)
+NegListCause<-data.frame("spName"=interInteractionNeg$cause.x,"RecipientFood"=NegListRecFood,"RecipientCol"=NegListRecCol)
 # PosListCauseとNegListCauseを結合
 PosListCause$Category <- "Positive"
 NegListCause$Category <- "Negative"
@@ -69,6 +69,11 @@ combined_cause_data$RecipientFood <- as.factor(combined_cause_data$RecipientFood
 for(i in 1:nrow(combined_cause_data)){
   combined_cause_data$rename[i]<-sp_food_coltp0[combined_cause_data$spName[i]==sp_food_coltp0$cause,]$bindre.namesp
 }
+
+cau_order<-c("Lam.cal","Aul.dew","Lep.att","Per.mic","Gna.pfe","Lob.lab","Neo.sex","Alt.com","Lep.elo","Lam.lem","Neo.fas","Var.moo","Lam.tan","Xen.pap","Oph.ven","Lim.dar","Int.loo","Jul.orn","Par.spp","Hap.mic","Pet.tre","Pet.pol","Syn.mul","Tro.moo","Tel.vit","Tel.tem")
+
+combined_cause_data$rename<-factor(combined_cause_data$rename, levels = cau_order)
+
 
 FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
   geom_bar(aes(y = Value), stat = "identity", position = "stack") + 
@@ -105,25 +110,25 @@ FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
 
 PosListCauFood<-NULL
 for(i in 1:nrow(interInteractionPos)){
-  PosListCauFood[i]<-sp_food_coltp0[interInteractionPos$cause[i]==sp_food_coltp0$cause,]$foodhabit7
+  PosListCauFood[i]<-sp_food_coltp0[interInteractionPos$cause.x[i]==sp_food_coltp0$cause,]$foodhabit7
 }
 PosListCauCol<-NULL
 for(i in 1:nrow(interInteractionPos)){
-  PosListCauCol[i]<-sp_food_coltp0[interInteractionPos$cause[i]==sp_food_coltp0$cause,]$col7
+  PosListCauCol[i]<-sp_food_coltp0[interInteractionPos$cause.x[i]==sp_food_coltp0$cause,]$col7
 }
 
-PosListRec<-data.frame("spName"=interInteractionPos$effect,"CauseFood"=PosListCauFood,"CauseCol"=PosListCauCol)
+PosListRec<-data.frame("spName"=interInteractionPos$effect.x,"CauseFood"=PosListCauFood,"CauseCol"=PosListCauCol)
 
 NegListCauFood<-NULL
 for(i in 1:nrow(interInteractionNeg)){
-  NegListCauFood[i]<-sp_food_coltp0[interInteractionNeg$cause[i]==sp_food_coltp0$cause,]$foodhabit7
+  NegListCauFood[i]<-sp_food_coltp0[interInteractionNeg$cause.x[i]==sp_food_coltp0$cause,]$foodhabit7
 }
 NegListCauCol<-NULL
 for(i in 1:nrow(interInteractionNeg)){
-  NegListCauCol[i]<-sp_food_coltp0[interInteractionNeg$cause[i]==sp_food_coltp0$cause,]$col7
+  NegListCauCol[i]<-sp_food_coltp0[interInteractionNeg$cause.x[i]==sp_food_coltp0$cause,]$col7
 }
 
-NegListRec<-data.frame("spName"=interInteractionNeg$effect,"CauseFood"=NegListCauFood,"CauseCol"=NegListCauCol)
+NegListRec<-data.frame("spName"=interInteractionNeg$effect.x,"CauseFood"=NegListCauFood,"CauseCol"=NegListCauCol)
 # PosListCauseとNegListCauseを結合
 PosListRec$Category <- "Positive"
 NegListRec$Category <- "Negative"
@@ -141,6 +146,10 @@ combined_recipient_data$CauseFood <- as.factor(combined_recipient_data$CauseFood
 for(i in 1:nrow(combined_recipient_data)){
   combined_recipient_data$rename[i]<-sp_food_coltp0[combined_recipient_data$spName[i]==sp_food_coltp0$cause,]$bindre.namesp
 }
+
+rec_order<-c("Lam.cal","Aul.dew","Lep.att","Per.mic","Lob.lab","Neo.sex","Alt.com","Lep.elo","Lam.lem","Neo.fas","Var.moo","Lam.tan","Xen.pap","Oph.ven","Lim.dar","Int.loo","Jul.orn","Par.spp","Pet.tre","Pet.pol","Syn.mul","Tro.moo","Tel.vit","Tel.tem")
+
+combined_recipient_data$rename<-factor(combined_recipient_data$rename, levels = rec_order)
 
 FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
   geom_bar(aes(y = Value), stat = "identity", position = "stack") + 
@@ -161,7 +170,7 @@ FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
   ) +  # y軸のメモリを1ごとに
   labs(title = "(b)",
        x = "",
-       y = "",
+       y = "Number of recipient relationship",
        fill = "Food Habitat") + 
   theme(
     axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
