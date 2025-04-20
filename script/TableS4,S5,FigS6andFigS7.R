@@ -23,16 +23,6 @@ for(i in 1:length(degree_dist_All_all_digdis$X)){
 
 Each_Other_lm_data<-data.frame("countCause"=degree_dist_out_digdis$x,"counteffect"=degree_dist_in_digdis$x,"popmean"=popmeans,"food"=foods)
 
-#igraphから抜き出している場合種名の順番が因果関係の原因側でも結果側でも同じため以下のような式になる
-glm_Each_Other_all<-vglm(cbind(Each_Other_lm_data$countCause,Each_Other_lm_data$counteffect)~popmean+food,data=Each_Other_lm_data,family=poissonff)
-
-Each_Other_lm_data$pred_countCause <- predict(glm_Each_Other_all, type = "response")[,1]
-Each_Other_lm_data$pred_countEffect <- predict(glm_Each_Other_all, type = "response")[,2]
-
-summary(glm_Each_Other_all)
-
-write.csv(capture.output(summary(glm_Each_Other_all)),"TableS4.csv")
-
 #原因側のリンクにおいての平均個体数と食性との関係
 
 popmeans<-NULL
@@ -54,7 +44,7 @@ Out_lm_data$pred_count <- predict(glm_Out, type = "response")
 
 summary(glm_Out)
 
-write.csv(capture.output(summary(glm_Out)),"Out_all_models_num_interact.csv")
+write.csv(capture.output(summary(glm_Out)),"TableS4_out.csv")
 
 
 
@@ -78,7 +68,7 @@ In_lm_data$pred_countEffect <- predict(glm_In, type = "response")
 
 summary(glm_In)
 
-write.csv(capture.output(summary(glm_In)),"In_all_models_num_interact.csv")
+write.csv(capture.output(summary(glm_In)),"TableS4_in.csv")
 
 
 #TableS5 媒介中心生モデルのものも追加して解析を行う
@@ -90,14 +80,14 @@ glm_dataFrame<-data.frame("Abbreviation"=glmdataCen$Abbreviation,"centrality"=gl
 
 glm_dataFrame_Outname<-NULL
 for(i in 1:nrow(degree_dist_out_digdis)){
-  glm_dataFrame_Outname<-c(glm_dataFrame_Outname,sp_food_coltp0[degree_dist_out_digdis$X[i]==sp_food_coltp0$cause,]$bindre.namesp)
+  glm_dataFrame_Outname<-c(glm_dataFrame_Outname,sp_food_coltp0[degree_dist_out_digdis$Abbreviation[i]==sp_food_coltp0$bindre.namesp,]$bindre.namesp)
 }
 
 degree_dist_out_digdis$X<-glm_dataFrame_Outname
 
 glm_dataFrame_Inname<-NULL
 for(i in 1:nrow(degree_dist_in_digdis)){
-  glm_dataFrame_Inname<-c(glm_dataFrame_Inname,sp_food_coltp0[degree_dist_in_digdis$X[i]==sp_food_coltp0$cause,]$bindre.namesp)
+  glm_dataFrame_Inname<-c(glm_dataFrame_Inname,sp_food_coltp0[degree_dist_in_digdis$Abbreviation[i]==sp_food_coltp0$bindre.namesp,]$bindre.namesp)
 }
 
 degree_dist_in_digdis$X<-glm_dataFrame_Inname
@@ -115,12 +105,14 @@ mergeData_in_out$Centrality.betweenness<-as.numeric(mergeData_in_out$Centrality.
 
 mergeData_in_out$mean<-as.numeric(mergeData_in_out$mean)
 
+lm_pred<-predict(lm(mergeData_in_out$Centrality.betweenness~mergeData_in_out$mean*mergeData_in_out$Food.habit),type="response")
+
+mergeData_in_out$pred_centrality<-lm_pred
+
 options(na.action="na.fail")
-glm_cent<-glm(Centrality.betweenness~mean*Food.habit,data=mergeData_in_out,family="gaussian")
+anova_cent<-anova(lm(mergeData_in_out$Centrality.betweenness~mergeData_in_out$mean*mergeData_in_out$Food.habit))
 
-mergeData_in_out$pred_centrality <- predict(glm_cent, type = "response")
-
-write.csv(capture.output(summary(glm_cent)),"TableS5.csv")
+write.csv(anova_cent,"TableS5.csv")
 
 #VGAM(双方向の因果関係数~popmean+food)
 
@@ -172,9 +164,9 @@ ggplot(In_lm_data, aes(x = popmean)) +
 
 #媒介中心性~popmean*food
 
-FigS6_b<-ggplot(mergeData_in_out, aes(x = mean)) +   # Centrality.betweenness の散布図
-  geom_point(aes(y = Centrality.betweenness, color = Food.habit), size = 3) +   # Centrality.betweenness の回帰曲線（予測値に基づく）
-  geom_line(aes(y = pred_centrality, color = Food.habit), size = 1) +   # 軸ラベル
+FigS6_b<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Food.habit)) +   # Centrality.betweenness の散布図
+  geom_point(aes(y = Centrality.betweenness, color = Food.habit), size = 3) +
+  geom_line(aes(y = pred_centrality, color = Food.habit), size = 1) +
   labs(x = "Population mean", y = "Centrality betweenness") + 
   scale_color_manual(values = c('Shrimp-Eater' = 'pink', 
                                 'Omnivore' = 'gray', 
