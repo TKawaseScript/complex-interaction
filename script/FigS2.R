@@ -601,7 +601,7 @@ dataframe_Smap_L_lab$index<-as.numeric(dataframe_Smap_L_lab$index)
 
 for_all_A_dew<-cbind(dataframe_Smap_A_dew,rep("A_dewindti",nrow(dataframe_Smap_A_dew)))
 colnames(for_all_A_dew)<-c("Smap","cause","index","effect")
-for_all_A_dew<-cbind(for_all_A_dew,rep(paste(for_all_A_dew$effect,"-",for_all_A_dew$cause))
+for_all_A_dew<-cbind(for_all_A_dew,rep(paste(for_all_A_dew$effect,"-",for_all_A_dew$cause)))
 colnames(for_all_A_dew)<-c("Smap","cause","index","effect","effect_cause")
 
 for_all_I_loo<-cbind(dataframe_Smap_I_loo,rep("I_loocki",nrow(dataframe_Smap_I_loo)))
