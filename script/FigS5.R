@@ -107,18 +107,20 @@ fit <- lm(log_P_k ~ log_k)
 # べき指数 gamma は -slope
 model_summary <- summary(fit)
 
-# 傾きとp値を抽出
-slope <- model_summary$coefficients[2,1]
-p_value <- model_summary$coefficients[2,4]
+degree_freq_all <- table(degree_dist_All_all_digdis)
+m_all<-displ$new(degree_freq_all)
+est_xmin_all<-estimate_pars(m_all)
+est_xmin_all$pars
+plot(degree_freq_all)
 
 # プロット
 plot_data <- data.frame(log_k = log_k, log_P_k = log_P_k)
 powera<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE, col = "black",lty=2) +
   labs(x = "", y = "log10(P(k))")+
+  geom_smooth(method = "lm", se = FALSE, col = "black",lty=1)+
   annotate("text", x =0.5, y =-1.2, 
-           label =paste("gamma = ",round(-slope,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
+           label =paste("γ = ",round(est_xmin_all$pars,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
   ylim(min(plot_data$log_P_k),0)+
   xlim(0,max(plot_data$log_k))+
   theme_classic()+
@@ -158,11 +160,11 @@ write.csv(degree_dist_out_digdis,"degree_dist_out_digdis.csv")
 degree_freq <- table(degree_dist_out_digdis)
 N <- sum(degree_freq)
 # degree_dist_in_digdis (度数) は table の名前部分
-degree_dist_in_digdis <- as.numeric(names(degree_freq))
+degree_dist_out_digdis <- as.numeric(names(degree_freq))
 k <- as.numeric(names(degree_freq))
 
-lambda <- sum(degree_dist_in_digdis * k) / N
-expected_counts <- N * dpois(degree_dist_in_digdis, lambda)
+lambda <- sum(degree_dist_out_digdis * k) / N
+expected_counts <- N * dpois(degree_dist_out_digdis, lambda)
 chi_squared <- sum((degree_freq - expected_counts)^2 / expected_counts)
 df <- length(k) - 1
 p_value_chi <- pchisq(chi_squared, df, lower.tail = FALSE)
@@ -196,19 +198,26 @@ model_summary <- summary(fit)
 slope <- model_summary$coefficients[2,1]
 p_value <- model_summary$coefficients[2,4]
 
+degree_freq_out <- table(degree_dist_out_digdis)
+m_out<-displ$new(degree_freq_out)
+est_xmin_out<-estimate_pars(m_out)
+est_xmin_out$pars
+plot(degree_freq_out)
+
+
 # プロット
 plot_data <- data.frame(log_k = log_k, log_P_k = log_P_k)
-powerc<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
+powerb<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE, col = "black",lty=2) +
   labs(x = "log10(k)", y = "")+
+  geom_smooth(method = "lm", se = FALSE, col = "black",lty=1)+
   annotate("text", x =0, y =-0.3, 
-           label =paste("gamma = ",round(-slope,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
+           label =paste("γ = ",round(est_xmin_out$pars,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
   ylim(min(plot_data$log_P_k),0)+
   xlim(0,max(plot_data$log_k))+
   theme_classic()+
   theme(panel.grid = element_blank())+
-  ggtitle("(c)")
+  ggtitle("(b)")
 
 
 
@@ -278,19 +287,25 @@ model_summary <- summary(fit)
 slope <- model_summary$coefficients[2,1]
 p_value <- model_summary$coefficients[2,4]
 
+degree_freq_in <- table(degree_dist_in_digdis)
+m_in<-displ$new(degree_freq_in)
+est_xmin_in<-estimate_pars(m_in)
+est_xmin_in$pars
+plot(degree_freq_in)
+
 # プロット
 plot_data <- data.frame(log_k = log_k, log_P_k = log_P_k)
-powerb<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
+powerc<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, col = "black",lty=1) +
   labs(x = "log10(k)", y = "log10(P(k))")+
   annotate("text", x =0.1, y =-1.2, 
-           label =paste("gamma = ",round(-slope,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
+           label =paste("γ = ",round(est_xmin_in$pars,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
   ylim(min(plot_data$log_P_k),0)+
   xlim(0,max(plot_data$log_k))+
   theme_classic()+
   theme(panel.grid = element_blank())+
-  ggtitle("(b)")
+  ggtitle("(c)")
 
 
 
