@@ -74,6 +74,11 @@ cau_order<-c("Lam.cal","Aul.dew","Lep.att","Per.mic","Gna.pfe","Lob.lab","Neo.se
 
 combined_cause_data$rename<-factor(combined_cause_data$rename, levels = cau_order)
 
+background_rects_cause <- data.frame(
+  xmin = c(0, 3.5,4.5,8.5,11.5,20.5,23.5),
+  xmax = c(3.5, 4.5,8.5,11.5,20.5,23.5,27),
+  fill_color = c("royalblue1", "blueviolet","pink","red","gray","lightgreen","darkorange")
+)
 
 FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
   geom_bar(aes(y = Value), stat = "identity", position = "stack") + 
@@ -90,19 +95,21 @@ FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
   ) +  # 手動で色を指定
   geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  # y = 0 の破線
   scale_y_continuous(breaks = seq(-10, 10, by = 1),
-                     limits = c(-10, 10)  # y軸の範囲を手動で指定
+                     limits = c(-9, 9)  # y軸の範囲を手動で指定
   ) +  # y軸のメモリを1ごとに
   labs(title = "(a)",
        x = "Species Name",
        y = "Number of causal relationship",
-       fill = "Food Habitat") + 
+       fill = "Trophic guild") + 
   theme(
     axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
     panel.background = element_rect(fill = "white"),  # 背景色を白に設定
     plot.background = element_rect(fill = "white"),   # プロット全体の背景色も白に設定
     axis.line = element_line(color = "black"),  # 軸の線を黒に設定
     panel.grid = element_blank()  # グリッド線を非表示
-  )
+  )+
+  geom_rect(data = background_rects_cause, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf),
+            fill = background_rects_cause$fill_color, inherit.aes = FALSE, alpha = 0.3)
 
 
 
@@ -151,6 +158,12 @@ rec_order<-c("Lam.cal","Aul.dew","Lep.att","Per.mic","Lob.lab","Neo.sex","Alt.co
 
 combined_recipient_data$rename<-factor(combined_recipient_data$rename, levels = rec_order)
 
+background_rects_effect <- data.frame(
+  xmin = c(0, 3.5,4.5,7.5,10.5,18.5,21.5),
+  xmax = c(3.5, 4.5,7.5,10.5,18.5,21.5,25),
+  fill_color = c("royalblue1", "blueviolet","pink","red","gray","lightgreen","darkorange")
+)
+
 FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
   geom_bar(aes(y = Value), stat = "identity", position = "stack") + 
   scale_fill_manual(
@@ -166,19 +179,22 @@ FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
   ) +  # 手動で色を指定
   geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  # y = 0 の破線
   scale_y_continuous(breaks = seq(-10, 10, by = 1),
-                     limits = c(-10, 10)  # y軸の範囲を手動で指定
+                     limits = c(-9, 9)  # y軸の範囲を手動で指定
   ) +  # y軸のメモリを1ごとに
   labs(title = "(b)",
        x = "",
        y = "Number of recipient relationship",
-       fill = "Food Habitat") + 
+       fill = "Trophic guild") + 
   theme(
     axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
     panel.background = element_rect(fill = "white"),  # 背景色を白に設定
     plot.background = element_rect(fill = "white"),   # プロット全体の背景色も白に設定
     axis.line = element_line(color = "black"),  # 軸の線を黒に設定
     panel.grid = element_blank()  # グリッド線を非表示
-  )
+  )+
+  geom_rect(data = background_rects_effect, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf),
+            fill = background_rects_effect$fill_color, inherit.aes = FALSE, alpha = 0.3)
+
 
 pdf("FigS4.pdf",width = 11.9, height = 8.27)
 grid.arrange(FigS4a, FigS4b, ncol = 2)
