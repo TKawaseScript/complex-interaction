@@ -37,6 +37,9 @@ for(i in 1:length(degree_dist_out_digdis$X)){
 
 Out_lm_data<-data.frame("count"=degree_dist_out_digdis$x,"popmean"=popmeans,"food"=foods)
 
+lm_out<-lm(count~popmean*food,data=Out_lm_data)
+
+anova_out<-anova(lm_out)
 
 glm_Out<-glm(count~popmean*food,data=Out_lm_data,family="poisson")
 
@@ -44,6 +47,7 @@ Out_lm_data$pred_count <- predict(glm_Out, type = "response")
 
 summary(glm_Out)
 
+write.csv(anova_out,"TableS4_anova_out.csv")
 write.csv(capture.output(summary(glm_Out)),"TableS4_out.csv")
 
 
@@ -62,11 +66,19 @@ for(i in 1:length(degree_dist_in_digdis$X)){
 
 In_lm_data<-data.frame("count"=degree_dist_in_digdis$x,"popmean"=popmeans,"food"=foods)
 
+
+lm_in<-lm(count~popmean*food,data=In_lm_data)
+
+anova_in<-anova(lm_in)
+
+
 glm_In<-glm(count~popmean*food,data=In_lm_data,family="poisson")
 
 In_lm_data$pred_countEffect <- predict(glm_In, type = "response")
 
 summary(glm_In)
+
+write.csv(anova_in,"TableS4_anova_in.csv")
 
 write.csv(capture.output(summary(glm_In)),"TableS4_in.csv")
 
@@ -80,14 +92,14 @@ glm_dataFrame<-data.frame("Abbreviation"=glmdataCen$Abbreviation,"centrality"=gl
 
 glm_dataFrame_Outname<-NULL
 for(i in 1:nrow(degree_dist_out_digdis)){
-  glm_dataFrame_Outname<-c(glm_dataFrame_Outname,sp_food_coltp0[degree_dist_out_digdis$Abbreviation[i]==sp_food_coltp0$bindre.namesp,]$bindre.namesp)
+  glm_dataFrame_Outname<-c(glm_dataFrame_Outname,sp_food_coltp0[degree_dist_out_digdis$X[i]==sp_food_coltp0$cause,]$bindre.namesp)
 }
 
 degree_dist_out_digdis$X<-glm_dataFrame_Outname
 
 glm_dataFrame_Inname<-NULL
 for(i in 1:nrow(degree_dist_in_digdis)){
-  glm_dataFrame_Inname<-c(glm_dataFrame_Inname,sp_food_coltp0[degree_dist_in_digdis$Abbreviation[i]==sp_food_coltp0$bindre.namesp,]$bindre.namesp)
+  glm_dataFrame_Inname<-c(glm_dataFrame_Inname,sp_food_coltp0[degree_dist_in_digdis$X[i]==sp_food_coltp0$cause,]$bindre.namesp)
 }
 
 degree_dist_in_digdis$X<-glm_dataFrame_Inname
@@ -118,11 +130,9 @@ write.csv(anova_cent,"TableS5.csv")
 
 # グラフの作成
 FigS6_a<-ggplot(Each_Other_lm_data, aes(x = popmean)) +   # countCause の散布図
-  geom_point(aes(y = countCause, shape = "Cause", color = food), size = 3) +   # countEffect の散布図
-  geom_point(aes(y = counteffect, shape = "Recipietnt", color = food), size = 3) +   # 回帰曲線（countCause）
-  geom_line(aes(y = pred_countCause, color = food), size = 1) +   # 回帰曲線（countEffect）
-  geom_line(aes(y = pred_countEffect, color = food), size = 1, linetype = "dashed") +   # 軸ラベル
-  labs(x = "", y = "Count (Causative / Recipient)") + 
+  geom_point(aes(y = countCause, shape = "Cause", color = food), size = 3) +   # countCause の散布図
+  geom_point(aes(y = counteffect, shape = "Recipietnt", color = food), size = 3) +   # 回帰曲線（counteffect）
+  labs(title = "(a)",x = "", y = "Count (Causative / Recipient)") + 
   scale_shape_manual(values = c(16, 17),name = "Interaction type") +
   scale_color_manual(values = c('shrimp-eater' = 'pink', 
                                 'omnivore' = 'gray', 
@@ -165,9 +175,8 @@ ggplot(In_lm_data, aes(x = popmean)) +
 #媒介中心性~popmean*food
 
 FigS6_b<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Food.habit)) +   # Centrality.betweenness の散布図
-  geom_point(aes(y = Centrality.betweenness, color = Food.habit), size = 3) +
-  geom_line(aes(y = pred_centrality, color = Food.habit), size = 1) +
-  labs(x = "Population mean", y = "Centrality betweenness") + 
+  geom_point(aes(y = Centrality.betweenness, color = Food.habit), size = 3,shape=15) +
+  labs(title="(b)",x = "Population mean", y = "Centrality betweenness") + 
   scale_color_manual(values = c('Shrimp-Eater' = 'pink', 
                                 'Omnivore' = 'gray', 
                                 'Piscivore' = 'red', 
