@@ -72,6 +72,10 @@ for(i in 1:nrow(combined_cause_data)){
 
 cau_order<-c("Lam.cal","Aul.dew","Lep.att","Per.mic","Gna.pfe","Lob.lab","Neo.sex","Alt.com","Lep.elo","Lam.lem","Neo.fas","Var.moo","Lam.tan","Xen.pap","Oph.ven","Lim.dar","Int.loo","Jul.orn","Par.spp","Hap.mic","Pet.tre","Pet.pol","Syn.mul","Tro.moo","Tel.vit","Tel.tem")
 
+cum_order<-c("fry-feeder","scale-eater","shrimp-eater","piscivore","omnivore","grazer","browser")
+
+combined_cause_data$RecipientFood<-factor(combined_cause_data$RecipientFood,levels=cum_order)
+
 combined_cause_data$rename<-factor(combined_cause_data$rename, levels = cau_order)
 
 background_rects_cause <- data.frame(
@@ -95,7 +99,7 @@ FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
   ) +  # 手動で色を指定
   geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  # y = 0 の破線
   scale_y_continuous(breaks = seq(-10, 10, by = 1),
-                     limits = c(-9, 9)  # y軸の範囲を手動で指定
+                     limits = c(-8, 8)  # y軸の範囲を手動で指定
   ) +  # y軸のメモリを1ごとに
   labs(title = "(a)",
        x = "Species Name",
@@ -108,8 +112,13 @@ FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
     axis.line = element_line(color = "black"),  # 軸の線を黒に設定
     panel.grid = element_blank()  # グリッド線を非表示
   )+
-  geom_rect(data = background_rects_cause, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf),
-            fill = background_rects_cause$fill_color, inherit.aes = FALSE, alpha = 0.3)
+  annotate("rect", xmin = 0, xmax = 3.5, ymin = -8, ymax = -7.8,fill = "royalblue1")+
+  annotate("rect", xmin = 3.5, xmax = 4.5, ymin = -8, ymax = -7.8,fill = "blueviolet")+
+  annotate("rect", xmin = 4.5, xmax = 8.5, ymin = -8, ymax = -7.8,fill = "pink")+
+  annotate("rect", xmin = 8.5, xmax = 11.5, ymin = -8, ymax = -7.8,fill = "red")+
+  annotate("rect", xmin = 11.5, xmax = 20.5, ymin = -8, ymax = -7.8,fill = "gray")+
+  annotate("rect", xmin = 20.5, xmax = 23.5, ymin = -8, ymax = -7.8,fill = "lightgreen")+
+  annotate("rect", xmin = 23.5, xmax = 27, ymin = -8, ymax = -7.8,fill = "darkorange")
 
 
 
@@ -158,11 +167,8 @@ rec_order<-c("Lam.cal","Aul.dew","Lep.att","Per.mic","Lob.lab","Neo.sex","Alt.co
 
 combined_recipient_data$rename<-factor(combined_recipient_data$rename, levels = rec_order)
 
-background_rects_effect <- data.frame(
-  xmin = c(0, 3.5,4.5,7.5,10.5,18.5,21.5),
-  xmax = c(3.5, 4.5,7.5,10.5,18.5,21.5,25),
-  fill_color = c("royalblue1", "blueviolet","pink","red","gray","lightgreen","darkorange")
-)
+combined_recipient_data$CauseFood<-factor(combined_recipient_data$CauseFood,levels=cum_order)
+
 
 FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
   geom_bar(aes(y = Value), stat = "identity", position = "stack") + 
@@ -179,7 +185,7 @@ FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
   ) +  # 手動で色を指定
   geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  # y = 0 の破線
   scale_y_continuous(breaks = seq(-10, 10, by = 1),
-                     limits = c(-9, 9)  # y軸の範囲を手動で指定
+                     limits = c(-8, 8)  # y軸の範囲を手動で指定
   ) +  # y軸のメモリを1ごとに
   labs(title = "(b)",
        x = "",
@@ -192,9 +198,14 @@ FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
     axis.line = element_line(color = "black"),  # 軸の線を黒に設定
     panel.grid = element_blank()  # グリッド線を非表示
   )+
-  geom_rect(data = background_rects_effect, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf),
-            fill = background_rects_effect$fill_color, inherit.aes = FALSE, alpha = 0.3)
-
+  annotate("rect", xmin = 0, xmax = 3.5, ymin = -8, ymax = -7.8,fill = "royalblue1")+
+  annotate("rect", xmin = 3.5, xmax = 4.5, ymin = -8, ymax = -7.8,fill = "blueviolet")+
+  annotate("rect", xmin = 4.5, xmax = 7.5, ymin = -8, ymax = -7.8,fill = "pink")+
+  annotate("rect", xmin = 7.5, xmax = 10.5, ymin = -8, ymax = -7.8,fill = "red")+
+  annotate("rect", xmin = 10.5, xmax = 18.5, ymin = -8, ymax = -7.8,fill = "gray")+
+  annotate("rect", xmin = 18.5, xmax = 21.5, ymin = -8, ymax = -7.8,fill = "lightgreen")+
+  annotate("rect", xmin = 21.5, xmax = 25, ymin = -8, ymax = -7.8,fill = "orange")
+  
 
 pdf("FigS4.pdf",width = 11.9, height = 8.27)
 grid.arrange(FigS4a, FigS4b, ncol = 2)
