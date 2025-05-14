@@ -37,11 +37,9 @@ for(i in 1:length(degree_dist_out_digdis$X)){
 
 Out_lm_data<-data.frame("count"=degree_dist_out_digdis$x,"popmean"=popmeans,"food"=foods)
 
-lm_out<-lm(count~popmean*food,data=Out_lm_data)
-
-anova_out<-anova(lm_out)
-
 glm_Out<-glm(count~popmean*food,data=Out_lm_data,family="poisson")
+
+anova_out<-anova(glm_Out,test = "Chisq")
 
 Out_lm_data$pred_count <- predict(glm_Out, type = "response")
 
@@ -66,13 +64,9 @@ for(i in 1:length(degree_dist_in_digdis$X)){
 
 In_lm_data<-data.frame("count"=degree_dist_in_digdis$x,"popmean"=popmeans,"food"=foods)
 
-
-lm_in<-lm(count~popmean*food,data=In_lm_data)
-
-anova_in<-anova(lm_in)
-
-
 glm_In<-glm(count~popmean*food,data=In_lm_data,family="poisson")
+
+anova_in<-anova(glm_In,test = "Chisq")
 
 In_lm_data$pred_countEffect <- predict(glm_In, type = "response")
 

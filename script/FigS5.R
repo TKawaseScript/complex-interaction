@@ -12,6 +12,7 @@ library(ape)
 library(nlme)
 library(tools)
 library(cowplot)
+library(poweRlaw)
 
 
 
@@ -107,11 +108,21 @@ fit <- lm(log_P_k ~ log_k)
 # べき指数 gamma は -slope
 model_summary <- summary(fit)
 
-degree_freq_all <- table(degree_dist_All_all_digdis)
+degree_freq_all <- degree_dist_All_all_digdis$x
 m_all<-displ$new(degree_freq_all)
-est_xmin_all<-estimate_pars(m_all)
+est_xmin_all<-estimate_xmin(m_all)
+
+m_all$setXmin(est_xmin_all)
+
+est_pars_all<-estimate_pars(m_all)
+m_all$setPars(est_pars_all)
+
+bootstrap_all<-bootstrap_p(m_all,no_of_sims=500,threads=2)
+#p値
+bootstrap_all$p
+
+#powerLowの係数
 est_xmin_all$pars
-plot(degree_freq_all)
 
 # プロット
 plot_data <- data.frame(log_k = log_k, log_P_k = log_P_k)
@@ -198,11 +209,36 @@ model_summary <- summary(fit)
 slope <- model_summary$coefficients[2,1]
 p_value <- model_summary$coefficients[2,4]
 
-degree_freq_out <- table(degree_dist_out_digdis)
+degree_freq_out <- degree_dist_out_digdis$x
 m_out<-displ$new(degree_freq_out)
-est_xmin_out<-estimate_pars(m_out)
+est_xmin_out<-estimate_xmin(m_out)
+
+m_out$setXmin(est_xmin_out)
+
+est_pars_out<-estimate_pars(m_out)
+m_out$setPars(est_pars_out)
+
+bootstrap_out<-bootstrap_p(m_out,no_of_sims=500,threads=2)
+#p値
+bootstrap_out$p
+
+#powerLowの係数
 est_xmin_out$pars
-plot(degree_freq_out)
+
+
+
+# barabashiデータのプロット
+plot(m_out, 
+     main="Degree distribution with power-law fit",
+     xlab="Degree (k)", 
+     ylab="P(X ≥ k)", 
+     cex=0.5, 
+     col="darkgray", 
+     pch=16)
+
+# パワーローのフィットを重ねる
+lines(m_out, col="red", lwd=2)
+
 
 
 # プロット
@@ -287,13 +323,40 @@ model_summary <- summary(fit)
 slope <- model_summary$coefficients[2,1]
 p_value <- model_summary$coefficients[2,4]
 
-degree_freq_in <- table(degree_dist_in_digdis)
-m_in<-displ$new(degree_freq_in)
-est_xmin_in<-estimate_pars(m_in)
-est_xmin_in$pars
-plot(degree_freq_in)
 
-# プロット
+
+degree_freq_in <- degree_dist_in_digdis$x
+degree_freq_in<-degree_freq_in[degree_freq_in!=0]
+
+m_in<-displ$new(degree_freq_in)
+est_xmin_in<-estimate_xmin(m_in)
+
+m_in$setXmin(est_xmin_in)
+
+est_pars_in<-estimate_pars(m_in)
+m_in$setPars(est_pars_in)
+
+bootstrap_in<-bootstrap_p(m_in,no_of_sims=500,threads=2)
+#p値
+bootstrap_in$p
+
+#powerLowの係数
+est_xmin_in$pars
+
+
+# barabashiデータのプロット
+plot(m_in, 
+     main="Degree distribution with power-law fit",
+     xlab="Degree (k)", 
+     ylab="P(X ≥ k)", 
+     cex=0.5, 
+     col="darkgray", 
+     pch=16)
+
+# パワーローのフィットを重ねる
+lines(m_in, col="red", lwd=2)
+
+
 plot_data <- data.frame(log_k = log_k, log_P_k = log_P_k)
 powerc<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
   geom_point() +
