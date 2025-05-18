@@ -1656,6 +1656,35 @@
       ],
       "Hash": "d744387aef9047b0b48be2933d78e862"
     },
+    "poweRlaw": {
+      "Package": "poweRlaw",
+      "Version": "1.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "methods",
+        "parallel",
+        "pracma",
+        "stats",
+        "utils"
+      ],
+      "Hash": "444205e31c58be36dd4f3b0a2dfbd76e"
+    },
+    "pracma": {
+      "Package": "pracma",
+      "Version": "2.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils"
+      ],
+      "Hash": "44bc172d47d1ea0a638d9f299e321203"
+    },
     "prettyunits": {
       "Package": "prettyunits",
       "Version": "1.1.1",
