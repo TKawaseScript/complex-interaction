@@ -69,6 +69,7 @@ igraphdatatp0ww8<-graph(t(cbind(igraph_allww8s$cause,igraph_allww8s$effect)))
 # ノードの次数を取得
 degree_dist_All_all_digdis <- igraph::degree(igraphdatatp0ww8,mode = "all")
 write.csv(degree_dist_All_all_digdis,"degree_dist_All_all_digdis.csv")
+degree_dist_All_all_digdis<-read.csv("degree_dist_All_all_digdis.csv")
 
 degree_freq_all <- degree_dist_All_all_digdis$x
 m_all<-displ$new(degree_freq_all)
@@ -79,6 +80,7 @@ m_all$setXmin(est_xmin_all)
 est_pars_all<-estimate_pars(m_all)
 m_all$setPars(est_pars_all)
 
+set.seed(123)
 bootstrap_all<-bootstrap_p(m_all,no_of_sims=500,threads=2)
 #p値
 bootstrap_all$p
@@ -117,7 +119,8 @@ m_out$setXmin(est_xmin_out)
 est_pars_out<-estimate_pars(m_out)
 m_out$setPars(est_pars_out)
 
-bootstrap_out<-bootstrap_p(m_out,no_of_sims=500,threads=2)
+set.seed(123)
+bootstrap_out<-bootstrap_p(m_out,no_of_sims=5000,threads=2)
 #p値
 bootstrap_out$p
 
@@ -161,7 +164,8 @@ m_in$setXmin(est_xmin_in)
 est_pars_in<-estimate_pars(m_in)
 m_in$setPars(est_pars_in)
 
-bootstrap_in<-bootstrap_p(m_in,no_of_sims=500,threads=2)
+set.seed(123)
+bootstrap_in<-bootstrap_p(m_in,no_of_sims=5000,threads=2)
 #p値
 bootstrap_in$p
 
@@ -187,12 +191,15 @@ lines(m_in, col="red", lwd=2)
 dev.off()
 
 
-pdf("FigS5.pdf", width=8, height=6)  # 高さを少し増やすとバランスが良くなります
-par(mfrow=c(1,1))  # 2行2列のレイアウト
+pdf("FigS5.pdf", width=8, height=6) 
+
+layout(matrix(c(1,1,2,3), nrow = 2,byrow = TRUE),heights = 1)
+par(oma=c(2,2,0,0),
+    mar=c(4,4,2,2))
 
 plot(m_all, 
-     main="Degree distribution with power-law fit for the all interaction network",
-     xlab="Degree (k)", 
+     main="",
+     xlab="", 
      ylab="P(X ≥ k)", 
      cex=1, 
      col="black", 
@@ -203,10 +210,8 @@ text(x=3, y=0.1, labels=paste("p=", round(bootstrap_all$p, digits=3)))
 # パワーローのフィットを重ねる
 lines(m_all, col="red", lwd=2)
 
-par(mfrow=c(1,2))  # 2行2列のレイアウト
-
 plot(m_out, 
-     main="Degree distribution with power-law fit for causality",
+     main="",
      xlab="Degree (k)", 
      ylab="P(X ≥ k)", 
      cex=1, 
@@ -221,9 +226,9 @@ lines(m_out, col="red", lwd=2)
 
 plot(m_in, 
      asp = 1,
-     main="Degree distribution with power-law fit for recipient",
+     main="",
      xlab="Degree (k)", 
-     ylab="P(X ≥ k)", 
+     ylab="", 
      cex=1, 
      col="black", 
      pch=16,

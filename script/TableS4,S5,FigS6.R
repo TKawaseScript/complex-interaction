@@ -44,7 +44,14 @@ anova_out<-anova(glm_Out,test = "Chisq")
 
 plotTableS4a<-ggplot(Out_lm_data,aes(x=popmean,y=count,color=food))+
   geom_point(alpha=0.6)+
-  geom_smooth(method="glm",method.args=list(family="poisson"),se=FALSE)+
+  geom_smooth(
+    aes(group = 1),
+    method = "glm",
+    method.args = list(family = "poisson"),
+    formula = y ~ x,
+    se = FALSE,
+    color = "black"
+  )+
   theme_minimal()+
   theme(
   panel.grid.major=element_blank(),
@@ -53,7 +60,7 @@ plotTableS4a<-ggplot(Out_lm_data,aes(x=popmean,y=count,color=food))+
   panel.border=element_blank(),
   legend.position="none"
   )+
-  scale_color_manual(values=c("browser"="darkorange","fry-feeder"="royalblue1","grazer"="lightgreen","omnivore"="gray","piscover"="red","scale-eater"="blueviolet","shrimp-eater"="pink"))+
+  scale_color_manual(values=c("browser"="darkorange","fry-feeder"="royalblue1","grazer"="lightgreen","omnivore"="gray","piscivore"="red","scale-eater"="blueviolet","shrimp-eater"="pink"))+
   ylim(0,14)+
   labs(
     x="Population mean",
@@ -98,7 +105,6 @@ plotTableS4b<-ggplot(In_lm_data,aes(x=popmean,y=count,color=food))+
     panel.grid.minor=element_blank(),
     axis.line=element_line(color = "black"),
     panel.border=element_blank(),
-    legend.position="none"
   )+
   scale_color_manual(values=c("browser"="darkorange","fry-feeder"="royalblue1","grazer"="lightgreen","omnivore"="gray","piscivore"="red","scale-eater"="blueviolet","shrimp-eater"="pink"))+
   ylim(0,14)+
@@ -112,9 +118,9 @@ write.csv(anova_in,"TableS4_anova_in.csv")
 
 write.csv(capture.output(summary(glm_In)),"TableS4_in.csv")
 
-pdf("TableS4fig.pdf")
+pdf("FigS7.pdf")
 plot_grid(plotTableS4a,plotTableS4b)
-dev.o
+dev.off()
 
 #TableS5 媒介中心生モデルのものも追加して解析を行う
 TableS1data<-read.csv("TableS1.csv")
