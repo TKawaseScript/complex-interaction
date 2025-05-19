@@ -2,6 +2,7 @@ library(VGAM)
 library(dplyr)
 library(ggplot2)
 library(gridExtra)
+library(cowplot)
 
 
 #TableS4
@@ -41,7 +42,23 @@ glm_Out<-glm(count~popmean*food,data=Out_lm_data,family="poisson")
 
 anova_out<-anova(glm_Out,test = "Chisq")
 
-Out_lm_data$pred_count <- predict(glm_Out, type = "response")
+plotTableS4a<-ggplot(Out_lm_data,aes(x=popmean,y=count,color=food))+
+  geom_point(alpha=0.6)+
+  geom_smooth(method="glm",method.args=list(family="poisson"),se=FALSE)+
+  theme_minimal()+
+  theme(
+  panel.grid.major=element_blank(),
+  panel.grid.minor=element_blank(),
+  axis.line=element_line(color = "black"),
+  panel.border=element_blank(),
+  legend.position="none"
+  )+
+  scale_color_manual(values=c("browser"="darkorange","fry-feeder"="royalblue1","grazer"="lightgreen","omnivore"="gray","piscover"="red","scale-eater"="blueviolet","shrimp-eater"="pink"))+
+  ylim(0,14)+
+  labs(
+    x="Population mean",
+    y="Number of causal relationship"
+  )
 
 summary(glm_Out)
 
@@ -72,10 +89,32 @@ In_lm_data$pred_countEffect <- predict(glm_In, type = "response")
 
 summary(glm_In)
 
+plotTableS4b<-ggplot(In_lm_data,aes(x=popmean,y=count,color=food))+
+  geom_point(alpha=0.6)+
+  geom_smooth(method="glm",method.args=list(family="poisson"),se=FALSE)+
+  theme_minimal()+
+  theme(
+    panel.grid.major=element_blank(),
+    panel.grid.minor=element_blank(),
+    axis.line=element_line(color = "black"),
+    panel.border=element_blank(),
+    legend.position="none"
+  )+
+  scale_color_manual(values=c("browser"="darkorange","fry-feeder"="royalblue1","grazer"="lightgreen","omnivore"="gray","piscover"="red","scale-eater"="blueviolet","shrimp-eater"="pink"))+
+  ylim(0,14)+
+  labs(
+    x="Population mean",
+    y="Number of repicient relationship"
+  )
+
+
 write.csv(anova_in,"TableS4_anova_in.csv")
 
 write.csv(capture.output(summary(glm_In)),"TableS4_in.csv")
 
+pdf("TableS4fig.pdf")
+plot_grid(plotTableS4a,plotTableS4b)
+dev.o
 
 #TableS5 媒介中心生モデルのものも追加して解析を行う
 TableS1data<-read.csv("TableS1.csv")
@@ -186,5 +225,6 @@ FigS6_b<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Fo
 FigS6 <- grid.arrange(FigS6_a, FigS6_b, ncol = 1)  # ncol = 1 は縦配置、nrow = 1 なら横配置
 
 ggsave("FigS6.pdf", plot = FigS6, width = 8, height = 6)
+
 
 

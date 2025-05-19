@@ -70,44 +70,6 @@ igraphdatatp0ww8<-graph(t(cbind(igraph_allww8s$cause,igraph_allww8s$effect)))
 degree_dist_All_all_digdis <- igraph::degree(igraphdatatp0ww8,mode = "all")
 write.csv(degree_dist_All_all_digdis,"degree_dist_All_all_digdis.csv")
 
-# 次数の頻度分布を計算
-degree_freq <- table(degree_dist_All_all_digdis)
-N <- sum(degree_freq)
-# degree_dist_in_digdis (度数) は table の名前部分
-degree_dist_in_digdis <- as.numeric(names(degree_freq))
-k <- as.numeric(names(degree_freq))
-
-lambda <- sum(degree_dist_in_digdis * k) / N
-expected_counts <- N * dpois(degree_dist_in_digdis, lambda)
-chi_squared <- sum((degree_freq - expected_counts)^2 / expected_counts)
-df <- length(k) - 1
-p_value_chi <- pchisq(chi_squared, df, lower.tail = FALSE)
-
-# 結果の表示
-cat("Chi-squared:", chi_squared, "\n")
-cat("Degrees of freedom:", df, "\n")
-cat("P-value:", p_value_chi, "\n")
-
-# 有意水準の設定
-alpha <- 0.05
-if (p_value_chi < alpha) {
-  cat("帰無仮説は棄却されました。ポアソン型ネットワークではない可能性があります。\n")
-} else {
-  cat("帰無仮説は棄却されませんでした。ポアソン型ネットワークの可能性があります。\n")
-}
-
-P_k <- as.numeric(degree_freq) / sum(degree_freq)
-
-# 対数を取る
-log_k <- log10(k)
-log_P_k <- log10(P_k)
-
-# 線形回帰を適用
-fit <- lm(log_P_k ~ log_k)
-
-# べき指数 gamma は -slope
-model_summary <- summary(fit)
-
 degree_freq_all <- degree_dist_All_all_digdis$x
 m_all<-displ$new(degree_freq_all)
 est_xmin_all<-estimate_xmin(m_all)
@@ -124,90 +86,27 @@ bootstrap_all$p
 #powerLowの係数
 est_xmin_all$pars
 
-# プロット
-plot_data <- data.frame(log_k = log_k, log_P_k = log_P_k)
-powera<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
-  geom_point() +
-  labs(x = "", y = "log10(P(k))")+
-  geom_smooth(method = "lm", se = FALSE, col = "black",lty=1)+
-  annotate("text", x =0.5, y =-1.2, 
-           label =paste("γ = ",round(est_xmin_all$pars,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
-  ylim(min(plot_data$log_P_k),0)+
-  xlim(0,max(plot_data$log_k))+
-  theme_classic()+
-  theme(panel.grid = element_blank())+
-  ggtitle("(a)")
 
+pdf("FigS5_a.pdf",width=8,height=4)
+# barabashiデータのプロット
+plot(m_all, 
+     main="Degree distribution with power-law fit for the all interaction network",
+     xlab="Degree (k)", 
+     ylab="P(X ≥ k)", 
+     cex=1, 
+     col="black", 
+     pch=16)
+text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_all$pars, digits=3)))
+text(x=3, y=0.1, labels=paste("p=", round(bootstrap_all$p, digits=3)))
 
-# 結果の表示
-print(summary(fit))
-
-# 回帰係数（log_kの係数とp値）を取得
-log_k_estimate <- model_summary$coefficients["log_k", "Estimate"]
-log_k_p_value <- model_summary$coefficients["log_k", "Pr(>|t|)"]
-
-# 結果を表示
-cat(sprintf("log_kの係数（γ）: %.4f\n", log_k_estimate))
-cat(sprintf("log_kのp値: %.4f\n", log_k_p_value))
-
-# γ（べき指数）として係数の符号を反転させる
-gamma <- -log_k_estimate
-
-cat(sprintf("べき指数 γ: %.2f\n", gamma))
-
-#ただし最小二乗法を用いた場合傾きは性も負もあり得るためその傾きの絶対値を取りマイナスをかけた値が冪乗法則のλに当たる
-#大きな𝜆の値は、ネットワーク内のハブノードがさらに希少化し、ノードの次数のばらつきがより大きくなることを示唆します。つまり、ごく少数のノードが非常に多くのリンクを持ち、残りのノードはそれほど多くのリンクを持たない、より不均衡なネットワーク構造が予想されます。
-#また、𝜆の値が大きい場合、ネットワーク内での情報や影響の伝播は、ごく少数の中心的なノードによって支配される可能性が高くなります。そのため、ネットワークのロバスト性や耐障害性が低下し、ハブノードの故障や攻撃に対する脆弱性が増すかもしれません。
-
-
-
+# パワーローのフィットを重ねる
+lines(m_all, col="red", lwd=2)
+dev.off()
 
 #原因側の因果関係についてのものを採用(sup)
 # ノードの次数を取得
 degree_dist_out_digdis <- igraph::degree(igraphdatatp0ww8,mode = "out")
 write.csv(degree_dist_out_digdis,"degree_dist_out_digdis.csv")
-
-# 次数の頻度分布を計算
-degree_freq <- table(degree_dist_out_digdis)
-N <- sum(degree_freq)
-# degree_dist_in_digdis (度数) は table の名前部分
-degree_dist_out_digdis <- as.numeric(names(degree_freq))
-k <- as.numeric(names(degree_freq))
-
-lambda <- sum(degree_dist_out_digdis * k) / N
-expected_counts <- N * dpois(degree_dist_out_digdis, lambda)
-chi_squared <- sum((degree_freq - expected_counts)^2 / expected_counts)
-df <- length(k) - 1
-p_value_chi <- pchisq(chi_squared, df, lower.tail = FALSE)
-
-# 結果の表示
-cat("Chi-squared:", chi_squared, "\n")
-cat("Degrees of freedom:", df, "\n")
-cat("P-value:", p_value_chi, "\n")
-
-# 有意水準の設定
-alpha <- 0.05
-if (p_value_chi < alpha) {
-  cat("帰無仮説は棄却されました。ポアソン型ネットワークではない可能性があります。\n")
-} else {
-  cat("帰無仮説は棄却されませんでした。ポアソン型ネットワークの可能性があります。\n")
-}
-
-P_k <- as.numeric(degree_freq) / sum(degree_freq)
-
-# 対数を取る
-log_k <- log10(k)
-log_P_k <- log10(P_k)
-
-# 線形回帰を適用
-fit <- lm(log_P_k ~ log_k)
-
-# べき指数 gamma は -slope
-model_summary <- summary(fit)
-
-# 傾きとp値を抽出
-slope <- model_summary$coefficients[2,1]
-p_value <- model_summary$coefficients[2,4]
 
 degree_freq_out <- degree_dist_out_digdis$x
 m_out<-displ$new(degree_freq_out)
@@ -226,51 +125,21 @@ bootstrap_out$p
 est_xmin_out$pars
 
 
-
+pdf("FigS5_b.pdf")
 # barabashiデータのプロット
 plot(m_out, 
-     main="Degree distribution with power-law fit",
+     main="Degree distribution with power-law fit for causality",
      xlab="Degree (k)", 
      ylab="P(X ≥ k)", 
-     cex=0.5, 
-     col="darkgray", 
+     cex=1, 
+     col="black", 
      pch=16)
+text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_out$pars, digits=3)))
+text(x=3, y=0.1, labels=paste("p=", round(bootstrap_out$p, digits=3)))
 
 # パワーローのフィットを重ねる
 lines(m_out, col="red", lwd=2)
-
-
-
-# プロット
-plot_data <- data.frame(log_k = log_k, log_P_k = log_P_k)
-powerb<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
-  geom_point() +
-  labs(x = "log10(k)", y = "")+
-  geom_smooth(method = "lm", se = FALSE, col = "black",lty=1)+
-  annotate("text", x =0, y =-0.3, 
-           label =paste("γ = ",round(est_xmin_out$pars,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
-  ylim(min(plot_data$log_P_k),0)+
-  xlim(0,max(plot_data$log_k))+
-  theme_classic()+
-  theme(panel.grid = element_blank())+
-  ggtitle("(b)")
-
-
-
-# 結果の表示
-print(summary(fit))
-
-log_k_estimate <- model_summary$coefficients["log_k", "Estimate"]
-log_k_p_value <- model_summary$coefficients["log_k", "Pr(>|t|)"]
-
-# 結果を表示
-cat(sprintf("log_kの係数（γ）: %.4f\n", log_k_estimate))
-cat(sprintf("log_kのp値: %.4f\n", log_k_p_value))
-
-# γ（べき指数）として係数の符号を反転させる
-gamma <- -log_k_estimate
-
-cat(sprintf("べき指数 γ: %.2f\n", gamma))
+dev.off()
 
 
 
@@ -280,50 +149,6 @@ cat(sprintf("べき指数 γ: %.2f\n", gamma))
 # ノードの次数を取得
 degree_dist_in_digdis <- igraph::degree(igraphdatatp0ww8,mode = "in")
 write.csv(degree_dist_in_digdis,"degree_dist_in_digdis.csv")
-# 次数の頻度分布を計算
-degree_freq <- table(degree_dist_in_digdis)
-N <- sum(degree_freq)
-# degree_dist_in_digdis (度数) は table の名前部分
-degree_dist_in_digdis <- as.numeric(names(degree_freq))
-k <- as.numeric(names(degree_freq))
-
-lambda <- sum(degree_dist_in_digdis * k) / N
-expected_counts <- N * dpois(degree_dist_in_digdis, lambda)
-chi_squared <- sum((degree_freq - expected_counts)^2 / expected_counts)
-df <- length(k) - 1
-p_value_chi <- pchisq(chi_squared, df, lower.tail = FALSE)
-
-# 結果の表示
-cat("Chi-squared:", chi_squared, "\n")
-cat("Degrees of freedom:", df, "\n")
-cat("P-value:", p_value_chi, "\n")
-
-# 有意水準の設定
-alpha <- 0.05
-if (p_value_chi < alpha) {
-  cat("帰無仮説は棄却されました。ポアソン型ネットワークではない可能性があります。\n")
-} else {
-  cat("帰無仮説は棄却されませんでした。ポアソン型ネットワークの可能性があります。\n")
-}
-
-P_k <- as.numeric(degree_freq) / sum(degree_freq)
-
-# 対数を取る
-#1個目はInfなので除外
-log_k <- log10(k)[-1]
-log_P_k <- log10(P_k)[-1]
-
-# 線形回帰を適用
-fit <- lm(log_P_k ~ log_k)
-
-# べき指数 gamma は -slope
-model_summary <- summary(fit)
-
-# 傾きとp値を抽出
-slope <- model_summary$coefficients[2,1]
-p_value <- model_summary$coefficients[2,4]
-
-
 
 degree_freq_in <- degree_dist_in_digdis$x
 degree_freq_in<-degree_freq_in[degree_freq_in!=0]
@@ -343,52 +168,71 @@ bootstrap_in$p
 #powerLowの係数
 est_xmin_in$pars
 
-
+pdf("FigS5_c.pdf")
 # barabashiデータのプロット
 plot(m_in, 
-     main="Degree distribution with power-law fit",
+     asp = 1,
+     main="Degree distribution with power-law fit for recipient",
      xlab="Degree (k)", 
      ylab="P(X ≥ k)", 
-     cex=0.5, 
-     col="darkgray", 
+     cex=1, 
+     col="black", 
+     pch=16,
+     )
+text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_in$pars, digits=3)))
+text(x=3, y=0.1, labels=paste("p=", round(bootstrap_in$p, digits=3)))
+
+# パワーローのフィットを重ねる
+lines(m_in, col="red", lwd=2)
+dev.off()
+
+
+pdf("FigS5.pdf", width=8, height=6)  # 高さを少し増やすとバランスが良くなります
+par(mfrow=c(1,1))  # 2行2列のレイアウト
+
+plot(m_all, 
+     main="Degree distribution with power-law fit for the all interaction network",
+     xlab="Degree (k)", 
+     ylab="P(X ≥ k)", 
+     cex=1, 
+     col="black", 
      pch=16)
+text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_all$pars, digits=3)))
+text(x=3, y=0.1, labels=paste("p=", round(bootstrap_all$p, digits=3)))
+
+# パワーローのフィットを重ねる
+lines(m_all, col="red", lwd=2)
+
+par(mfrow=c(1,2))  # 2行2列のレイアウト
+
+plot(m_out, 
+     main="Degree distribution with power-law fit for causality",
+     xlab="Degree (k)", 
+     ylab="P(X ≥ k)", 
+     cex=1, 
+     col="black", 
+     pch=16)
+text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_out$pars, digits=3)))
+text(x=3, y=0.1, labels=paste("p=", round(bootstrap_out$p, digits=3)))
+
+# パワーローのフィットを重ねる
+lines(m_out, col="red", lwd=2)
+
+
+plot(m_in, 
+     asp = 1,
+     main="Degree distribution with power-law fit for recipient",
+     xlab="Degree (k)", 
+     ylab="P(X ≥ k)", 
+     cex=1, 
+     col="black", 
+     pch=16,
+)
+text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_in$pars, digits=3)))
+text(x=3, y=0.1, labels=paste("p=", round(bootstrap_in$p, digits=3)))
 
 # パワーローのフィットを重ねる
 lines(m_in, col="red", lwd=2)
 
-
-plot_data <- data.frame(log_k = log_k, log_P_k = log_P_k)
-powerc<-ggplot(plot_data, aes(x = log_k, y = log_P_k)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, col = "black",lty=1) +
-  labs(x = "log10(k)", y = "log10(P(k))")+
-  annotate("text", x =0.1, y =-1.2, 
-           label =paste("γ = ",round(est_xmin_in$pars,digits = 2)) , hjust = 0, vjust = 1, size = 5)+
-  ylim(min(plot_data$log_P_k),0)+
-  xlim(0,max(plot_data$log_k))+
-  theme_classic()+
-  theme(panel.grid = element_blank())+
-  ggtitle("(c)")
-
-
-
-# 結果の表示
-print(summary(fit))
-
-log_k_estimate <- model_summary$coefficients["log_k", "Estimate"]
-log_k_p_value <- model_summary$coefficients["log_k", "Pr(>|t|)"]
-
-# 結果を表示
-cat(sprintf("log_kの係数（γ）: %.4f\n", log_k_estimate))
-cat(sprintf("log_kのp値: %.4f\n", log_k_p_value))
-
-# γ（べき指数）として係数の符号を反転させる
-gamma <- -log_k_estimate
-
-cat(sprintf("べき指数 γ: %.2f\n", gamma))
-
-top_plot<-plot_grid(powera,ncol=1)
-bottom_plot<-plot_grid(powerb,powerc,ncol=2)
-combined_plot<-plot_grid(top_plot,bottom_plot,ncol=1,rel_heights = c(1,1))
-ggsave("FigS5.pdf",combined_plot,width = 8.27, height = 5.69, units = "in")
+dev.off()
 
