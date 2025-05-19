@@ -100,7 +100,7 @@ plotTableS4b<-ggplot(In_lm_data,aes(x=popmean,y=count,color=food))+
     panel.border=element_blank(),
     legend.position="none"
   )+
-  scale_color_manual(values=c("browser"="darkorange","fry-feeder"="royalblue1","grazer"="lightgreen","omnivore"="gray","piscover"="red","scale-eater"="blueviolet","shrimp-eater"="pink"))+
+  scale_color_manual(values=c("browser"="darkorange","fry-feeder"="royalblue1","grazer"="lightgreen","omnivore"="gray","piscivore"="red","scale-eater"="blueviolet","shrimp-eater"="pink"))+
   ylim(0,14)+
   labs(
     x="Population mean",
