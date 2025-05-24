@@ -81,7 +81,7 @@ est_pars_all<-estimate_pars(m_all)
 m_all$setPars(est_pars_all)
 
 set.seed(123)
-bootstrap_all<-bootstrap_p(m_all,no_of_sims=500,threads=2)
+bootstrap_all<-bootstrap_p(m_all,no_of_sims=5000,threads=2)
 #p値
 bootstrap_all$p
 
