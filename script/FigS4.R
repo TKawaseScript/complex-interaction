@@ -1,6 +1,10 @@
 library(ggplot2)
 library(gridExtra)
+library(renv)
+library(dplyr)
+library(purrr)
 
+renv::restore()
 
 strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,9:11)]
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
@@ -211,3 +215,83 @@ pdf("FigS4.pdf",width = 11.9, height = 8.27)
 grid.arrange(FigS4a, FigS4b, ncol = 2)
 dev.off()
 
+combined_cause_data
+
+guildList<-NULL
+for(i in 1:length(unique(sp_food_coltp0$foodhabit7))){
+  guildList[[i]]<-subset(sp_food_coltp0$bindre.namesp,sp_food_coltp0$foodhabit7==unique(sp_food_coltp0$foodhabit7)[i])
+  names(guildList)[i] <- unique(sp_food_coltp0$foodhabit7)[i]
+}
+
+guild_categories <- names(guildList)
+
+combined_cause_data_by_guild <- map(
+  guild_categories,
+  function(cat) {
+    rename_values <- guildList[[cat]]
+    filtered_data <- combined_cause_data %>%
+      filter(rename %in% rename_values)
+    return(filtered_data)
+  }
+)
+
+names(combined_cause_data_by_guild) <- guild_categories
+
+guild_match_stats_cause <- map_dfr(
+  names(combined_cause_data_by_guild),
+  function(guild_name) {
+    df <- combined_cause_data_by_guild[[guild_name]]
+    # RecipientFood とリスト名が一致する行数
+    matched <- sum(df$RecipientFood == guild_name)
+    # RecipientFood とリスト名が一致しない行数
+    unmatched <- sum(df$RecipientFood != guild_name)
+    # 合計行数
+    total <- nrow(df)
+    
+    # データフレームとして返す
+    tibble(
+      Guild = guild_name,
+      Matched = matched,
+      Unmatched = unmatched,
+      Total = total
+    )
+  }
+)%>%
+  mutate(
+    Matched_Ratio = round(Matched / Total, 3),
+    Unmatched_Ratio = round(Unmatched / Total, 3)
+  )
+
+
+combined_recipient_data_by_guild <- map(
+  names(guildList),
+  function(guild_name) {
+    rename_values <- guildList[[guild_name]]
+    filtered_data <- combined_recipient_data %>%
+      filter(rename %in% rename_values)
+    return(filtered_data)
+  }
+)
+names(combined_recipient_data_by_guild) <- names(guildList)
+
+
+recipient_data_guild_match_stats <- map_dfr(
+  names(combined_recipient_data_by_guild),
+  function(guild_name) {
+    df <- combined_recipient_data_by_guild[[guild_name]]
+    matched <- sum(df$CauseFood == guild_name)
+    unmatched <- sum(df$CauseFood != guild_name)
+    total <- nrow(df)
+    
+    tibble(
+      Guild = guild_name,
+      Matched = matched,
+      Unmatched = unmatched,
+      Total = total
+    )
+  }
+)%>%
+  mutate(
+    Matched_Ratio = round(Matched / Total, 3),
+    Unmatched_Ratio = round(Unmatched / Total, 3)
+  )
