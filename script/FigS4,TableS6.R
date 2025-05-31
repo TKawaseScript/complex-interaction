@@ -295,3 +295,12 @@ recipient_data_guild_match_stats <- map_dfr(
     Matched_Ratio = round(Matched / Total, 3),
     Unmatched_Ratio = round(Unmatched / Total, 3)
   )
+
+
+write.csv(guild_match_stats_cause,"guild_match_stats_cause.csv")
+write.csv(recipient_data_guild_match_stats,"recipient_data_guild_match_stats.csv")
+
+
+
+
+
