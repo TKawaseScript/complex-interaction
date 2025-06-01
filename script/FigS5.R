@@ -13,6 +13,9 @@ library(nlme)
 library(tools)
 library(cowplot)
 library(poweRlaw)
+library(renv)
+
+renv::restore()
 
 
 
@@ -104,6 +107,8 @@ text(x=3, y=0.1, labels=paste("p=", round(bootstrap_all$p, digits=3)))
 # パワーローのフィットを重ねる
 lines(m_all, col="red", lwd=2)
 dev.off()
+
+
 
 #原因側の因果関係についてのものを採用(sup)
 # ノードの次数を取得
@@ -240,4 +245,40 @@ text(x=3, y=0.1, labels=paste("p=", round(bootstrap_in$p, digits=3)))
 lines(m_in, col="red", lwd=2)
 
 dev.off()
+
+
+compare_power_vs_truncated <- function(degree_data) {
+  # 1. 純粋なべき乗分布のオブジェクト作成
+  m_pl <- displ$new(degree_data)
+  est <- estimate_xmin(m_pl)
+  m_pl$setXmin(est)
+  m_pl$setPars(est$pars)
+  
+  # 2. 切断付きべき乗分布のオブジェクト作成
+  m_tpl <- displ$new(degree_data)
+  m_tpl$setXmin(est)
+  est_tpl <- estimate_pars(m_tpl)
+  m_tpl$setPars(est_tpl$pars)
+  
+  # 3. 分布の比較（Vuong検定）
+  comp <- compare_distributions(m_pl, m_tpl)
+  
+  # 4. 結果の表示
+  print("=== Power-law vs Truncated Power-law ===")
+  print(comp)
+  # 6. 結果を返す
+  return(comp)
+}
+
+
+#切断つきか否か優位差なし
+compare_power_vs_truncated(degree_freq_all)
+
+compare_power_vs_truncated(degree_freq_out)
+compare_power_vs_truncated(degree_freq_in)
+
+
+
+
+
 
