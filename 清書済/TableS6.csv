@@ -1,4 +1,4 @@
-﻿input,,,,,,,,,
+﻿output,,,,,,,,,
 Trophic guild,Intra-guild,,Inter-guild,,Total,Intra-guild,,Inter-guild,
 ,Positive,Negative,Positive,Negative,,Positive,Negative,Positive,Negative
 Fry feeder,2,0,11,9,22,0.09,0,0.5,0.41
@@ -8,7 +8,7 @@ Piscivore,0,0,3,8,11,0,0,0.27,0.73
 Omnivore,4,8,22,10,44,0.09,0.18,0.5,0.23
 Grazer,0,0,6,3,9,0,0,0.67,0.33
 Browser,1,0,5,8,14,0.07,0,0.36,0.57
-output,,,,,,,,,
+input,,,,,,,,,
 Trophic guild,Intra-guild,,Inter-guild,,Total,Intra-guild propotion,,Inter-guild propotion,
 ,Positive,Negative,Positive,Negative,,Positive,Negative,Positive,Negative
 Fry feeder,2,0,9,5,16,0.12,0,0.56,0.31
