@@ -214,91 +214,139 @@ FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
 pdf("FigS4.pdf",width = 11.9, height = 8.27)
 grid.arrange(FigS4a, FigS4b, ncol = 2)
 dev.off()
+library(dplyr)
 
-combined_cause_data
-
-guildList<-NULL
-for(i in 1:length(unique(sp_food_coltp0$foodhabit7))){
-  guildList[[i]]<-subset(sp_food_coltp0$bindre.namesp,sp_food_coltp0$foodhabit7==unique(sp_food_coltp0$foodhabit7)[i])
-  names(guildList)[i] <- unique(sp_food_coltp0$foodhabit7)[i]
-}
-
-guild_categories <- names(guildList)
-
-combined_cause_data_by_guild <- map(
-  guild_categories,
-  function(cat) {
-    rename_values <- guildList[[cat]]
-    filtered_data <- combined_cause_data %>%
-      filter(rename %in% rename_values)
-    return(filtered_data)
-  }
+# サンプルデータ
+sp_food_coltp0 <- data.frame(
+  cause = c("A_compressiceps", "A_dewindti", "Cyathopharynx", "C_horei", "Cyprichromissp", "C_longiventralis", "E_cyanostictus", "G_pfefferi"),
+  foodhabit7 = c("shrimp-eater", "fry-feeder", "omnivore", "fry-feeder", "omnivore", "nodata", "grazer", "shrimp-eater"),
+  bindre.namesp = c("Alt.com", "Aul.dew", "Cya.pha", "C.hor", "Cyp.ssp", "C.lon", "E.cya", "Gna.pfe")
 )
 
-names(combined_cause_data_by_guild) <- guild_categories
-
-guild_match_stats_cause <- map_dfr(
-  names(combined_cause_data_by_guild),
-  function(guild_name) {
-    df <- combined_cause_data_by_guild[[guild_name]]
-    # RecipientFood とリスト名が一致する行数
-    matched <- sum(df$RecipientFood == guild_name)
-    # RecipientFood とリスト名が一致しない行数
-    unmatched <- sum(df$RecipientFood != guild_name)
-    # 合計行数
-    total <- nrow(df)
-    
-    # データフレームとして返す
-    tibble(
-      Guild = guild_name,
-      Matched = matched,
-      Unmatched = unmatched,
-      Total = total
-    )
-  }
-)%>%
-  mutate(
-    Matched_Ratio = round(Matched / Total, 3),
-    Unmatched_Ratio = round(Unmatched / Total, 3)
-  )
-
-
-combined_recipient_data_by_guild <- map(
-  names(guildList),
-  function(guild_name) {
-    rename_values <- guildList[[guild_name]]
-    filtered_data <- combined_recipient_data %>%
-      filter(rename %in% rename_values)
-    return(filtered_data)
-  }
+combined_cause_data <- data.frame(
+  spName = c("A_compressiceps", "A_compressiceps", "A_dewindti", "A_dewindti", "A_dewindti", "A_dewindti", "A_dewindti", "G_pfefferi", "G_pfefferi", "G_pfefferi", "G_pfefferi"),
+  RecipientFood = c("omnivore", "piscivore", "fry-feeder", "piscivore", "shrimp-eater", "omnivore", "browser", "shrimp-eater", "piscivore", "shrimp-eater", "omnivore"),
+  Category = rep("Positive", 11),
+  rename = c("Alt.com", "Alt.com", "Aul.dew", "Aul.dew", "Aul.dew", "Aul.dew", "Aul.dew", "Gna.pfe", "Gna.pfe", "Gna.pfe", "Gna.pfe")
 )
-names(combined_recipient_data_by_guild) <- names(guildList)
 
+# ギルドごとのリスト作成
+guildList <- split(sp_food_coltp0$bindre.namesp, sp_food_coltp0$foodhabit7)
+guild_order <- c("fry-feeder", "scale-eater", "shrimp-eater", "piscivore", "omnivore", "grazer", "browser","nodata")
 
-recipient_data_guild_match_stats <- map_dfr(
-  names(combined_recipient_data_by_guild),
-  function(guild_name) {
-    df <- combined_recipient_data_by_guild[[guild_name]]
-    matched <- sum(df$CauseFood == guild_name)
-    unmatched <- sum(df$CauseFood != guild_name)
-    total <- nrow(df)
-    
-    tibble(
-      Guild = guild_name,
-      Matched = matched,
-      Unmatched = unmatched,
-      Total = total
-    )
-  }
-)%>%
-  mutate(
-    Matched_Ratio = round(Matched / Total, 3),
-    Unmatched_Ratio = round(Unmatched / Total, 3)
+# 統計計算
+res_cause <- lapply(names(guildList), function(guild) {
+  rename_values <- guildList[[guild]]
+  df_cause <- combined_cause_data %>% filter(rename %in% rename_values)
+  
+  matched <- df_cause %>% filter(RecipientFood == guild)
+  unmatched <- df_cause %>% filter(RecipientFood != guild)
+  
+  matched_pos <- sum(matched$Category == "Positive")
+  matched_neg <- sum(matched$Category == "Negative")
+  unmatched_pos <- sum(unmatched$Category == "Positive")
+  unmatched_neg <- sum(unmatched$Category == "Negative")
+  
+  total <- matched_pos + matched_neg + unmatched_pos + unmatched_neg
+  
+  tibble(
+    Guild = guild,
+    Matched_Pos = matched_pos,
+    Matched_Neg = matched_neg,
+    Unmatched_Pos = unmatched_pos,
+    Unmatched_Neg = unmatched_neg,
+    Total = total,
+    Matched_Pos_Ratio = ifelse((matched_pos + matched_neg) > 0, round(matched_pos / (matched_pos + matched_neg), 3), 0),
+    Matched_Neg_Ratio = ifelse((matched_pos + matched_neg) > 0, round(matched_neg / (matched_pos + matched_neg), 3), 0),
+    Unmatched_Pos_Ratio = ifelse((unmatched_pos + unmatched_neg) > 0, round(unmatched_pos / (unmatched_pos + unmatched_neg), 3), 0),
+    Unmatched_Neg_Ratio = ifelse((unmatched_pos + unmatched_neg) > 0, round(unmatched_neg / (unmatched_pos + unmatched_neg), 3), 0)
   )
+}) %>% bind_rows()
+
+# 列順を調整（Totalを6列目に）
+res_cause <- res_cause %>%
+  select(Guild, Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg, Total,
+         Matched_Pos_Ratio, Matched_Neg_Ratio, Unmatched_Pos_Ratio, Unmatched_Neg_Ratio)
+
+# 統計計算
+res_cause <- lapply(names(guildList), function(guild) {
+  rename_values <- guildList[[guild]]
+  df_cause <- combined_cause_data %>% filter(rename %in% rename_values)
+  
+  matched <- df_cause %>% filter(RecipientFood == guild)
+  unmatched <- df_cause %>% filter(RecipientFood != guild)
+  
+  matched_pos <- sum(matched$Category == "Positive")
+  matched_neg <- sum(matched$Category == "Negative")
+  unmatched_pos <- sum(unmatched$Category == "Positive")
+  unmatched_neg <- sum(unmatched$Category == "Negative")
+  
+  total <- matched_pos + matched_neg + unmatched_pos + unmatched_neg
+  
+  tibble(
+    Guild = guild,
+    Matched_Pos = matched_pos,
+    Matched_Neg = matched_neg,
+    Unmatched_Pos = unmatched_pos,
+    Unmatched_Neg = unmatched_neg,
+    Total = total,
+    Matched_Pos_Ratio = round(matched_pos / total, 2),
+    Matched_Neg_Ratio = round(matched_neg / total, 2),
+    Unmatched_Pos_Ratio =round(unmatched_pos / total, 2),
+    Unmatched_Neg_Ratio = round(unmatched_neg / total, 2)
+  )
+}) %>% bind_rows()
+
+# 列順を調整（Totalを6列目に）
+res_cause <- res_cause %>%
+  select(Guild, Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg, Total,
+         Matched_Pos_Ratio, Matched_Neg_Ratio, Unmatched_Pos_Ratio, Unmatched_Neg_Ratio)
+
+# 統計計算
+res_recipient <- lapply(names(guildList), function(guild) {
+  rename_values <- guildList[[guild]]
+  df_recipient <- combined_recipient_data %>% filter(rename %in% rename_values)
+  
+  matched <- df_recipient %>% filter(CauseFood == guild)
+  unmatched <- df_recipient %>% filter(CauseFood != guild)
+  
+  matched_pos <- sum(matched$Category == "Positive")
+  matched_neg <- sum(matched$Category == "Negative")
+  unmatched_pos <- sum(unmatched$Category == "Positive")
+  unmatched_neg <- sum(unmatched$Category == "Negative")
+  
+  total <- matched_pos + matched_neg + unmatched_pos + unmatched_neg
+  
+  tibble(
+    Guild = guild,
+    Matched_Pos = matched_pos,
+    Matched_Neg = matched_neg,
+    Unmatched_Pos = unmatched_pos,
+    Unmatched_Neg = unmatched_neg,
+    Total = total,
+    Matched_Pos_Ratio = round(matched_pos / total, 2),
+    Matched_Neg_Ratio = round(matched_neg / total, 2),
+    Unmatched_Pos_Ratio = round(unmatched_pos / total, 2),
+    Unmatched_Neg_Ratio = round(unmatched_neg / total, 2)
+  )
+}) %>% bind_rows()
+
+# 列順を調整（Totalを6列目に）
+res_recipient <- res_recipient %>%
+  select(Guild, Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg, Total,
+         Matched_Pos_Ratio, Matched_Neg_Ratio, Unmatched_Pos_Ratio, Unmatched_Neg_Ratio)
+
+res_cause<-res_cause %>%
+  mutate(Guild = factor(Guild, levels = guild_order)) %>%
+  arrange(Guild)
+
+res_recipient<-res_recipient %>%
+  mutate(Guild = factor(Guild, levels = guild_order)) %>%
+  arrange(Guild)
 
 
-write.csv(guild_match_stats_cause,"guild_match_stats_cause.csv")
-write.csv(recipient_data_guild_match_stats,"recipient_data_guild_match_stats.csv")
+write.csv(res_cause,"guild_match_stats_cause.csv")
+write.csv(res_recipient,"recipient_data_guild_match_stats.csv")
 
 
 

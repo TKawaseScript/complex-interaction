@@ -1,19 +1,20 @@
-(a),Trophic guild,Matched,Unmatched,Total,Matched ratio,Unmatched ratio
-1,Shrimp eater,4,13,17,0.235,0.765
-2,Fry feeder,2,20,22,0.091,0.909
-3,Omnivore,12,32,44,0.273,0.727
-4,Nodata,0,0,0,0,0
-5,Grazer,0,9,9,0,1
-6,Piscivore,0,11,11,0,1
-7,Browser,1,13,14,0.071,0.929
-8,Scale eater,0,8,8,0,1
-,,,,,,
-(b),Trophic guild,Matched,Unmatched,Total,Matched ratio,Unmatched ratio
-1,Shrimp eater,4,11,15,0.267,0.733
-2,Fry feeder,2,14,16,0.125,0.875
-3,Omnivore,12,29,41,0.293,0.707
-4,Nodata,0,0,0,0,0
-5,Grazer,0,9,9,0,1
-6,Piscivore,0,15,15,0,1
-7,Browser,1,19,20,0.05,0.95
-8,Scale eater,0,9,9,0,1
+﻿input,,,,,,,,,
+Trophic guild,Intra-guild,,Inter-guild,,Total,Intra-guild,,Inter-guild,
+,Positive,Negative,Positive,Negative,,Positive,Negative,Positive,Negative
+Fry feeder,2,0,11,9,22,0.09,0,0.5,0.41
+Scale eater,0,0,3,5,8,0,0,0.38,0.62
+Shrimp eater,3,1,7,6,17,0.18,0.06,0.41,0.35
+Piscivore,0,0,3,8,11,0,0,0.27,0.73
+Omnivore,4,8,22,10,44,0.09,0.18,0.5,0.23
+Grazer,0,0,6,3,9,0,0,0.67,0.33
+Browser,1,0,5,8,14,0.07,0,0.36,0.57
+output,,,,,,,,,
+Trophic guild,Intra-guild,,Inter-guild,,Total,Intra-guild propotion,,Inter-guild propotion,
+,Positive,Negative,Positive,Negative,,Positive,Negative,Positive,Negative
+Fry feeder,2,0,9,5,16,0.12,0,0.56,0.31
+Scale eater,0,0,4,5,9,0,0,0.44,0.56
+Shrimp eater,3,1,7,4,15,0.2,0.07,0.47,0.27
+Piscivore,0,0,11,4,15,0,0,0.73,0.27
+Omnivore,4,8,10,19,41,0.1,0.2,0.24,0.46
+Grazer,0,0,4,5,9,0,0,0.44,0.56
+Browser,1,0,12,7,20,0.05,0,0.6,0.35
