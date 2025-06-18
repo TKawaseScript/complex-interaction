@@ -3,6 +3,7 @@ library(gridExtra)
 library(renv)
 library(dplyr)
 library(purrr)
+library(tidyverse)
 
 renv::restore()
 
@@ -349,6 +350,96 @@ write.csv(res_cause,"guild_match_stats_cause.csv")
 write.csv(res_recipient,"recipient_data_guild_match_stats.csv")
 
 
+res_cause_long <- res_cause %>%
+  filter(Guild != "nodata") %>%
+  select(-Total) %>%
+  pivot_longer(
+    cols = c(Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg),
+    names_to = "Category",
+    values_to = "Count"
+  )
 
+
+res_cause_long$Category <- factor(
+  res_cause_long$Category,
+  levels = c("Matched_Pos", "Matched_Neg", "Unmatched_Pos", "Unmatched_Neg"),
+  labels = c("Intraguild Positive", "Intraguild Negative", "Interguild Positive", "Interguild Negative")
+)
+
+TableS6Figa<-ggplot(res_cause_long, aes(x = Guild, y = Count, fill = Category)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(
+    values = c(
+      "Intraguild Positive" = "skyblue",   # 青
+      "Intraguild Negative" = "pink",   # オレンジ
+      "Interguild Positive" = "blue", # 緑
+      "Interguild Negative" = "red"  # 赤
+    )
+  ) +
+  labs(
+    title = "(a)",
+    x = "Guild",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  ylim(0,25)+
+  xlab("Trophic guild")+
+  ylab("Number of causal relationship")+ 
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
+    panel.background = element_rect(fill = "white"),  # 背景色を白に設定
+    plot.background = element_rect(fill = "white"),   # プロット全体の背景色も白に設定
+    axis.line = element_line(color = "black"),  # 軸の線を黒に設定
+    panel.grid = element_blank()  # グリッド線を非表示
+  )
+
+res_recipient_long <- res_recipient %>%
+  filter(Guild != "nodata") %>%
+  select(-Total) %>%
+  pivot_longer(
+    cols = c(Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg),
+    names_to = "Category",
+    values_to = "Count"
+  )
+
+res_recipient_long$Category <- factor(
+  res_recipient_long$Category,
+  levels = c("Matched_Pos", "Matched_Neg", "Unmatched_Pos", "Unmatched_Neg"),
+  labels = c("Intraguild Positive", "Intraguild Negative", "Interguild Positive", "Interguild Negative")
+)
+
+TableS6Figb<-ggplot(res_recipient_long, aes(x = Guild, y = Count, fill = Category)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(
+    values = c(
+      "Intraguild Positive" = "skyblue",   # 青
+      "Intraguild Negative" = "pink",   # オレンジ
+      "Interguild Positive" = "blue", # 緑
+      "Interguild Negative" = "red"  # 赤
+    )
+  ) +
+  labs(
+    title = "(b)",
+    x = "Guild",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  ylim(0,25)+
+  xlab("Trophic guild")+
+  ylab("Number of recipient relationship")+
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
+    panel.background = element_rect(fill = "white"),  # 背景色を白に設定
+    plot.background = element_rect(fill = "white"),   # プロット全体の背景色も白に設定
+    axis.line = element_line(color = "black"),  # 軸の線を黒に設定
+    panel.grid = element_blank()  # グリッド線を非表示
+  )
+
+
+
+pdf("TableS6Fig.pdf", width = 11.7, height = 8.3) # A4 landscape in inches
+grid.arrange(TableS6Figa, TableS6Figb, ncol = 2)
+dev.off()
 
 
