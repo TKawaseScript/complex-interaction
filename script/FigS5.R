@@ -139,7 +139,8 @@ plot(m_all,
      ylab = "P(k)",
      cex = 1,
      col = "black",
-     pch = 16)
+     pch = 16
+     )
 lines(ccdf_all$x, ccdf_all$ccdf, col = "red", lwd = 2)
 mtext("(a)", side = 3, adj = 0, line = 1.5, cex = 1.2)
 
@@ -154,7 +155,8 @@ plot(m_out,
      ylab = "P(k)",
      cex = 1,
      col = "black",
-     pch = 16)
+     pch = 16
+     )
 lines(ccdf_out$x, ccdf_out$ccdf, col = "red", lwd = 2)
 mtext("(b)", side = 3, adj = 0, line = 1.5, cex = 1.2)
 text(x = 3, y = 0.15, labels = paste("γ =", round(m_out$pars, 2)), cex = 1.1)
@@ -168,7 +170,8 @@ plot(m_in,
      ylab = "P(k)",
      cex = 1,
      col = "black",
-     pch = 16)
+     pch = 16
+     )
 lines(ccdf_in$x, ccdf_in$ccdf, col = "red", lwd = 2)
 mtext("(c)", side = 3, adj = 0, line = 1.5, cex = 1.2)
 text(x = 3, y = 0.15, labels = paste("γ =", round(m_in$pars, 2)), cex = 1.1)
