@@ -1,4 +1,3 @@
-
 library(caret)
 library(tools)
 library(dplyr)
@@ -7,278 +6,173 @@ library(tidyverse)
 library(plyr)
 library(ggrepel)
 library(tidygraph)
-library(ggrepel)
 library(ape)
 library(nlme)
-library(tools)
 library(cowplot)
 library(poweRlaw)
 library(renv)
 
 renv::restore()
 
+# データの読み込みと整形
+sp_food_coltp0 <- read.csv("spcollisttp=0.csv", header = TRUE, fileEncoding = "UTF-8")
+strengthtp0 <- read.csv("GLMbasedatatp0.csv", header = TRUE)[, -c(1, 9:11)]
 
+colnames(strengthtp0) <- c("cause", "effect", "causepopmean", "effectpopmean", "causepopsd",
+                           "effectpopsd", "causehabitat", "effecthabitat", "smapmin", "smapX1st",
+                           "smapmedian", "smapmean", "smapX3rd", "smapmax", "strength", "ratio")
 
-#データの読み込みと整形
-#GLMbasedatatp0に因果関係リストとSmap係数などが格納されている
-sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T,fileEncoding = "UTF-8")
-strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,9:11)]
+intratp0 <- NULL
+intertp0 <- NULL
 
-colnames(strengthtp0)<-c("cause","effect","causepopmean","effectpopmean","causepopsd",
-                         "effectpopsd","causehabitat","effecthabitat","smapmin","smapX1st",
-                         "smapmedian","smapmean","smapX3rd","smapmax","strength","ratio")
-
-
-intratp0<-NULL
-intertp0<-NULL
-
-for(i in 1:nrow(strengthtp0)){
-  if(strengthtp0$cause[i]==strengthtp0$effect[i]){
-    intratp0<-rbind(intratp0,strengthtp0[i,])
-  }else{
-    intertp0<-rbind(intertp0,strengthtp0[i,])
+for (i in 1:nrow(strengthtp0)) {
+  if (strengthtp0$cause.x[i] == strengthtp0$effect.x[i]) {
+    intratp0 <- rbind(intratp0, strengthtp0[i, ])
+  } else {
+    intertp0 <- rbind(intertp0, strengthtp0[i, ])
   }
 }
 
-#原因側と結果側のまとめ
-countcausetp0<-t(table(intertp0$cause))
-counteffecttp0<-t(table(intertp0$effect))
+# 原因側と結果側のまとめ
+countcausetp0 <- t(table(intertp0$cause))
+counteffecttp0 <- t(table(intertp0$effect))
 
-
-forGray<-list()
-
-for(i in 1:nrow(intertp0)){
-  if(intertp0$strength[i]=="positive"){
-    forGray[[i]]<-c(0,1)
-  }else{
-    forGray[[i]]<-c(1,0)
+forGray <- list()
+for (i in 1:nrow(intertp0)) {
+  if (intertp0$strength[i] == "positive") {
+    forGray[[i]] <- c(0, 1)
+  } else {
+    forGray[[i]] <- c(1, 0)
   }
 }
 
-forGray_data<-NULL
-for(i in 1:length(forGray)){
-  forGray_data<-rbind(forGray_data,forGray[[i]])
-}
+forGray_data <- do.call(rbind, forGray)
+colnames(forGray_data) <- c("Neg", "Pos")
 
-colnames(forGray_data)<-c("Neg","Pos")
+igraph_allww8s <- cbind(intertp0, forGray_data)
+igraphdatatp0ww8 <- graph(t(cbind(igraph_allww8s$cause.x, igraph_allww8s$effect.x)))
 
-igraph_allww8s<-cbind(intertp0,forGray_data)
-
-
-
-igraphdatatp0ww8<-graph(t(cbind(igraph_allww8s$cause,igraph_allww8s$effect)))
-
-#全ての因果関係についてのものを採用(sup)
-# ノードの次数を取得
-degree_dist_All_all_digdis <- igraph::degree(igraphdatatp0ww8,mode = "all")
-write.csv(degree_dist_All_all_digdis,"degree_dist_All_all_digdis.csv")
-degree_dist_All_all_digdis<-read.csv("degree_dist_All_all_digdis.csv")
-
-degree_freq_all <- degree_dist_All_all_digdis$x
-m_all<-displ$new(degree_freq_all)
-est_xmin_all<-estimate_xmin(m_all)
-
+# 全体の次数分布
+degree_dist_All_all_digdis <- igraph::degree(igraphdatatp0ww8, mode = "all")
+degree_freq_all <- degree_dist_All_all_digdis
+m_all <- displ$new(degree_freq_all)
+est_xmin_all <- estimate_xmin(m_all)
 m_all$setXmin(est_xmin_all)
-
-est_pars_all<-estimate_pars(m_all)
+est_pars_all <- estimate_pars(m_all)
 m_all$setPars(est_pars_all)
-
 set.seed(123)
-bootstrap_all<-bootstrap_p(m_all,no_of_sims=5000,threads=2)
-#p値
-bootstrap_all$p
-
-#powerLowの係数
-est_xmin_all$pars
+bootstrap_all <- bootstrap_p(m_all, no_of_sims = 5000, threads = 2)
 
 
-pdf("FigS5_a.pdf",width=8,height=4)
-# barabashiデータのプロット
-plot(m_all, 
-     main="Degree distribution with power-law fit for the all interaction network",
-     xlab="Degree (k)", 
-     ylab="P(X ≥ k)", 
-     cex=1, 
-     col="black", 
-     pch=16)
-text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_all$pars, digits=3)))
-text(x=3, y=0.1, labels=paste("p=", round(bootstrap_all$p, digits=3)))
-
-# パワーローのフィットを重ねる
-lines(m_all, col="red", lwd=2)
-dev.off()
-
-
-
-#原因側の因果関係についてのものを採用(sup)
-# ノードの次数を取得
-degree_dist_out_digdis <- igraph::degree(igraphdatatp0ww8,mode = "out")
-write.csv(degree_dist_out_digdis,"degree_dist_out_digdis.csv")
-
-degree_freq_out <- degree_dist_out_digdis$x
-m_out<-displ$new(degree_freq_out)
-est_xmin_out<-estimate_xmin(m_out)
-
+# 原因側（出次数）
+degree_dist_out_digdis <- igraph::degree(igraphdatatp0ww8, mode = "out")
+degree_freq_out <- degree_dist_out_digdis
+m_out <- displ$new(degree_freq_out)
+est_xmin_out <- estimate_xmin(m_out)
 m_out$setXmin(est_xmin_out)
-
-est_pars_out<-estimate_pars(m_out)
+est_pars_out <- estimate_pars(m_out)
 m_out$setPars(est_pars_out)
-
 set.seed(123)
-bootstrap_out<-bootstrap_p(m_out,no_of_sims=5000,threads=2)
-#p値
-bootstrap_out$p
+bootstrap_out <- bootstrap_p(m_out, no_of_sims = 5000, threads = 2)
 
-#powerLowの係数
-est_xmin_out$pars
-
-
-pdf("FigS5_b.pdf")
-# barabashiデータのプロット
-plot(m_out, 
-     main="Degree distribution with power-law fit for causality",
-     xlab="Degree (k)", 
-     ylab="P(X ≥ k)", 
-     cex=1, 
-     col="black", 
-     pch=16)
-text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_out$pars, digits=3)))
-text(x=3, y=0.1, labels=paste("p=", round(bootstrap_out$p, digits=3)))
-
-# パワーローのフィットを重ねる
-lines(m_out, col="red", lwd=2)
-dev.off()
-
-
-
-
-
-#結果側の因果関係についてのものを採用(sup)
-# ノードの次数を取得
-degree_dist_in_digdis <- igraph::degree(igraphdatatp0ww8,mode = "in")
-write.csv(degree_dist_in_digdis,"degree_dist_in_digdis.csv")
-
-degree_freq_in <- degree_dist_in_digdis$x
-degree_freq_in<-degree_freq_in[degree_freq_in!=0]
-
-m_in<-displ$new(degree_freq_in)
-est_xmin_in<-estimate_xmin(m_in)
-
+# 結果側（入次数）
+degree_dist_in_digdis <- igraph::degree(igraphdatatp0ww8, mode = "in")
+degree_freq_in <- degree_dist_in_digdis
+degree_freq_in <- degree_freq_in[degree_freq_in != 0]
+m_in <- displ$new(degree_freq_in)
+est_xmin_in <- estimate_xmin(m_in)
 m_in$setXmin(est_xmin_in)
-
-est_pars_in<-estimate_pars(m_in)
+est_pars_in <- estimate_pars(m_in)
 m_in$setPars(est_pars_in)
-
 set.seed(123)
-bootstrap_in<-bootstrap_p(m_in,no_of_sims=5000,threads=2)
-#p値
-bootstrap_in$p
+bootstrap_in <- bootstrap_p(m_in, no_of_sims = 5000, threads = 2)
 
-#powerLowの係数
-est_xmin_in$pars
+xmin_all <- m_all$getXmin()
+alpha_all <- m_all$pars
+x_vals_all <- seq(xmin_all, max(m_all$dat), length.out = 100)
+y_vals_all <- (x_vals_all / xmin_all)^(-alpha_all + 1)
+y_vals_all <- y_vals_all / sum(y_vals_all)
+ccdf_vals_all <- 1 - cumsum(y_vals_all)
 
-pdf("FigS5_c.pdf")
-# barabashiデータのプロット
-plot(m_in, 
-     asp = 1,
-     main="Degree distribution with power-law fit for recipient",
-     xlab="Degree (k)", 
-     ylab="P(X ≥ k)", 
-     cex=1, 
-     col="black", 
-     pch=16,
-     )
-text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_in$pars, digits=3)))
-text(x=3, y=0.1, labels=paste("p=", round(bootstrap_in$p, digits=3)))
+xmin_out <- m_out$getXmin()
+alpha_out <- m_out$pars
+x_vals_out <- seq(xmin_out, max(m_out$dat), length.out = 100)
+y_vals_out <- (x_vals_out / xmin_out)^(-alpha_out + 1)
+y_vals_out <- y_vals_out / sum(y_vals_out)
+ccdf_vals_out <- 1 - cumsum(y_vals_out)
 
-# パワーローのフィットを重ねる
-lines(m_in, col="red", lwd=2)
-dev.off()
+xmin_in <- m_in$getXmin()
+alpha_in <- m_in$pars
+x_vals_in <- seq(xmin_in, max(m_in$dat), length.out = 100)
+y_vals_in <- (x_vals_in / xmin_in)^(-alpha_in + 1)
+y_vals_in <- y_vals_in / sum(y_vals_in)
+ccdf_vals_in <- 1 - cumsum(y_vals_in)
 
 
-pdf("FigS5.pdf", width=8, height=6) 
-
-layout(matrix(c(1,1,2,3), nrow = 2,byrow = TRUE),heights = 1)
-par(oma=c(2,2,0,0),
-    mar=c(4,4,2,2))
-
-plot(m_all, 
-     main="",
-     xlab="", 
-     ylab="P(X ≥ k)", 
-     cex=1, 
-     col="black", 
-     pch=16)
-text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_all$pars, digits=3)))
-text(x=3, y=0.1, labels=paste("p=", round(bootstrap_all$p, digits=3)))
-
-# パワーローのフィットを重ねる
-lines(m_all, col="red", lwd=2)
-
-plot(m_out, 
-     main="",
-     xlab="Degree (k)", 
-     ylab="P(X ≥ k)", 
-     cex=1, 
-     col="black", 
-     pch=16)
-text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_out$pars, digits=3)))
-text(x=3, y=0.1, labels=paste("p=", round(bootstrap_out$p, digits=3)))
-
-# パワーローのフィットを重ねる
-lines(m_out, col="red", lwd=2)
-
-
-plot(m_in, 
-     asp = 1,
-     main="",
-     xlab="Degree (k)", 
-     ylab="", 
-     cex=1, 
-     col="black", 
-     pch=16,
-)
-text(x=3, y=0.15, labels=paste("γ=", round(est_xmin_in$pars, digits=3)))
-text(x=3, y=0.1, labels=paste("p=", round(bootstrap_in$p, digits=3)))
-
-# パワーローのフィットを重ねる
-lines(m_in, col="red", lwd=2)
-
-dev.off()
-
-
-compare_power_vs_truncated <- function(degree_data) {
-  # 1. 純粋なべき乗分布のオブジェクト作成
-  m_pl <- displ$new(degree_data)
-  est <- estimate_xmin(m_pl)
-  m_pl$setXmin(est)
-  m_pl$setPars(est$pars)
-  
-  # 2. 切断付きべき乗分布のオブジェクト作成
-  m_tpl <- displ$new(degree_data)
-  m_tpl$setXmin(est)
-  est_tpl <- estimate_pars(m_tpl)
-  m_tpl$setPars(est_tpl$pars)
-  
-  # 3. 分布の比較（Vuong検定）
-  comp <- compare_distributions(m_pl, m_tpl)
-  
-  # 4. 結果の表示
-  print("=== Power-law vs Truncated Power-law ===")
-  print(comp)
-  # 6. 結果を返す
-  return(comp)
+# 理論的なCCDFを計算する関数
+get_theoretical_ccdf <- function(model) {
+  xmin <- model$getXmin()
+  alpha <- model$pars
+  x_vals <- seq(xmin, max(model$dat), length.out = 100)
+  y_vals <- (x_vals / xmin)^(-alpha + 1)
+  y_vals <- y_vals / sum(y_vals)
+  ccdf_vals <- 1 - cumsum(y_vals)
+  return(list(x = x_vals, ccdf = ccdf_vals))
 }
 
-
-#切断つきか否か優位差なし
-compare_power_vs_truncated(degree_freq_all)
-
-compare_power_vs_truncated(degree_freq_out)
-compare_power_vs_truncated(degree_freq_in)
+# 各モデルに対してCCDFを計算
+ccdf_all <- get_theoretical_ccdf(m_all)
+ccdf_out <- get_theoretical_ccdf(m_out)
+ccdf_in <- get_theoretical_ccdf(m_in)
 
 
+# PDF出力
+pdf("FigS5_combined.pdf", width = 8, height = 6)
+
+layout(matrix(c(1, 1, 2, 3), nrow = 2, byrow = TRUE))
+par(mar = c(4, 4, 2, 2), oma = c(2, 2, 2, 2)) 
+
+# (a) All
+plot(m_all,
+     main = "",
+     xlab = "",
+     ylab = "P(k)",
+     cex = 1,
+     col = "black",
+     pch = 16)
+lines(ccdf_all$x, ccdf_all$ccdf, col = "red", lwd = 2)
+mtext("(a)", side = 3, adj = 0, line = 1.5, cex = 1.2)
+
+text(x = 3, y = 0.15, labels = paste("γ =", round(m_all$pars, 2)), cex = 1.1)
+text(x = 3, y = 0.1, labels = paste("p =", round(bootstrap_all$p, 2)), cex = 1.1)
 
 
+# (b) Out
+plot(m_out,
+     main = "",
+     xlab = "k",
+     ylab = "P(k)",
+     cex = 1,
+     col = "black",
+     pch = 16)
+lines(ccdf_out$x, ccdf_out$ccdf, col = "red", lwd = 2)
+mtext("(b)", side = 3, adj = 0, line = 1.5, cex = 1.2)
+text(x = 3, y = 0.15, labels = paste("γ =", round(m_out$pars, 2)), cex = 1.1)
+text(x = 3, y = 0.1, labels = paste("p =", round(bootstrap_out$p, 2)), cex = 1.1)
 
 
+# (c) In
+plot(m_in,
+     main = "",
+     xlab = "k",
+     ylab = "P(k)",
+     cex = 1,
+     col = "black",
+     pch = 16)
+lines(ccdf_in$x, ccdf_in$ccdf, col = "red", lwd = 2)
+mtext("(c)", side = 3, adj = 0, line = 1.5, cex = 1.2)
+text(x = 3, y = 0.15, labels = paste("γ =", round(m_in$pars, 2)), cex = 1.1)
+text(x = 3, y = 0.1, labels = paste("p =", round(bootstrap_in$p, 2)), cex = 1.1)
+
+
+dev.off()
