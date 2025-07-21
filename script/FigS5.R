@@ -54,7 +54,7 @@ igraphdatatp0ww8 <- graph(t(cbind(igraph_allww8s$cause.x, igraph_allww8s$effect.
 
 # 全体の次数分布
 degree_dist_All_all_digdis <- igraph::degree(igraphdatatp0ww8, mode = "all")
-degree_freq_all <- degree_dist_All_all_digdis
+degree_freq_all <- as.numeric(degree_dist_All_all_digdis)
 m_all <- displ$new(degree_freq_all)
 est_xmin_all <- estimate_xmin(m_all)
 m_all$setXmin(est_xmin_all)
@@ -66,7 +66,7 @@ bootstrap_all <- bootstrap_p(m_all, no_of_sims = 5000, threads = 2)
 
 # 原因側（出次数）
 degree_dist_out_digdis <- igraph::degree(igraphdatatp0ww8, mode = "out")
-degree_freq_out <- degree_dist_out_digdis
+degree_freq_out <- as.numeric(degree_dist_out_digdis)
 m_out <- displ$new(degree_freq_out)
 est_xmin_out <- estimate_xmin(m_out)
 m_out$setXmin(est_xmin_out)
@@ -77,7 +77,7 @@ bootstrap_out <- bootstrap_p(m_out, no_of_sims = 5000, threads = 2)
 
 # 結果側（入次数）
 degree_dist_in_digdis <- igraph::degree(igraphdatatp0ww8, mode = "in")
-degree_freq_in <- degree_dist_in_digdis
+degree_freq_in <- as.numeric(degree_dist_in_digdis)
 degree_freq_in <- degree_freq_in[degree_freq_in != 0]
 m_in <- displ$new(degree_freq_in)
 est_xmin_in <- estimate_xmin(m_in)
@@ -140,7 +140,7 @@ plot(m_all,
      cex = 1,
      col = "black",
      pch = 16
-     )
+)
 lines(ccdf_all$x, ccdf_all$ccdf, col = "red", lwd = 2)
 mtext("(a)", side = 3, adj = 0, line = 1.5, cex = 1.2)
 
@@ -156,12 +156,34 @@ plot(m_out,
      cex = 1,
      col = "black",
      pch = 16
-     )
+)
 lines(ccdf_out$x, ccdf_out$ccdf, col = "red", lwd = 2)
 mtext("(b)", side = 3, adj = 0, line = 1.5, cex = 1.2)
 text(x = 3, y = 0.15, labels = paste("γ =", round(m_out$pars, 2)), cex = 1.1)
 text(x = 3, y = 0.1, labels = paste("p =", round(bootstrap_out$p, 2)), cex = 1.1)
 
+
+library(poweRlaw)
+
+# 入次数データ（0を除外）
+degree_freq_in <- degree_freq_in[degree_freq_in > 0]
+
+# 通常のべき乗則モデル（連続）
+m_pl <- conpl$new(degree_freq_in)
+m_pl$setXmin(estimate_xmin(m_pl))
+m_pl$setPars(estimate_pars(m_pl))
+
+# 「Truncated Power-law」として比較するには、別の連続分布を使う
+# ここでは対数正規分布（log-normal）を代替として比較する例
+m_ln <- conlnorm$new(degree_freq_in)
+m_ln$setXmin(4)
+m_ln$setPars(estimate_pars(m_ln))
+
+# モデル比較
+comparison <- compare_distributions(m_pl, m_ln)
+
+# 結果表示
+print(comparison)
 
 # (c) In
 plot(m_in,
@@ -171,7 +193,7 @@ plot(m_in,
      cex = 1,
      col = "black",
      pch = 16
-     )
+)
 lines(ccdf_in$x, ccdf_in$ccdf, col = "red", lwd = 2)
 mtext("(c)", side = 3, adj = 0, line = 1.5, cex = 1.2)
 text(x = 3, y = 0.15, labels = paste("γ =", round(m_in$pars, 2)), cex = 1.1)
@@ -179,3 +201,77 @@ text(x = 3, y = 0.1, labels = paste("p =", round(bootstrap_in$p, 2)), cex = 1.1)
 
 
 dev.off()
+
+
+# データの準備（0を除外）
+degree_freq_all <- degree_freq_all[degree_freq_all > 0]
+
+# モデルの作成
+m_pl_all <- conpl$new(degree_freq_all)
+m_ln_all <- conlnorm$new(degree_freq_all)
+
+# xmall を揃える（Power-law に合わせるのが一般的）
+est_xmin_all <- estimate_xmin(m_pl_all)$xmin
+m_pl_all$setXmin(est_xmin_all)
+m_ln_all$setXmin(est_xmin_all)
+
+# パラメータ推定
+m_pl_all$setPars(estimate_pars(m_pl_all))
+m_ln_all$setPars(estimate_pars(m_ln_all))
+
+# モデル比較
+comparison_all <- compare_distributions(m_pl_all, m_ln_all)
+
+# 結果表示
+print(comparison_all)
+
+
+# データの準備（0を除外）
+degree_freq_out <- degree_freq_out[degree_freq_out > 0]
+
+# モデルの作成
+m_pl_out <- conpl$new(degree_freq_out)
+m_ln_out <- conlnorm$new(degree_freq_out)
+
+# xmout を揃える（Power-law に合わせるのが一般的）
+est_xmin_out <- estimate_xmin(m_pl_out)$xmin
+m_pl_out$setXmin(est_xmin_out)
+m_ln_out$setXmin(est_xmin_out)
+
+# パラメータ推定
+m_pl_out$setPars(estimate_pars(m_pl_out))
+m_ln_out$setPars(estimate_pars(m_ln_out))
+
+# モデル比較
+comparison_out <- compare_distributions(m_pl_out, m_ln_out)
+
+# 結果表示
+print(comparison_out)
+
+
+# データの準備（0を除外）
+degree_freq_in <- degree_freq_in[degree_freq_in > 0]
+
+# モデルの作成
+m_pl_in <- conpl$new(degree_freq_in)
+m_ln_in <- conlnorm$new(degree_freq_in)
+
+# xmin を揃える（Power-law に合わせるのが一般的）
+est_xmin_in <- estimate_xmin(m_pl_in)$xmin
+m_pl_in$setXmin(est_xmin_in)
+m_ln_in$setXmin(est_xmin_in)
+
+# パラメータ推定
+m_pl_in$setPars(estimate_pars(m_pl_in))
+m_ln_in$setPars(estimate_pars(m_ln_in))
+
+# モデル比較
+comparison_in <- compare_distributions(m_pl_in, m_ln_in)
+
+# 結果表示
+print(comparison_in)
+
+
+
+
+
