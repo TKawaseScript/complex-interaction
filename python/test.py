@@ -47,3 +47,4 @@ hyps_df["strength"] = hyps_df["category"].apply(extract_strength)
 
 print("\n強弱まとめ:")
 print(hyps_df[['file', 'category', 'strength']])
+print(hyps_df)
