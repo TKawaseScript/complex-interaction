@@ -31,3 +31,19 @@ print(analysis_display)
 hyps_df = categorize_networks(analysis_df)
 print("\nスケールフリー性分類:")
 print(hyps_df[['file', 'category']])
+
+# --- 強弱を抽出して別の列を作る ---
+def extract_strength(cat):
+    if cat in ["Strongest", "Strong"]:
+        return "Strong"
+    elif cat in ["Weak", "Weakest"]:
+        return "Weak"
+    elif cat == "Super-Weak":
+        return "Super-Weak"
+    else:
+        return "Not Scale-Free"
+
+hyps_df["strength"] = hyps_df["category"].apply(extract_strength)
+
+print("\n強弱まとめ:")
+print(hyps_df[['file', 'category', 'strength']])
