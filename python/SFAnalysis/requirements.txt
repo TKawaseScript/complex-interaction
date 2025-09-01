@@ -18,3 +18,4 @@ sfanalysis==0.1
 six==1.17.0
 texttable==1.7.0
 tzdata==2025.2
+powerlaw==1.5

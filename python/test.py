@@ -52,23 +52,35 @@ for ax, (_, row) in zip(axes, analysis_df.iterrows()):
     data = pd.read_csv(os.path.join(deg_dir, fname))
     data.columns = ["xvalue", "counts"]
 
-    # --- 確率分布に変換 ---
-    data['prob'] = data['counts'] / data['counts'].sum()
+    # 0度はlog軸で描けないので除外（必要なら）
+    data = data[data["xvalue"] > 0].copy()
 
-    # --- CCDF 計算 ---
-    # xの降順に累積和
-    ccdf = data.sort_values("xvalue", ascending=True)
-    ccdf['ccdf'] = ccdf['prob'][::-1].cumsum()[::-1]  # 右から累積和
+    # --- PMF & CCDF（全データで計算）---
+    data = data.sort_values("xvalue").reset_index(drop=True)
+    data["prob"] = data["counts"] / data["counts"].sum()
+    ccdf = data.copy()
+    ccdf["ccdf"] = ccdf["prob"][::-1].cumsum()[::-1]
 
-    # --- CCDF log-log プロット ---
-    ax.scatter(ccdf["xvalue"], ccdf["ccdf"], color="black", s=30, label="Empirical CCDF")
+    # --- プロット（経験CCDFは全範囲表示）---
+    ax.scatter(ccdf["xvalue"], ccdf["ccdf"], s=30, color="black", label="Empirical CCDF")
 
-    # --- 理論べき乗分布のCCDF ---
-    x = np.arange(xmin, int(data["xvalue"].max()) + 1)
-    y = x**(-alpha + 1)  # CCDFは P(X≥k) ~ k^(-α+1)
-    y = y * (ccdf["ccdf"].max() / y.max())  # スケーリング
+    # --- 理論べき乗CCDF（xmin から引く、再正規化なし）---
+    kmin = int(np.ceil(xmin))
+    if kmin > ccdf["xvalue"].max():
+        print(f"{fname}: xmin({kmin}) がデータ範囲外です。")
+        continue
 
-    ax.plot(x, y, color="red", lw=2, label=f"Power-law fit (α={alpha:.2f})")
+    x = np.arange(kmin, int(ccdf["xvalue"].max()) + 1)
+
+    # 理論近似: P(X ≥ k) ∝ k^(-(alpha - 1))
+    y = x**(-(alpha - 1))
+
+    # データの CCDF とスケールを合わせる（xmin の点で揃える）
+    emp_at_kmin = ccdf.loc[ccdf["xvalue"] >= kmin, "ccdf"].iloc[0]
+    y = y * (emp_at_kmin / y[0])
+
+    ax.plot(x, y, color="red", lw=2,
+            label=f"Power-law fit (α={alpha:.2f}, xmin={kmin})")
 
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -85,9 +97,3 @@ plt.savefig(pdf_path, format='pdf')
 print(f"PDFを保存しました: {pdf_path}")
 
 plt.show()
-
-#ccdf['ccdf'] = ccdf['prob'][::-1].cumsum()[::-1] で累積確率を計算
-#理論べき乗分布のCCDFは 
-#∼𝑘~(−𝛼+1)でスケーリング
-#y軸ラベルは "CCDF P(X ≥ k) (log)"
-#log-log プロットで直線になればスケールフリー性の目安
