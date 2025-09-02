@@ -4,6 +4,7 @@ library(renv)
 library(dplyr)
 library(purrr)
 library(tidyverse)
+library(tidyr)
 
 renv::restore()
 
@@ -224,95 +225,19 @@ sp_food_coltp0 <- data.frame(
   bindre.namesp = c("Alt.com", "Aul.dew", "Cya.pha", "C.hor", "Cyp.ssp", "C.lon", "E.cya", "Gna.pfe")
 )
 
-combined_cause_data <- data.frame(
-  spName = c("A_compressiceps", "A_compressiceps", "A_dewindti", "A_dewindti", "A_dewindti", "A_dewindti", "A_dewindti", "G_pfefferi", "G_pfefferi", "G_pfefferi", "G_pfefferi"),
-  RecipientFood = c("omnivore", "piscivore", "fry-feeder", "piscivore", "shrimp-eater", "omnivore", "browser", "shrimp-eater", "piscivore", "shrimp-eater", "omnivore"),
-  Category = rep("Positive", 11),
-  rename = c("Alt.com", "Alt.com", "Aul.dew", "Aul.dew", "Aul.dew", "Aul.dew", "Aul.dew", "Gna.pfe", "Gna.pfe", "Gna.pfe", "Gna.pfe")
-)
-
 # ギルドごとのリスト作成
 guildList <- split(sp_food_coltp0$bindre.namesp, sp_food_coltp0$foodhabit7)
 guild_order <- c("fry-feeder", "scale-eater", "shrimp-eater", "piscivore", "omnivore", "grazer", "browser","nodata")
-
-# 統計計算
+# Cause側の集計
 res_cause <- lapply(names(guildList), function(guild) {
   rename_values <- guildList[[guild]]
   df_cause <- combined_cause_data %>% filter(rename %in% rename_values)
   
-  matched <- df_cause %>% filter(RecipientFood == guild)
+  matched   <- df_cause %>% filter(RecipientFood == guild)
   unmatched <- df_cause %>% filter(RecipientFood != guild)
   
-  matched_pos <- sum(matched$Category == "Positive")
-  matched_neg <- sum(matched$Category == "Negative")
-  unmatched_pos <- sum(unmatched$Category == "Positive")
-  unmatched_neg <- sum(unmatched$Category == "Negative")
-  
-  total <- matched_pos + matched_neg + unmatched_pos + unmatched_neg
-  
-  tibble(
-    Guild = guild,
-    Matched_Pos = matched_pos,
-    Matched_Neg = matched_neg,
-    Unmatched_Pos = unmatched_pos,
-    Unmatched_Neg = unmatched_neg,
-    Total = total,
-    Matched_Pos_Ratio = ifelse((matched_pos + matched_neg) > 0, round(matched_pos / (matched_pos + matched_neg), 3), 0),
-    Matched_Neg_Ratio = ifelse((matched_pos + matched_neg) > 0, round(matched_neg / (matched_pos + matched_neg), 3), 0),
-    Unmatched_Pos_Ratio = ifelse((unmatched_pos + unmatched_neg) > 0, round(unmatched_pos / (unmatched_pos + unmatched_neg), 3), 0),
-    Unmatched_Neg_Ratio = ifelse((unmatched_pos + unmatched_neg) > 0, round(unmatched_neg / (unmatched_pos + unmatched_neg), 3), 0)
-  )
-}) %>% bind_rows()
-
-# 列順を調整（Totalを6列目に）
-res_cause <- res_cause %>%
-  select(Guild, Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg, Total,
-         Matched_Pos_Ratio, Matched_Neg_Ratio, Unmatched_Pos_Ratio, Unmatched_Neg_Ratio)
-
-# 統計計算
-res_cause <- lapply(names(guildList), function(guild) {
-  rename_values <- guildList[[guild]]
-  df_cause <- combined_cause_data %>% filter(rename %in% rename_values)
-  
-  matched <- df_cause %>% filter(RecipientFood == guild)
-  unmatched <- df_cause %>% filter(RecipientFood != guild)
-  
-  matched_pos <- sum(matched$Category == "Positive")
-  matched_neg <- sum(matched$Category == "Negative")
-  unmatched_pos <- sum(unmatched$Category == "Positive")
-  unmatched_neg <- sum(unmatched$Category == "Negative")
-  
-  total <- matched_pos + matched_neg + unmatched_pos + unmatched_neg
-  
-  tibble(
-    Guild = guild,
-    Matched_Pos = matched_pos,
-    Matched_Neg = matched_neg,
-    Unmatched_Pos = unmatched_pos,
-    Unmatched_Neg = unmatched_neg,
-    Total = total,
-    Matched_Pos_Ratio = round(matched_pos / total, 2),
-    Matched_Neg_Ratio = round(matched_neg / total, 2),
-    Unmatched_Pos_Ratio =round(unmatched_pos / total, 2),
-    Unmatched_Neg_Ratio = round(unmatched_neg / total, 2)
-  )
-}) %>% bind_rows()
-
-# 列順を調整（Totalを6列目に）
-res_cause <- res_cause %>%
-  select(Guild, Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg, Total,
-         Matched_Pos_Ratio, Matched_Neg_Ratio, Unmatched_Pos_Ratio, Unmatched_Neg_Ratio)
-
-# 統計計算
-res_recipient <- lapply(names(guildList), function(guild) {
-  rename_values <- guildList[[guild]]
-  df_recipient <- combined_recipient_data %>% filter(rename %in% rename_values)
-  
-  matched <- df_recipient %>% filter(CauseFood == guild)
-  unmatched <- df_recipient %>% filter(CauseFood != guild)
-  
-  matched_pos <- sum(matched$Category == "Positive")
-  matched_neg <- sum(matched$Category == "Negative")
+  matched_pos   <- sum(matched$Category == "Positive")
+  matched_neg   <- sum(matched$Category == "Negative")
   unmatched_pos <- sum(unmatched$Category == "Positive")
   unmatched_neg <- sum(unmatched$Category == "Negative")
   
@@ -330,116 +255,112 @@ res_recipient <- lapply(names(guildList), function(guild) {
     Unmatched_Pos_Ratio = round(unmatched_pos / total, 2),
     Unmatched_Neg_Ratio = round(unmatched_neg / total, 2)
   )
-}) %>% bind_rows()
-
-# 列順を調整（Totalを6列目に）
-res_recipient <- res_recipient %>%
-  select(Guild, Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg, Total,
-         Matched_Pos_Ratio, Matched_Neg_Ratio, Unmatched_Pos_Ratio, Unmatched_Neg_Ratio)
-
-res_cause<-res_cause %>%
+}) %>% bind_rows() %>%
   mutate(Guild = factor(Guild, levels = guild_order)) %>%
   arrange(Guild)
 
-res_recipient<-res_recipient %>%
+# Recipient側の集計
+res_recipient <- lapply(names(guildList), function(guild) {
+  rename_values <- guildList[[guild]]
+  df_recipient <- combined_recipient_data %>% filter(rename %in% rename_values)
+  
+  matched   <- df_recipient %>% filter(CauseFood == guild)
+  unmatched <- df_recipient %>% filter(CauseFood != guild)
+  
+  matched_pos   <- sum(matched$Category == "Positive")
+  matched_neg   <- sum(matched$Category == "Negative")
+  unmatched_pos <- sum(unmatched$Category == "Positive")
+  unmatched_neg <- sum(unmatched$Category == "Negative")
+  
+  total <- matched_pos + matched_neg + unmatched_pos + unmatched_neg
+  
+  tibble(
+    Guild = guild,
+    Matched_Pos = matched_pos,
+    Matched_Neg = matched_neg,
+    Unmatched_Pos = unmatched_pos,
+    Unmatched_Neg = unmatched_neg,
+    Total = total,
+    Matched_Pos_Ratio = round(matched_pos / total, 2),
+    Matched_Neg_Ratio = round(matched_neg / total, 2),
+    Unmatched_Pos_Ratio = round(unmatched_pos / total, 2),
+    Unmatched_Neg_Ratio = round(unmatched_neg / total, 2)
+  )
+}) %>% bind_rows() %>%
   mutate(Guild = factor(Guild, levels = guild_order)) %>%
   arrange(Guild)
-
 
 write.csv(res_cause,"guild_match_stats_cause.csv")
 write.csv(res_recipient,"recipient_data_guild_match_stats.csv")
 
+# データフレームの作成
+fisher_df_cause <-res_cause[,c(1:5)]
 
+# MatchedとUnmatchedの合計
+fisher_df_cause$Matched <- fisher_df_cause$Matched_Pos + fisher_df_cause$Matched_Neg
+fisher_df_cause$Unmatched <- fisher_df_cause$Unmatched_Pos + fisher_df_cause$Unmatched_Neg
+
+table_mat_cause <- as.table(rbind(fisher_df_cause$Matched, fisher_df_cause$Unmatched))
+
+
+colnames(table_mat_cause) <- fisher_df_cause$Guild
+rownames(table_mat_cause) <- c("Matched", "Unmatched")
+
+fisher.test(table_mat_cause)
+
+# NAを0に置き換え、比率列をlong形式に変換
 res_cause_long <- res_cause %>%
-  filter(Guild != "nodata") %>%
-  select(-Total) %>%
-  pivot_longer(
-    cols = c(Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg),
-    names_to = "Category",
-    values_to = "Count"
-  )
+  mutate(
+    Matched_Pos_Ratio = ifelse(is.na(Matched_Pos_Ratio), 0, Matched_Pos_Ratio),
+    Unmatched_Pos_Ratio = ifelse(is.na(Unmatched_Pos_Ratio), 0, Unmatched_Pos_Ratio)
+  ) %>%
+  select(Guild, Matched_Pos_Ratio, Unmatched_Pos_Ratio) %>%
+  pivot_longer(cols = c(Matched_Pos_Ratio, Unmatched_Pos_Ratio),
+               names_to = "Type", values_to = "Ratio") %>%
+  mutate(Type = recode(Type,
+                       Matched_Pos_Ratio = "Matched",
+                       Unmatched_Pos_Ratio = "Unmatched"))
 
-
-res_cause_long$Category <- factor(
-  res_cause_long$Category,
-  levels = c("Matched_Pos", "Matched_Neg", "Unmatched_Pos", "Unmatched_Neg"),
-  labels = c("Intraguild Positive", "Intraguild Negative", "Interguild Positive", "Interguild Negative")
-)
-
-TableS6Figa<-ggplot(res_cause_long, aes(x = Guild, y = Count, fill = Category)) +
+ggplot(res_cause_long, aes(x = Guild, y = Ratio, fill = Type)) +
   geom_bar(stat = "identity", position = "dodge") +
-  scale_fill_manual(
-    values = c(
-      "Intraguild Positive" = "skyblue",   # 青
-      "Intraguild Negative" = "pink",   # オレンジ
-      "Interguild Positive" = "blue", # 緑
-      "Interguild Negative" = "red"  # 赤
-    )
-  ) +
-  labs(
-    title = "(a)",
-    x = "Guild",
-    y = "Count"
-  ) +
-  theme_minimal() +
-  ylim(0,25)+
-  xlab("Trophic guild")+
-  ylab("Number of causal relationship")+ 
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
-    panel.background = element_rect(fill = "white"),  # 背景色を白に設定
-    plot.background = element_rect(fill = "white"),   # プロット全体の背景色も白に設定
-    axis.line = element_line(color = "black"),  # 軸の線を黒に設定
-    panel.grid = element_blank()  # グリッド線を非表示
-  )
+  labs(title = "Matched vs Unmatched Ratio by Guild",
+       x = "Guild", y = "Ratio", fill = "Type") +
+  theme_minimal()
 
-res_recipient_long <- res_recipient %>%
-  filter(Guild != "nodata") %>%
-  select(-Total) %>%
-  pivot_longer(
-    cols = c(Matched_Pos, Matched_Neg, Unmatched_Pos, Unmatched_Neg),
-    names_to = "Category",
-    values_to = "Count"
-  )
 
-res_recipient_long$Category <- factor(
-  res_recipient_long$Category,
-  levels = c("Matched_Pos", "Matched_Neg", "Unmatched_Pos", "Unmatched_Neg"),
-  labels = c("Intraguild Positive", "Intraguild Negative", "Interguild Positive", "Interguild Negative")
-)
+fisher_df_effect <-res_recipient[,c(1:5)]
 
-TableS6Figb<-ggplot(res_recipient_long, aes(x = Guild, y = Count, fill = Category)) +
+# MatchedとUnmatchedの合計
+fisher_df_effect$Matched <- fisher_df_effect$Matched_Pos + fisher_df_effect$Matched_Neg
+fisher_df_effect$Unmatched <- fisher_df_effect$Unmatched_Pos + fisher_df_effect$Unmatched_Neg
+
+table_mat_effect <- as.table(rbind(fisher_df_effect$Matched, fisher_df_effect$Unmatched))
+
+
+colnames(table_mat_effect) <- fisher_df_effect$Guild
+rownames(table_mat_effect) <- c("Matched", "Unmatched")
+
+fisher.test(table_mat_effect)
+
+# 比率を計算し、NAは0に置き換える
+fisher_df_long <- fisher_df_effect %>%
+  mutate(
+    Total = Matched + Unmatched,
+    Matched_Ratio = ifelse(Total > 0, Matched / Total, 0),
+    Unmatched_Ratio = ifelse(Total > 0, Unmatched / Total, 0)
+  ) %>%
+  select(Guild, Matched_Ratio, Unmatched_Ratio) %>%
+  pivot_longer(cols = c(Matched_Ratio, Unmatched_Ratio),
+               names_to = "Type", values_to = "Ratio") %>%
+  mutate(Type = recode(Type,
+                       Matched_Ratio = "Matched",
+                       Unmatched_Ratio = "Unmatched"))
+
+ggplot(fisher_df_long, aes(x = Guild, y = Ratio, fill = Type)) +
   geom_bar(stat = "identity", position = "dodge") +
-  scale_fill_manual(
-    values = c(
-      "Intraguild Positive" = "skyblue",   # 青
-      "Intraguild Negative" = "pink",   # オレンジ
-      "Interguild Positive" = "blue", # 緑
-      "Interguild Negative" = "red"  # 赤
-    )
-  ) +
-  labs(
-    title = "(b)",
-    x = "Guild",
-    y = "Count"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
-  ylim(0,25)+
-  xlab("Trophic guild")+
-  ylab("Number of recipient relationship")+
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
-    panel.background = element_rect(fill = "white"),  # 背景色を白に設定
-    plot.background = element_rect(fill = "white"),   # プロット全体の背景色も白に設定
-    axis.line = element_line(color = "black"),  # 軸の線を黒に設定
-    panel.grid = element_blank()  # グリッド線を非表示
-  )
+  labs(title = "Matched vs Unmatched Ratio by Guild",
+       x = "Guild", y = "Ratio", fill = "Type") +
+  theme_minimal()
 
-
-
-pdf("TableS6Fig.pdf", width = 11.7, height = 8.3) # A4 landscape in inches
-grid.arrange(TableS6Figa, TableS6Figb, ncol = 2)
-dev.off()
-
+renv::snapshot()
 
