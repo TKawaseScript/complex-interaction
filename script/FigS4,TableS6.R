@@ -8,7 +8,7 @@ library(tidyr)
 
 renv::restore()
 
-strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,9:11)]
+strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,10:12)]
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
 
 

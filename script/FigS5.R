@@ -17,7 +17,7 @@ renv::restore()
 
 # データの読み込みと整形
 sp_food_coltp0 <- read.csv("spcollisttp=0.csv", header = TRUE, fileEncoding = "UTF-8")
-strengthtp0 <- read.csv("GLMbasedatatp0.csv", header = TRUE)[, -c(1, 9:11)]
+strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,10:12)]
 colnames(strengthtp0) <- c("cause", "effect", "causepopmean", "effectpopmean", "causepopsd",
                            "effectpopsd", "causehabitat", "effecthabitat", "smapmin", "smapX1st",
                            "smapmedian", "smapmean", "smapX3rd", "smapmax", "strength", "ratio")

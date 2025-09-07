@@ -10,6 +10,9 @@ library(ggrepel)
 library(ape)
 library(nlme)
 library(tools)
+library(renv)
+
+renv::restore()
 
 source("igraphplot2.R")
 
@@ -19,7 +22,7 @@ environment(igraph.Arrows2) <- asNamespace('igraph')
 #データの読み込みと整形
 #GLMbasedatatp0に因果関係リストとSmap係数などが格納されている
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T,fileEncoding = "UTF-8")
-strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,9:11)]
+strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,10:12)]
 
 colnames(strengthtp0)<-c("cause","effect","causepopmean","effectpopmean","causepopsd",
                          "effectpopsd","causehabitat","effecthabitat","smapmin","smapX1st",
@@ -109,9 +112,6 @@ V(igraphdatatp0ww8)$name<-gsub(" ","\n",SPCOLtp0nameww8)
 lay.crctp0ww8<-layout_in_circle(igraphdatatp0ww8,order=order(SPORDERtp0ww8))
 
 plot(lay.crctp0ww8)
-
-
-SPFoodtp0posww8
 
 pdf("Fig1a.pdf")
 
