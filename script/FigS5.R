@@ -52,6 +52,7 @@ igraphdatatp0ww8 <- graph(t(cbind(igraph_allww8s$cause, igraph_allww8s$effect)))
 
 # 全体の次数分布
 degree_dist_All_all_digdis <- igraph::degree(igraphdatatp0ww8, mode = "all")
+write.csv(degree_dist_All_all_digdis,"degree_dist_All_all_digdis.csv")
 degree_freq_all <- as.numeric(degree_dist_All_all_digdis)
 
 #pythonように整形
