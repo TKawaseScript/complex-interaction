@@ -3,6 +3,9 @@ library(dplyr)
 library(ggplot2)
 library(gridExtra)
 library(cowplot)
+library(renv)
+
+renv::restore()
 
 
 #TableS4
@@ -42,7 +45,7 @@ glm_Out<-glm(count~popmean*food,data=Out_lm_data,family="poisson")
 
 anova_out<-anova(glm_Out,test = "Chisq")
 
-plotTableS4a<-ggplot(Out_lm_data,aes(x=popmean,y=count,color=food))+
+plotTableS8a<-ggplot(Out_lm_data,aes(x=popmean,y=count,color=food))+
   geom_point(alpha=0.6)+
   geom_smooth(
     aes(group = 1),
@@ -96,7 +99,7 @@ In_lm_data$pred_countEffect <- predict(glm_In, type = "response")
 
 summary(glm_In)
 
-plotTableS4b<-ggplot(In_lm_data,aes(x=popmean,y=count,color=food))+
+plotTableS8b<-ggplot(In_lm_data,aes(x=popmean,y=count,color=food))+
   geom_point(alpha=0.6)+
   geom_smooth(method="glm",method.args=list(family="poisson"),se=FALSE)+
   theme_minimal()+
@@ -118,8 +121,8 @@ write.csv(anova_in,"TableS4_anova_in.csv")
 
 write.csv(capture.output(summary(glm_In)),"TableS4_in.csv")
 
-pdf("FigS7.pdf")
-plot_grid(plotTableS4a,plotTableS4b)
+pdf("FigS8.pdf")
+plot_grid(plotTableS8a,plotTableS8b)
 dev.off()
 
 #TableS5 媒介中心生モデルのものも追加して解析を行う
@@ -145,8 +148,6 @@ degree_dist_in_digdis$X<-glm_dataFrame_Inname
 colnames(degree_dist_in_digdis)<-c("Abbreviation","in_count")
 colnames(degree_dist_out_digdis)<-c("Abbreviation","out_count")
 
-mergeData_in<-merge(glmAICdataCen[,-1], degree_dist_in_digdis, by = "Abbreviation", all.x = TRUE)
-
 
 mergeData_in<-merge(glmdataCen, degree_dist_in_digdis, by = "Abbreviation", all.x = TRUE)
 
@@ -167,55 +168,11 @@ write.csv(anova_cent,"TableS5.csv")
 
 #VGAM(双方向の因果関係数~popmean+food)
 
-# グラフの作成
-FigS6_a<-ggplot(Each_Other_lm_data, aes(x = popmean)) +   # countCause の散布図
-  geom_point(aes(y = countCause, shape = "Cause", color = food), size = 3) +   # countCause の散布図
-  geom_point(aes(y = counteffect, shape = "Recipietnt", color = food), size = 3) +   # 回帰曲線（counteffect）
-  labs(title = "(a)",x = "", y = "Count (Causative / Recipient)") + 
-  scale_shape_manual(values = c(16, 17),name = "Interaction type") +
-  scale_color_manual(values = c('shrimp-eater' = 'pink', 
-                                'omnivore' = 'gray', 
-                                'piscivore' = 'red', 
-                                'fry-feeder' = 'royalblue1', 
-                                'scale-eater' = 'blueviolet', 
-                                'grazer' = 'lightgreen', 
-                                'browser' = 'darkorange'),
-                     guide = "none") + # foodごとに色を設定
-  theme(panel.background = element_blank(),   # 背景を透明または白に設定
-        plot.background = element_blank(),    # プロットエリアの背景を透明または白に設定
-        panel.grid = element_blank(),
-        axis.line = element_line(color = "black"))
-
-#原因側の因果関係数~popmean*food
-ggplot(Out_lm_data, aes(x = popmean, y = count)) +
-  # 散布図
-  geom_point(aes(color = food), size = 3) +
-  # 回帰曲線（予測値に基づく）
-  geom_line(aes(y = pred_count, color = food), size = 1) +
-  # 軸ラベル
-  labs(x = "Population mean", y = "Count of Causative interaction") +
-  theme_minimal() +
-  scale_color_manual(values = c('shrimp-eater' = 'pink', 'omnivore' = 'gray', 'piscivore' = 'red', 'fry-feeder' = 'royalblue1', 'scale-eater' = 'blueviolet', 'grazer' = 'lightgreen', 'browser' = 'darkorange')) # foodごとに色を設定
-
-
-
-#結果側の因果関係数~popmean*food
-
-ggplot(In_lm_data, aes(x = popmean)) +
-  # countEffect の散布図
-  geom_point(aes(y = count, color = food), size = 3) +
-  # countEffect の回帰曲線（予測値に基づく）
-  geom_line(aes(y = pred_countEffect, color = food), size = 1, linetype = "dashed") +
-  # 軸ラベル
-  labs(x = "Population mean", y = "Count of recipient interaction") +
-  theme_minimal() +
-  scale_color_manual(values = c('shrimp-eater' = 'pink', 'omnivore' = 'gray', 'piscivore' = 'red', 'fry-feeder' = 'royalblue1', 'scale-eater' = 'blueviolet', 'grazer' = 'lightgreen', 'browser' = 'darkorange')) # foodごとに色を設定
-
 #媒介中心性~popmean*food
 
-FigS6_b<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Food.habit)) +   # Centrality.betweenness の散布図
+FigS6<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Food.habit)) +   # Centrality.betweenness の散布図
   geom_point(aes(y = Centrality.betweenness, color = Food.habit), size = 3,shape=15) +
-  labs(title="(b)",x = "Population mean", y = "Centrality betweenness") + 
+  labs(x = "Population mean", y = "Centrality betweenness") + 
   scale_color_manual(values = c('Shrimp-Eater' = 'pink', 
                                 'Omnivore' = 'gray', 
                                 'Piscivore' = 'red', 
@@ -228,7 +185,6 @@ FigS6_b<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Fo
         panel.grid = element_blank(),
         axis.line = element_line(color = "black"))
 
-FigS6 <- grid.arrange(FigS6_a, FigS6_b, ncol = 1)  # ncol = 1 は縦配置、nrow = 1 なら横配置
 
 ggsave("FigS6.pdf", plot = FigS6, width = 8, height = 6)
 
