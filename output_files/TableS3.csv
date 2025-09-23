@@ -1,15 +1,15 @@
-"","cause.x","effect.x","causehabtp0","min","mean","max","strength","ratio","match_type","rmatch_type","match_reversed"
-"1","G_pfefferi","P_microlepis","Shrimp_feeder",-1.33744027334622,0.032017055854784,1.41212184399964,"positive",0.552631578947368,"Aggressor-Victim","Prey-Predator",FALSE
-"2","L_callipterus","P_microlepis","Shrimp_feeder",-2.03678050263056,-0.407400030995674,0.653141674015276,"negative",0.736842105263158,"No Match","Prey-Predator",FALSE
-"3","L_callipterus","T_moorii","Shrimp_feeder",-0.208448124607181,0.362487938390315,0.923599903190071,"positive",0.921052631578947,"No Match","Victim-Aggressor",FALSE
-"4","L_elongatus","T_temporalis","Fish_feeder",-4.79022697364682,-0.361401657557099,5.83306542831018,"negative",0.578947368421053,"Predator-Prey","Victim-Aggressor",FALSE
-"5","L_tanganicanus","P_microlepis","Unicellular_algae_feeder",-1.66464293001362,0.0645202559769775,0.825516939913907,"positive",0.552631578947368,"No Match","Prey-Predator",FALSE
-"6","N_fasciatus","P_microlepis","Shrimp_feeder",-0.610344003181223,0.104477061743846,1.86085256486914,"positive",0.578947368421053,"No Match","Prey-Predator",TRUE
-"7","N_fasciatus","T_moorii","Shrimp_feeder",-0.350005292446474,-0.0600444071495525,0.343374166385019,"negative",0.684210526315789,"Predator-Prey","No Match",TRUE
-"8","O_ventralis","P_microlepis","Detritus_feeder",-0.209052334767531,0.562769902732457,1.49071018337314,"positive",0.921052631578947,"No Match","Prey-Predator",TRUE
-"9","P_microlepis","N_fasciatus","Scale_feeder",-0.166336406238298,0.315342588558902,1.30902808712053,"positive",0.868421052631579,"Predator-Prey","No Match",TRUE
-"10","P_microlepis","O_ventralis","Scale_feeder",-0.30683001229702,-0.0372579824148894,0.270095375091778,"negative",0.631578947368421,"Predator-Prey","No Match",TRUE
-"11","P_microlepis","P_trewavasae","Scale_feeder",-3.02876882017924,-0.430345381638452,1.44054107467448,"negative",0.578947368421053,"Predator-Prey","Victim-Aggressor",FALSE
-"12","P_microlepis","T_moorii","Scale_feeder",-0.337896142538957,0.0720204466916965,0.407128120632332,"positive",0.631578947368421,"Predator-Prey","Victim-Aggressor",FALSE
-"13","T_moorii","N_fasciatus","Filamentous_algae_feeder",-0.413220032233881,0.189692919235553,0.595572847535101,"positive",0.789473684210526,"No Match","Prey-Predator",TRUE
-"14","T_temporalis","L_callipterus","Filamentous_algae_feeder",-2.11548678153379,-0.0111982512516259,0.969458344895531,"negative",0.605263157894737,"Aggressor-Victim","No Match",FALSE
+"","cause.x","effect.x","cause_guild","effect_guild","min","mean","max","strength","ratio","match_type","rmatch_type","match_reversed"
+"1","G_pfefferi","P_microlepis","Shrimp-Eater","Scale-Eater",-1.33744027334622,0.032017055854784,1.41212184399964,"positive",0.552631578947368,"Aggressor-Victim","Prey-Predator",FALSE
+"2","L_callipterus","P_microlepis","Fry-Feeder","Scale-Eater",-2.03678050263056,-0.407400030995674,0.653141674015276,"negative",0.736842105263158,"No Match","Prey-Predator",FALSE
+"3","L_callipterus","T_moorii","Fry-Feeder","Browser",-0.208448124607181,0.362487938390315,0.923599903190071,"positive",0.921052631578947,"No Match","Victim-Aggressor",FALSE
+"4","L_elongatus","T_temporalis","Piscivore","Browser",-4.79022697364682,-0.361401657557099,5.83306542831018,"negative",0.578947368421053,"Predator-Prey","Victim-Aggressor",FALSE
+"5","L_tanganicanus","P_microlepis","Omnivore","Scale-Eater",-1.66464293001362,0.0645202559769775,0.825516939913907,"positive",0.552631578947368,"No Match","Prey-Predator",FALSE
+"6","N_fasciatus","P_microlepis","Piscivore","Scale-Eater",-0.610344003181223,0.104477061743846,1.86085256486914,"positive",0.578947368421053,"No Match","Prey-Predator",TRUE
+"7","N_fasciatus","T_moorii","Piscivore","Browser",-0.350005292446474,-0.0600444071495525,0.343374166385019,"negative",0.684210526315789,"Predator-Prey","No Match",TRUE
+"8","O_ventralis","P_microlepis","Omnivore","Scale-Eater",-0.209052334767531,0.562769902732457,1.49071018337314,"positive",0.921052631578947,"No Match","Prey-Predator",TRUE
+"9","P_microlepis","N_fasciatus","Scale-Eater","Piscivore",-0.166336406238298,0.315342588558902,1.30902808712053,"positive",0.868421052631579,"Predator-Prey","No Match",TRUE
+"10","P_microlepis","O_ventralis","Scale-Eater","Omnivore",-0.30683001229702,-0.0372579824148894,0.270095375091778,"negative",0.631578947368421,"Predator-Prey","No Match",TRUE
+"11","P_microlepis","P_trewavasae","Scale-Eater","Grazer",-3.02876882017924,-0.430345381638452,1.44054107467448,"negative",0.578947368421053,"Predator-Prey","Victim-Aggressor",FALSE
+"12","P_microlepis","T_moorii","Scale-Eater","Browser",-0.337896142538957,0.0720204466916965,0.407128120632332,"positive",0.631578947368421,"Predator-Prey","Victim-Aggressor",FALSE
+"13","T_moorii","N_fasciatus","Browser","Piscivore",-0.413220032233881,0.189692919235553,0.595572847535101,"positive",0.789473684210526,"No Match","Prey-Predator",TRUE
+"14","T_temporalis","L_callipterus","Browser","Fry-Feeder",-2.11548678153379,-0.0111982512516259,0.969458344895531,"negative",0.605263157894737,"Aggressor-Victim","No Match",FALSE

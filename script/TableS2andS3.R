@@ -1,10 +1,14 @@
 library(dplyr)
+library(renv)
+library(tools)
+
+
+renv::restore()
 
 GLMbasedatatp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-1]
 correlation_Hori<-read.csv("Hori_aggressive_behaviors.csv")
 hori_foodweb_interaction<-read.csv("Hori_Food_web.csv",header=T)
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
-
 
 intraInteraction<-NULL
 interInteraction<-NULL
@@ -79,6 +83,20 @@ print(interInteraction$match_reversed)
 View(interInteraction)
 
 TableS2<-interInteraction %>% select(cause.x,effect.x,causehabtp0,min,mean,max,strength,ratio,match_type,rmatch_type,match_reversed)
+
+TableS2_foods<-NULL
+
+for(i in 1:nrow(TableS2)){
+  TableS2_foods<-rbind(TableS2_foods,c(toTitleCase(sp_food_coltp0[TableS2$cause.x[i]==sp_food_coltp0$cause,]$foodhabit7),
+            toTitleCase(sp_food_coltp0[TableS2$effect.x[i]==sp_food_coltp0$cause,]$foodhabit7)))
+}
+
+TableS2<-cbind(TableS2,TableS2_foods)
+
+colnames(TableS2)=c("cause.x","effect.x","causehabtp0","min","mean","max","strength","ratio","match_type","rmatch_type","match_reversed","cause_guild","effect_guild")
+
+TableS2<-TableS2 %>% select(cause.x,effect.x,cause_guild,effect_guild,min,mean,max,strength,ratio,match_type,rmatch_type,match_reversed)
+
 
 write.csv(TableS2,"TableS2.csv")
 
