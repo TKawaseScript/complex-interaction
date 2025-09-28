@@ -1,0 +1,1 @@
+./histcsvs/\python_csv_all.csv has a bad mean degree 

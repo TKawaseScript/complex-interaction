@@ -1,7 +1,0 @@
-LICENSE
-README.md
-setup.py
-sfanalysis.egg-info/PKG-INFO
-sfanalysis.egg-info/SOURCES.txt
-sfanalysis.egg-info/dependency_links.txt
-sfanalysis.egg-info/top_level.txt

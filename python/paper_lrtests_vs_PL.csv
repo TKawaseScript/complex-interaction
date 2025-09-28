@@ -1,0 +1,5 @@
+file,xmin,ntail,alpha_PL,compare_to,LR,Z,p_Vuong
+python_csv_all.csv,11,12,4.0162,TPL,-0.82,-2.206,0.027
+python_csv_all.csv,11,12,4.0162,LOGN,-1.568,-1.203,0.229
+python_csv_all.csv,11,12,4.0162,EXP,-0.996,-1.983,0.047
+python_csv_all.csv,11,12,4.0162,STEX,9.945,3.939,0.0
