@@ -1,0 +1,2 @@
+file,n,xmin,ntail,alpha,KS,p_gof,ll_PL,ll_TPL,ll_LOGN,ll_EXP,ll_STEX,best_model
+python_csv_out.csv,26,6,12,4.9483,0.26338,0.08,-19.401,-18.684,-17.625,-18.548,-38.883,LOGN

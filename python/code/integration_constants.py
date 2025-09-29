@@ -81,7 +81,7 @@ def plconst(alpha, xmin):
         C                      float, normalization constant
 
     """
-    total = mp.zeta(np.asscalar(alpha),1) # op.minimize passes array
+    total = mp.zeta(alpha.item(), 1) # op.minimize passes array
     lowertail = np.sum(np.asarray(range(1,xmin)**(-alpha)))
     result = total-lowertail
     C = 1./(result)

@@ -214,7 +214,7 @@ def exp(x):
         negloglike = lambda lam: -np.sum(logpdf(x,lam))
         tol = 1E-9
         res = op.minimize(negloglike,lam0, bounds=[(tol,None)],method='L-BFGS-B')
-        lam = np.asscalar(res.x)
+        lam = res.x.item()
         convstatus = res.success
         LV = logpdf(x,lam)
     return [lam, LV, convstatus]
