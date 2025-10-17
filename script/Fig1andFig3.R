@@ -19,15 +19,13 @@ source("igraphplot2.R")
 environment(plot.igraph2) <- asNamespace('igraph')
 environment(igraph.Arrows2) <- asNamespace('igraph')
 
-#データの読み込みと整形
-#GLMbasedatatp0に因果関係リストとSmap係数などが格納されている
+#read data from input_files and output_files folders
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T,fileEncoding = "UTF-8")
 strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,10:12)]
 
 colnames(strengthtp0)<-c("cause","effect","causepopmean","effectpopmean","causepopsd",
                          "effectpopsd","causehabitat","effecthabitat","smapmin","smapX1st",
                          "smapmedian","smapmean","smapX3rd","smapmax","strength","ratio")
-
 
 intratp0<-NULL
 intertp0<-NULL
@@ -42,10 +40,8 @@ for(i in 1:nrow(strengthtp0)){
 
 write.csv(intertp0,"interspecific_interaction.csv")
 
-#原因側と結果側のまとめ
 countcausetp0<-t(table(intertp0$cause))
 counteffecttp0<-t(table(intertp0$effect))
-
 
 forGray<-list()
 
@@ -66,10 +62,7 @@ colnames(forGray_data)<-c("Neg","Pos")
 
 igraph_allww8s<-cbind(intertp0,forGray_data)
 
-
-
 igraphdatatp0ww8<-graph(t(cbind(igraph_allww8s$cause,igraph_allww8s$effect)))
-
 
 SPCOLtp0ww8=NULL
 for(i in 1:length(V(igraphdatatp0ww8))){
@@ -93,7 +86,6 @@ SPCOLtp0betww8<-betweenness(igraphdatatp0ww8)
 
 write.csv(SPCOLtp0betww8,"betweenness.csv")
 
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
 SPCOLtp0nameww8=NULL
 for(i in 1:length(V(igraphdatatp0ww8))){
   SPCOLtp0nameww8=c(SPCOLtp0nameww8,as.character(sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0ww8)$name[i],]$re.namesp))
@@ -105,7 +97,6 @@ for(i in 1:length(V(igraphdatatp0ww8))){
   SPSIZEtp0ww8=c(SPSIZEtp0ww8,as.numeric(sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0ww8)$name[i],]$popmean))
 }
 SPSIZEtp0ww8
-
 
 V(igraphdatatp0ww8)$name<-gsub(" ","\n",SPCOLtp0nameww8)
 
@@ -129,13 +120,11 @@ plot.igraph2(igraphdatatp0ww8,layout=lay.crctp0ww8,
              vertex.label.color="black",
              vertex.color=alpha(SPCOLtp0ww8,0.5),
              vertex.label.dist=0,
-             edge.color=rgb(igraph_allww8s$Neg*abs(igraph_allww8s$ratio),0,igraph_allww8s$Pos*abs(igraph_allww8s$ratio),alpha=(igraph_allww8s$ratio)*igraph_allww8s$Pos)
-             
+             edge.color=rgb(igraph_allww8s$Neg*abs(igraph_allww8s$ratio),0,igraph_allww8s$Pos*abs(igraph_allww8s$ratio),alpha=(igraph_allww8s$ratio)*igraph_allww8s$Pos)    
 )
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0ww8), col=unique(SPCOLtp0ww8),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
 
 dev.off()
-
 
 pdf("Fig1b.pdf")
 
@@ -160,9 +149,6 @@ legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0ww8), col=un
 
 dev.off()
 
-
-
-
 hori_foodweb_interaction<-read.csv("Hori_Food_web.csv",header=T)
 
 renameForfoodcau<-NULL
@@ -174,7 +160,6 @@ for(i in 1:length(igraph_allww8s$cause)){
 
 nonPersistenceHorifood<-setdiff(unique(c(renameForfoodcau,renameForfoodeff)),
                                 unique(c(hori_foodweb_interaction$cause,hori_foodweb_interaction$effect)))
-
 
 nonPersistenceHorifoodFoodweb<-NULL
 for(i in 1:length(nonPersistenceHorifood)){
@@ -199,18 +184,14 @@ for(i in 1:length(V(hori_hoodweb_int_graph)$name)){
 }
 Hori_graph_foodweb_col
 
-
 Hori_graph_foodweb_pos<-NULL
 for(i in 1:length(V(hori_hoodweb_int_graph)$name)){
   Hori_graph_foodweb_pos[i]<-sp_food_coltp0[sp_food_coltp0$re.namesp==V(hori_hoodweb_int_graph)$name[i],]$re.position
 }
 Hori_graph_foodweb_pos
 
-
 Agg_food_fig_name<-gsub(". ",".\n",V(igraph::simplify(hori_hoodweb_int_graph))$name)
-
 Agg_food_fig<-igraph::simplify(hori_hoodweb_int_graph)
-
 V(Agg_food_fig)$name<-Agg_food_fig_name
 
 lay.crctp0_Hori_foodweb<-layout_in_circle(hori_hoodweb_int_graph,order=order(Hori_graph_foodweb_pos))
@@ -230,12 +211,9 @@ plot.igraph2(Agg_food_fig,layout=lay.crctp0_Hori_foodweb,
              vertex.color=alpha(Hori_graph_foodweb_col,0.5),
              vertex.label.dist=0,
              edge.color="red"
-             
 )
 
 dev.off()
-
-
 
 correlation_Hori<-read.csv("Hori_aggressive_behaviors.csv")
 
@@ -273,8 +251,6 @@ for(i in 1:length(V(Hori_graph)$name)){
 }
 Hori_graph_col
 
-
-
 Hori_graph_pos<-NULL
 for(i in 1:length(V(Hori_graph)$name)){
   Hori_graph_pos[i]<-sp_food_coltp0[sp_food_coltp0$re.namesp==V(Hori_graph)$name[i],]$re.position
@@ -283,10 +259,7 @@ Hori_graph_pos
 
 lay.crctp0_Hori<-layout_in_circle(Hori_graph,order=order(Hori_graph_pos))
 
-
-
 Agg_hori_fig<-igraph::simplify(Hori_graph)
-
 
 V(Agg_hori_fig)$name<-gsub(". ",".\n",V(Agg_hori_fig)$name)
 
@@ -316,9 +289,6 @@ plot.igraph2(Agg_hori_fig,layout=lay.crctp0_Hori,
 par(family="Times")
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=unique(SPFoodtp0ww8), col=alpha(unique(SPCOLtp0ww8),0.5),pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
 dev.off()
-
-
-
 
 
 pdf("Fig3.pdf",width = 11.69,height = 8.27)
