@@ -11,8 +11,6 @@ renv::restore()
 strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,10:12)]
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
 
-
-#(a)spName:種間相互作用の原因種の名前、RecipientFood、RecipientCol：その種間相互用の受け手側の食性と色
 PosList<-strengthtp0[strengthtp0$strength=="positive",]
 NegList<-strengthtp0[strengthtp0$strength=="negative",]
 
@@ -61,17 +59,11 @@ NegListCause<-data.frame("spName"=interInteractionNeg$cause.x,"RecipientFood"=Ne
 # PosListCauseとNegListCauseを結合
 PosListCause$Category <- "Positive"
 NegListCause$Category <- "Negative"
-
-# 両方のデータを結合
 combined_cause_data <- rbind(PosListCause, NegListCause)
 
-# 負の値のRecipientFoodに対して積み上げ方向を反転
 combined_cause_data$Value <- ifelse(combined_cause_data$Category == "Negative", -1, 1)
-
-# RecipientFoodを因子型に変換
 combined_cause_data$RecipientFood <- as.factor(combined_cause_data$RecipientFood)
 
-#spNameを3文字ルールに変更
 for(i in 1:nrow(combined_cause_data)){
   combined_cause_data$rename[i]<-sp_food_coltp0[combined_cause_data$spName[i]==sp_food_coltp0$cause,]$bindre.namesp
 }
@@ -102,21 +94,21 @@ FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
       "scale-eater" = "blueviolet", 
       "grazer" = "lightgreen"
     )
-  ) +  # 手動で色を指定
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  # y = 0 の破線
+  ) +  
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  
   scale_y_continuous(breaks = seq(-10, 10, by = 1),
-                     limits = c(-8, 8)  # y軸の範囲を手動で指定
-  ) +  # y軸のメモリを1ごとに
+                     limits = c(-8, 8) 
+  ) + 
   labs(title = "(a)",
        x = "Species Name",
        y = "Number of causal relationship",
        fill = "Trophic guild") + 
   theme(
-    axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
-    panel.background = element_rect(fill = "white"),  # 背景色を白に設定
-    plot.background = element_rect(fill = "white"),   # プロット全体の背景色も白に設定
-    axis.line = element_line(color = "black"),  # 軸の線を黒に設定
-    panel.grid = element_blank()  # グリッド線を非表示
+    axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"), 
+    panel.background = element_rect(fill = "white"), 
+    plot.background = element_rect(fill = "white"),   
+    axis.line = element_line(color = "black"), 
+    panel.grid = element_blank()  
   )+
   annotate("rect", xmin = 0, xmax = 3.5, ymin = -8, ymax = -7.8,fill = "royalblue1")+
   annotate("rect", xmin = 3.5, xmax = 4.5, ymin = -8, ymax = -7.8,fill = "blueviolet")+
@@ -126,9 +118,6 @@ FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
   annotate("rect", xmin = 20.5, xmax = 23.5, ymin = -8, ymax = -7.8,fill = "lightgreen")+
   annotate("rect", xmin = 23.5, xmax = 27, ymin = -8, ymax = -7.8,fill = "darkorange")
 
-
-
-#(b)spName:種間相互作用の受け手側の名前、RecipientFood、RecipientCol：その種間相互用の原因側の食性と色
 
 PosListCauFood<-NULL
 for(i in 1:nrow(interInteractionPos)){
@@ -151,20 +140,12 @@ for(i in 1:nrow(interInteractionNeg)){
 }
 
 NegListRec<-data.frame("spName"=interInteractionNeg$effect.x,"CauseFood"=NegListCauFood,"CauseCol"=NegListCauCol)
-# PosListCauseとNegListCauseを結合
 PosListRec$Category <- "Positive"
 NegListRec$Category <- "Negative"
-
-# 両方のデータを結合
 combined_recipient_data <- rbind(PosListRec, NegListRec)
-
-# 負の値のRecipientFoodに対して積み上げ方向を反転
 combined_recipient_data$Value <- ifelse(combined_recipient_data$Category == "Negative", -1, 1)
-
-# RecipientFoodを因子型に変換
 combined_recipient_data$CauseFood <- as.factor(combined_recipient_data$CauseFood)
 
-#spNameを3文字ルールに変更
 for(i in 1:nrow(combined_recipient_data)){
   combined_recipient_data$rename[i]<-sp_food_coltp0[combined_recipient_data$spName[i]==sp_food_coltp0$cause,]$bindre.namesp
 }
@@ -188,21 +169,21 @@ FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
       "scale-eater" = "blueviolet", 
       "grazer" = "lightgreen"
     )
-  ) +  # 手動で色を指定
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  # y = 0 の破線
+  ) +  
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  
   scale_y_continuous(breaks = seq(-10, 10, by = 1),
-                     limits = c(-8, 8)  # y軸の範囲を手動で指定
-  ) +  # y軸のメモリを1ごとに
+                     limits = c(-8, 8)  
+  ) +  
   labs(title = "(b)",
        x = "",
        y = "Number of recipient relationship",
        fill = "Trophic guild") + 
   theme(
-    axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"),  # x軸ラベルを縦
-    panel.background = element_rect(fill = "white"),  # 背景色を白に設定
-    plot.background = element_rect(fill = "white"),   # プロット全体の背景色も白に設定
-    axis.line = element_line(color = "black"),  # 軸の線を黒に設定
-    panel.grid = element_blank()  # グリッド線を非表示
+    axis.text.x = element_text(angle = 90, hjust = 1,face = "italic"), 
+    panel.background = element_rect(fill = "white"),  
+    plot.background = element_rect(fill = "white"),  
+    axis.line = element_line(color = "black"),  
+    panel.grid = element_blank() 
   )+
   annotate("rect", xmin = 0, xmax = 3.5, ymin = -8, ymax = -7.8,fill = "royalblue1")+
   annotate("rect", xmin = 3.5, xmax = 4.5, ymin = -8, ymax = -7.8,fill = "blueviolet")+
@@ -218,14 +199,13 @@ grid.arrange(FigS4a, FigS4b, ncol = 2)
 dev.off()
 library(dplyr)
 
-# サンプルデータ
+
 sp_food_coltp0 <- data.frame(
   cause = c("A_compressiceps", "A_dewindti", "Cyathopharynx", "C_horei", "Cyprichromissp", "C_longiventralis", "E_cyanostictus", "G_pfefferi"),
   foodhabit7 = c("shrimp-eater", "fry-feeder", "omnivore", "fry-feeder", "omnivore", "nodata", "grazer", "shrimp-eater"),
   bindre.namesp = c("Alt.com", "Aul.dew", "Cya.pha", "C.hor", "Cyp.ssp", "C.lon", "E.cya", "Gna.pfe")
 )
 
-# ギルドごとのリスト作成
 guildList <- split(sp_food_coltp0$bindre.namesp, sp_food_coltp0$foodhabit7)
 guild_order <- c("fry-feeder", "scale-eater", "shrimp-eater", "piscivore", "omnivore", "grazer", "browser","nodata")
 # Cause側の集計
@@ -259,7 +239,7 @@ res_cause <- lapply(names(guildList), function(guild) {
   mutate(Guild = factor(Guild, levels = guild_order)) %>%
   arrange(Guild)
 
-# Recipient側の集計
+# Recipient species
 res_recipient <- lapply(names(guildList), function(guild) {
   rename_values <- guildList[[guild]]
   df_recipient <- combined_recipient_data %>% filter(rename %in% rename_values)
@@ -293,10 +273,9 @@ res_recipient <- lapply(names(guildList), function(guild) {
 write.csv(res_cause,"guild_match_stats_cause.csv")
 write.csv(res_recipient,"recipient_data_guild_match_stats.csv")
 
-# データフレームの作成
+# Making data frame
 fisher_df_cause <-res_cause[,c(1:5)]
 
-# MatchedとUnmatchedの合計
 fisher_df_cause$Matched <- fisher_df_cause$Matched_Pos + fisher_df_cause$Matched_Neg
 fisher_df_cause$Unmatched <- fisher_df_cause$Unmatched_Pos + fisher_df_cause$Unmatched_Neg
 
@@ -308,7 +287,6 @@ rownames(table_mat_cause) <- c("Matched", "Unmatched")
 
 fisher.test(table_mat_cause)
 
-# NAを0に置き換え、比率列をlong形式に変換
 res_cause_long <- res_cause %>%
   mutate(
     Matched_Pos_Ratio = ifelse(is.na(Matched_Pos_Ratio), 0, Matched_Pos_Ratio),
@@ -330,7 +308,6 @@ ggplot(res_cause_long, aes(x = Guild, y = Ratio, fill = Type)) +
 
 fisher_df_effect <-res_recipient[,c(1:5)]
 
-# MatchedとUnmatchedの合計
 fisher_df_effect$Matched <- fisher_df_effect$Matched_Pos + fisher_df_effect$Matched_Neg
 fisher_df_effect$Unmatched <- fisher_df_effect$Unmatched_Pos + fisher_df_effect$Unmatched_Neg
 
@@ -342,7 +319,6 @@ rownames(table_mat_effect) <- c("Matched", "Unmatched")
 
 fisher.test(table_mat_effect)
 
-# 比率を計算し、NAは0に置き換える
 fisher_df_long <- fisher_df_effect %>%
   mutate(
     Total = Matched + Unmatched,
