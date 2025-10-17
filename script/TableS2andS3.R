@@ -50,36 +50,31 @@ for(i in 1:nrow(hori_foodweb_interaction)){
 hori_foodweb_interaction_with_key<-cbind(hori_foodweb_interaction,hori_foodweb_interaction_key,hori_foodweb_interaction_rkey)
 colnames(hori_foodweb_interaction_with_key)<-c("cause","effect","foodhabit","ratio","cause_effect","effect_cause")
 
-# interInteractionデータフレームに新しい列 'match_type' を追加
-interInteraction$match_type <- "No Match"  # 初期値として "No Match" を設定
-interInteraction$rmatch_type <- "No Match"  # 初期値として "No Match" を設定
+interInteraction$match_type <- "No Match"  
+interInteraction$rmatch_type <- "No Match" 
 
-# hori_foodweb_interaction_with_key との一致を確認し、該当する行の 'match_type' に "Prey-Predator" を記録
+#Prey-Predator
 interInteraction$match_type[interInteraction$cause_effect %in% hori_foodweb_interaction_with_key$cause_effect] <- "Predator-Prey"
 interInteraction$rmatch_type[interInteraction$effect_cause %in% hori_foodweb_interaction_with_key$cause_effect] <- "Prey-Predator"
 
-# correlation_Hori_with_key との一致を確認し、該当する行の 'match_type' に "Aggressor-Victim" を記録
+#Aggressor-Victim
 interInteraction$match_type[interInteraction$cause_effect %in% correlation_Hori_with_key$cause_effect] <- "Aggressor-Victim"
 interInteraction$rmatch_type[interInteraction$effect_cause %in% correlation_Hori_with_key$cause_effect] <- "Victim-Aggressor"
 
-# 両方に一致する場合は "Prey-Predator, Aggressor-Victim" と記録
+# Prey-Predator, Aggressor-Victim
 interInteraction$match_type[interInteraction$cause_effect %in% hori_foodweb_interaction_with_key$cause_effect &
                               interInteraction$cause_effect %in% correlation_Hori_with_key$cause_effect] <- "Predator-Prey, Aggressor-Victim"
 
 interInteraction$rmatch_type[interInteraction$effect_cause %in% hori_foodweb_interaction_with_key$cause_effect &
                               interInteraction$effect_cause %in% correlation_Hori_with_key$cause_effect] <- "Prey-Predator, Victim-Aggressor"
 
-# 結果の表示
 print(interInteraction$match_type)
 print(interInteraction$rmatch_type)
 
-# reversed_cause_effect と effect_cause が一致するかを確認し、新しい列 match_reversed に TRUE/FALSE を記録
 interInteraction$match_reversed <- interInteraction$effect_cause %in% interInteraction$cause_effect
 
-# 結果の表示
 print(interInteraction$match_reversed)
 
-# 結果の表示
 View(interInteraction)
 
 TableS2<-interInteraction %>% select(cause.x,effect.x,causehabtp0,min,mean,max,strength,ratio,match_type,rmatch_type,match_reversed)
