@@ -1,17 +1,6 @@
-#要確認あり(要確認で検索)
-
-#cum_sum(abssum)が足し算して絶対値化したもの
-#abs_meanが絶対値を取って平均値化したもの
-
-#---------8/26 edge.arrow.size=0.5からedge.arrow.size=0.2に編集
-#edge.curve=0.03で様子を見る
-#edgeの太さを変換と矢尻のおきさを合わせたサイズにする
-#popmean:20年間の観測個体数を東西に40年間に変換した後の平均個体数
-
-################
-###igraph描写###
-################
-
+#################
+######igraph#####
+#################
 
 library(igraph)
 library(tidyverse)
@@ -19,23 +8,16 @@ library(plyr)
 library(ggrepel)
 library(tidygraph)
 library(ggrepel)
-
 source("igraphplot2.R")
 
 environment(plot.igraph2) <- asNamespace('igraph')
 environment(igraph.Arrows2) <- asNamespace('igraph')
 
-#データの読み込みと整形
-#GLMbasedatatp0に因果関係リストとSmap係数などが格納されている
+#read data from "imput_files" and "output_files"
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T,fileEncoding = "UTF-8")
 strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-1]
 
-
-#8/26編集なぜかバックスラッシュが二重になる
-#gsub("\\","",sp_food_coltp0$linerename)
-
 strengthtp0<-strengthtp0[,c(-9:-11)]
-
 colnames(strengthtp0)<-c("cause","effect","causepopmean","effectpopmean","causepopsd",
                          "effectpopsd","causehabitat","effecthabitat","smapmin","smapX1st",
                          "smapmedian","smapmean","smapX3rd","smapmax","strength")
@@ -51,18 +33,14 @@ for(i in 1:nrow(strengthtp0)){
   }
 }
 
-#原因側と結果側のまとめ
 countcausetp0<-t(table(intertp0$cause))
 counteffecttp0<-t(table(intertp0$effect))
 
 write.csv(t(countcausetp0),"countcausetp0.csv")
 
 
-#相関図を書くためのデータ化
+#Making a network
 igraphdatatp0<-graph(t(cbind(intertp0$cause,intertp0$effect)))
-
-#nodeやedgeの色分け
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],4]----------------------------------------------------------------
 
 SPCOLtp0=NULL
 for(i in 1:length(V(igraphdatatp0))){
@@ -70,7 +48,6 @@ for(i in 1:length(V(igraphdatatp0))){
 }
 SPCOLtp0
 
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],8]----------------------------------------------------------------
 SPORDERtp0=NULL
 for(i in 1:length(V(igraphdatatp0))){
   SPORDERtp0=c(SPORDERtp0,sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0)$name[i],]$re.position)
@@ -83,24 +60,14 @@ for(i in 1:nrow(intertp0)){
 }
 EdgeCOL
 
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
-
 SPCOLtp0name=NULL
 for(i in 1:length(V(igraphdatatp0))){
   SPCOLtp0name=c(SPCOLtp0name,as.character(sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0)$name[i],]$re.namesp))
 }
 SPCOLtp0name
 
-
-
-
-#判例のラベル
 labels1<-unique(sp_food_coltp0$foodhabit7)
-
 labels1[is.na(labels1)]<-"unclear"
-
-#unclearはいない？
-#labels<-labels[-10]
 
 cols=NULL
 for(i in 1:length(labels)){
@@ -108,33 +75,12 @@ for(i in 1:length(labels)){
 }
 cols
 
-#cols<-cols[-10]
-
-#lay.crctp0<-c(3,32,5,
-#              18,
-#              38,26,14,30,
-#              31,37,
-#              2,4,22,19,33,
-#              9,12,23,7,
-#              10,11,
-#              25,
-#              1,13,16,17,
-#              28,27,
-#              6,
-#              35,20,
-#              24,15,34,21,29,36,
-#              8)
-
-#sort(testlay.crctp0)
-#nodeの順番設定
 lay.crctp0<-layout_in_circle(igraphdatatp0,order=order(SPORDERtp0))
-
 frpostp0forcsv<-layout_in_circle(igraphdatatp0,order=order(SPORDERtp0))
 
 sort(SPORDERtp0)
 plot(lay.crctp0)
 
-#因果関係(edge)の正負わけ
 positivetp0<-NULL
 negativetp0<-NULL
 
@@ -152,11 +98,9 @@ write.csv(positivetp0[,c(1,2)],"poslisttp=0.csv")
 write.csv(table(positivetp0$cause),"positivecausetp0.csv")
 write.csv(table(negativetp0$cause),"negativecausetp0.csv")
 
-#相関図の正もしくは負だけのグラフデータ作成
+#for Fig1a and Fig1b
 igraphdatapositivetp0<-graph(t(cbind(positivetp0$cause,positivetp0$effect)))
 igraphdatanegativetp0<-graph(t(cbind(negativetp0$cause,negativetp0$effect)))
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],4]----------------------------------------------------------------
 
 SPCOLtp0pos=NULL
 for(i in 1:length(V(igraphdatapositivetp0))){
@@ -164,17 +108,11 @@ for(i in 1:length(V(igraphdatapositivetp0))){
 }
 SPCOLtp0pos
 
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],8]----------------------------------------------------------------
-
 SPORDERtp0pos=NULL
 for(i in 1:length(V(igraphdatapositivetp0))){
   SPORDERtp0pos=c(SPORDERtp0pos,sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatapositivetp0)$name[i],]$re.position)
 }
 SPORDERtp0pos
-
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
 
 SPCOLtp0namepos=NULL
 for(i in 1:length(V(igraphdatapositivetp0))){
@@ -182,20 +120,17 @@ for(i in 1:length(V(igraphdatapositivetp0))){
 }
 SPCOLtp0namepos
 
-#正についての相関図についての場所分け
 lay.crctp0pos<-layout_in_circle(igraphdatapositivetp0,order=order(SPORDERtp0pos))
 
 plot(lay.crctp0pos)
 
 ######################
-###円形正の効果のみ###
+###Fig.1a###
 ######################
 igraphdatapositivetp0cir<-igraphdatapositivetp0
 
 V(igraphdatapositivetp0cir)$name<-gsub("_",". ",SPCOLtp0namepos)
 V(igraphdatapositivetp0cir)$name<-gsub(" ","\n",SPCOLtp0namepos)
-
-
 
 pdf("Correlation_diagram_tp0_positive.pdf")
 
@@ -230,20 +165,9 @@ legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=labels,col=cols,pch=16,ncol=
 
 dev.off()
 
-
-
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
-
 for(i in 1:length(V(igraphdatapositivetp0)$name)){
   V(igraphdatapositivetp0)$name[i]<-sp_food_coltp0[V(igraphdatapositivetp0)$name[i]==sp_food_coltp0$cause,]$re.namesp
 }
-
-
-
-
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],4]----------------------------------------------------------------
 
 SPCOLtp0neg=NULL
 for(i in 1:length(V(igraphdatanegativetp0))){
@@ -251,33 +175,20 @@ for(i in 1:length(V(igraphdatanegativetp0))){
 }
 SPCOLtp0neg
 
-
-
-#要編集(plotの場所について)-----------------------------------------------------
-
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],8]----------------------------------------------------------------
-
 SPORDERtp0neg=NULL
 
 for(i in 1:length(V(igraphdatanegativetp0))){
   SPORDERtp0neg=c(SPORDERtp0neg,sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],]$re.position)
 }
 SPORDERtp0neg
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
-
 SPCOLtp0nameneg=NULL
 for(i in 1:length(V(igraphdatanegativetp0))){
   SPCOLtp0nameneg=c(SPCOLtp0nameneg,as.character(sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],]$re.namesp))
 }
 SPCOLtp0nameneg
 
-
 lay.crctp0neg<-layout_in_circle(igraphdatanegativetp0,order=order(SPORDERtp0neg))
-
 plot(lay.crctp0neg)
-
 
 SPCOLtp0nodepopneg=vector()
 for(i in 1:length(V(igraphdatanegativetp0)$name)){
@@ -285,9 +196,6 @@ for(i in 1:length(V(igraphdatanegativetp0)$name)){
 }
 SPCOLtp0nodepopneg
 
-
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],13]----------------------------------------------------------------
 SPCOLtp0noderenameneg=vector()
 for(i in 1:length(V(igraphdatanegativetp0)$name)){
   SPCOLtp0noderenameneg[i]<-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],]$re.namesp
@@ -295,16 +203,12 @@ for(i in 1:length(V(igraphdatanegativetp0)$name)){
 SPCOLtp0noderenameneg
 
 V(igraphdatanegativetp0)$name<-gsub(" ","\n",SPCOLtp0noderenameneg)
-
 V(igraphdatanegativetp0)$name<-gsub(" ","\n",SPCOLtp0nameneg)
 
 
 #######################
-### 円形負の効果のみ###
+### Fig.1b###
 #######################
-
-
-
 pdf("Correlation_diagram_tp0_negative.pdf")
 
 par(oma=c(0,0,0,0),mar=c(0,3,5,3),mgp=c(0,0,0),mfrow=c(1,1))
@@ -339,20 +243,12 @@ legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=labels,col=cols,pch=16,ncol=
 dev.off()
 
 #####################
-### 円形全相互作用###
+### Fig.3###
 #####################
 
 pdf("Correlation_diagram_tp0.pdf")
 
 par(oma=c(0,0,0,0),mar=c(0,3,5,3),mgp=c(0,0,0),mfrow=c(1,1))
-
-
-#SPCOLtp0nodesize=NULL
-#for(i in 1:length(V(igraphdatatp0))){
-#SPCOLtp0nodesize=c(SPCOLtp0nodesize,sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatatp0)$name[i],12])
-#}
-#SPCOLtp0nodesize
-
 
 plot(igraphdatatp0,layout=lay.crctp0,
      vertex.size=17,
@@ -369,48 +265,34 @@ plot(igraphdatatp0,layout=lay.crctp0,
      
      edge.color=as.character(factor(EdgeCOL,labels = c("#ff00007F", "#0000ff7F")))
 )
-#title(main="negative interaction for interspecificity")
 
 par(family="Times")
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=labels,col=cols,pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
-
 legend("bottomleft",legend=c("negative","positive"),col=c("Red", "Blue"),lty=1,bty="n")
-
 
 dev.off()
 
 
-
-
-#########################################
-### 相関図のnodeを平均個体数で重み付け###
+########################################
+### Node size###
 #########################################
 library(dplyr)
 
 popmeandataframetp0<-data.frame("cause"=rownames(popmean),"mean"=popmean)
-
-#2023/08/11編集多分sp_foodcoltp0の読み込みができていない？-----------------------------------------------------------------
-
 plotrenamestp0<-data.frame("cause"=sp_food_coltp0$cause,"renames.n"=renames.n)
-
 plotmeanpoptp01<-left_join(sp_food_coltp0,popmeandataframetp0,by="cause")
-
 plotmeanpoptp02<-left_join(plotmeanpoptp01,plotrenamestp0,by="cause")
 
-
-#2023/08/31加筆-sp_food_coltp0[sp_food_coltp0$cause==V(igraphdatanegativetp0)$name[i],15]----------------------------------------------------------------
 popmeanrenameplottp0<-NULL
 for(i in 1:length(V(igraphdatatp0)$name)){
   popmeanrenameplottp0<-c(popmeanrenameplottp0,plotmeanpoptp02[plotmeanpoptp02$cause==V(igraphdatatp0)$name[i],]$popmean)
 }
 popmeanrenameplottp0
-
 popmeanrenameplotpostp0<-NULL
 for(i in 1:length(V(igraphdatapositivetp0)$name)){
   popmeanrenameplotpostp0<-c(popmeanrenameplotpostp0,plotmeanpoptp02[plotmeanpoptp02$re.namesp==V(igraphdatapositivetp0)$name[i],]$popmean)
 }
 popmeanrenameplotpostp0
-
 
 popmeanrenameplotnegtp0<-NULL
 for(i in 1:length(V(igraphdatanegativetp0)$name)){
@@ -418,20 +300,14 @@ for(i in 1:length(V(igraphdatanegativetp0)$name)){
 }
 popmeanrenameplotnegtp0
 
-
-
-#V(igraphdatapositivetp0)$name<-gsub("_",". ",V(igraphdatapositivetp0)$name)
-#V(igraphdatapositivetp0)$name<-gsub(" ","\n",V(igraphdatapositivetp0)$name)
-
 #############################################
-### 正の相関図のnodeを平均個体数で重み付け###
+### Fig.1a###
 #############################################
 
 V(igraphdatatp0)$name<-SPCOLtp0name
 V(igraphdatatp0)$name<-gsub(" ","\n",SPCOLtp0name)
 
 renames.n<-gsub(" ","\n",sp_food_coltp0$re.namesp)
-#nodeの大きさが個体数の平均ものもの場所3枚とおも同じ
 
 pdf("Correlation_diagram_tp0_positive_mean.pdf")
 
@@ -468,7 +344,7 @@ dev.off()
 
 
 #############################################
-### 負の相関図のnodeを平均個体数で重み付け###
+###Fig.1b###
 #############################################
 
 pdf("Correlation_diagram_tp0_negative_mean.pdf")
@@ -506,9 +382,8 @@ dev.off()
 
 
 ###################################################
-### 全相互作用相関図のnodeを平均個体数で重み付け###
+### Fig.3###
 ###################################################
-
 
 plot(igraphdatatp0,layout=lay.crctp0,
      vertex.size=log(popmeanrenameplottp0)+abs(min(log(popmeanrenameplottp0)))+5,
@@ -535,21 +410,16 @@ plot(igraphdatatp0,layout=lay.crctp0,
 )
 #title(main="negative interaction for interspecificity")
 
-
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=labels,col=cols,pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
-
 legend("bottomleft",legend=c("negative","positive"),col=c("Red", "Blue"),lty=1,bty="n")
-
 
 dev.off()
 
 
 #############################
-### 全相互作用相関図のnode###
+###Fig.3###
 #############################
-
 pdf("Correlation_diagram_tp0.pdf")
-
 
 plot(igraphdatatp0,layout=lay.crctp0,
      vertex.frame.color="black",
@@ -575,29 +445,18 @@ plot(igraphdatatp0,layout=lay.crctp0,
 )
 #title(main="negative interaction for interspecificity")
 
-
 legend(x=par()$usr[1]-0.1,y=par()$usr[4]+0.3,legend=labels,col=cols,pch=16,ncol=3,cex=0.6,box.lwd =NA,xpd=T)
-
 legend("bottomleft",legend=c("negative","positive"),col=c("Red", "Blue"),lty=1,bty="n")
-
 
 dev.off()
 
 
-
-
-#因果関係の正負の割合
+#ratios of posivite and negative relationships
 strengthposnum<-subset(GLMbasedatatp0$strength,GLMbasedatatp0$strength=="positive")
 strengthnegnum<-subset(GLMbasedatatp0$strength,GLMbasedatatp0$strength=="negative")
 
 length(strengthposnum)/length(GLMbasedatatp0$strength)
 length(strengthnegnum)/length(GLMbasedatatp0$strength)
-
-
-
-
-
-
 
 pdf("exam_Smap.pdf")
 for(i in 1:length(spsmaptp0)){
@@ -627,8 +486,7 @@ SmapInterOnly[[i]]<-SmapInterListWithIntB[[i]][[1]][,c(-1,-ncol(SmapInterListWit
 names(SmapInterOnly)<-names(SmapInterListWithIntB)
 
 
-
-#------Smap係数描画のためのデータ整形 2023/07/23編集
+#------Smap coefficients
 
 dataframe_Smap_A_dews<-list()
 
@@ -680,10 +538,8 @@ for(i in 1:length(dataframe_Smap_I_loos_index)){
   dataframe_Smap_I_loo <- rbind(dataframe_Smap_I_loo,dataframe_Smap_I_loos_index[[i]])
 }
 
-
 dataframe_Smap_I_loo$Smap<-as.numeric(dataframe_Smap_I_loo$Smap)
 dataframe_Smap_I_loo$index<-as.numeric(dataframe_Smap_I_loo$index)
-
 
 dataframe_Smap_L_cals<-list()
 
@@ -710,9 +566,7 @@ for(i in 1:length(dataframe_Smap_L_cals_index)){
 }
 
 dataframe_Smap_L_cal$Smap<- as.numeric(dataframe_Smap_L_cal$Smap)
-
 dataframe_Smap_L_cal$index<- as.numeric(dataframe_Smap_L_cal$index)
-
 dataframe_Smap_L_elos<-list()
 
 for(i in 1:ncol(SmapInterOnly$L_elongatus)){
@@ -740,18 +594,13 @@ for(i in 1:length(dataframe_Smap_L_elos_index)){
 dataframe_Smap_L_elo$Smap<-as.numeric(dataframe_Smap_L_elo$Smap)
 dataframe_Smap_L_elo$index<-as.numeric(dataframe_Smap_L_elo$index)
 
-
-
-
 dataframe_Smap_N_fass<-list()
-
 for(i in 1:ncol(SmapInterOnly$N_fasciatus)){
   dataframe_Smap_N_fass[[i]] <- c(SmapInterOnly$N_fasciatus[,i][c(1:19)],rep(NA,1),SmapInterOnly$N_fasciatus[,i][c(20:38)])
   dataframe_Smap_N_fass[[i]] <- cbind(dataframe_Smap_N_fass[[i]],rep(names(SmapInterOnly$N_fasciatus[i]),length(dataframe_Smap_N_fass[[i]])))
 }
 
 dataframe_Smap_N_fass_index<-list()
-
 for(i in 1:length(dataframe_Smap_N_fass)){
   dataframe_Smap_N_fass_index[[i]] <- cbind(dataframe_Smap_N_fass[[i]],c(1:39))
   dataframe_Smap_N_fass_index[[i]] <- as.data.frame(dataframe_Smap_N_fass_index[[i]])
@@ -904,19 +753,11 @@ for(i in 1:length(dataframe_Smap_T_moos_index)){
 dataframe_Smap_T_moo$Smap<-as.numeric(dataframe_Smap_T_moo$Smap)
 dataframe_Smap_T_moo$index<-as.numeric(dataframe_Smap_T_moo$index)
 
-
-
-
-
-
-##-----
-
 dataframe_Smap_T_vits<-list()
 for(i in 1:ncol(SmapInterOnly$T_vittatus)){
   dataframe_Smap_T_vits[[i]] <- c(SmapInterOnly$T_vittatus[,i][c(1:19)],rep(NA,1),SmapInterOnly$T_vittatus[,i][c(20:38)])
   dataframe_Smap_T_vits[[i]] <- cbind(dataframe_Smap_T_vits[[i]],rep(names(SmapInterOnly$T_vittatus[i]),length(dataframe_Smap_T_vits[[i]])))
 }
-
 
 dataframe_Smap_T_vits_index<-list()
 
@@ -1363,10 +1204,7 @@ for_all_L_lem<-cbind(for_all_L_lem,rep(paste(for_all_L_lem$effect,"-",for_all_L_
 colnames(for_all_L_lem)<-c("Smap","cause","index","effect","effect_cause")
 
 
-#個別のggplot-------------
-#凡例の整理2023/09/01編集
-#凡例はSmap係数の平均値で高いものから上に配置
-
+#ggplot for each species
 yearslabel <- c(rep(c(seq(1995,2013,1),NA),2))
 
 
@@ -2315,7 +2153,7 @@ Smap_L_tan<-ggplot(data=dataframe_Smap_L_tan, aes(x = index, y = Smap,  group = 
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(min(dataframe_Smap_L_tan$Smap,na.rm=T)-0.46),  # テキストの中心座標位置
+           x = 30, y = c(min(dataframe_Smap_L_tan$Smap,na.rm=T)-0.46),  
            color = "black",
            size = 4,
            label = "West",
@@ -2370,13 +2208,13 @@ Smap_L_att<-ggplot(data=dataframe_Smap_L_att, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(min(dataframe_Smap_L_att$Smap,na.rm=T)-0.0237),  # テキストの中心座標位置
+           x = 10, y = c(min(dataframe_Smap_L_att$Smap,na.rm=T)-0.0237),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(min(dataframe_Smap_L_att$Smap,na.rm=T)-0.0237),  # テキストの中心座標位置
+           x = 30, y = c(min(dataframe_Smap_L_att$Smap,na.rm=T)-0.0237),  
            color = "black",
            size = 4,
            label = "West",
@@ -2388,7 +2226,7 @@ Smap_L_att<-ggplot(data=dataframe_Smap_L_att, aes(x = index, y = Smap,  group = 
 ggsave(file = "Smap_L_att.pdf", plot = Smap_L_att, dpi = 100, width = 10, height = 5)
 
 
-#--L_labiatus(eff)対L_att(cas)
+#--L_labiatus(eff) L_att(cas)
 dataframe_Smap_L_lab$cause<-gsub(unique(dataframe_Smap_L_lab$cause),sp_food_coltp0[unique(dataframe_Smap_L_lab$cause)==sp_food_coltp0$cause,]$re.namesp,dataframe_Smap_L_lab$cause)
 
 Smap_L_lab<-ggplot(data=dataframe_Smap_L_lab, aes(x = index, y = Smap,  group = cause, color = cause))+
@@ -2414,7 +2252,7 @@ Smap_L_lab<-ggplot(data=dataframe_Smap_L_lab, aes(x = index, y = Smap,  group = 
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(min(dataframe_Smap_L_lab$Smap,na.rm=T)-2.6),  # テキストの中心座標位置
+           x = 30, y = c(min(dataframe_Smap_L_lab$Smap,na.rm=T)-2.6),
            color = "black",
            size = 4,
            label = "West",
@@ -2471,13 +2309,13 @@ Smap_X_pap<-ggplot(data=dataframe_Smap_X_pap, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(min(dataframe_Smap_X_pap$Smap,na.rm=T)-2.55),  # テキストの中心座標位置
+           x = 10, y = c(min(dataframe_Smap_X_pap$Smap,na.rm=T)-2.55), 
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(min(dataframe_Smap_X_pap$Smap,na.rm=T)-2.55),  # テキストの中心座標位置
+           x = 30, y = c(min(dataframe_Smap_X_pap$Smap,na.rm=T)-2.55),  
            color = "black",
            size = 4,
            label = "West",
@@ -2487,8 +2325,6 @@ Smap_X_pap<-ggplot(data=dataframe_Smap_X_pap, aes(x = index, y = Smap,  group = 
                   clip = "off")
 
 ggsave(file = "Smap_X_pap.pdf", plot = Smap_X_pap, dpi = 100, width = 10, height = 5)
-
-
 
 
 Varmoo_leg_orders<-NULL
@@ -2517,9 +2353,6 @@ for(i in 1:length(dataframe_Smap_V_moo$cause)){
 dataframe_Smap_V_moo$cause<-factor(dataframe_Smap_V_moo$cause,levels=c(Varmoo_leg_orders$cause))
 
 
-
-
-
 Smap_V_moo<-ggplot(data=dataframe_Smap_V_moo, aes(x = index, y = Smap,  group = cause, color = cause))+
   geom_line()+
   geom_hline(yintercept=0)+
@@ -2543,7 +2376,7 @@ Smap_V_moo<-ggplot(data=dataframe_Smap_V_moo, aes(x = index, y = Smap,  group = 
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(min(dataframe_Smap_V_moo$Smap,na.rm=T)-0.35),  # テキストの中心座標位置
+           x = 30, y = c(min(dataframe_Smap_V_moo$Smap,na.rm=T)-0.35),  
            color = "black",
            size = 4,
            label = "West",
@@ -2598,7 +2431,7 @@ Smap_P_pol<-ggplot(data=dataframe_Smap_P_pol, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(min(dataframe_Smap_P_pol$Smap,na.rm=T)-0.41),  # テキストの中心座標位置
+           x = 10, y = c(min(dataframe_Smap_P_pol$Smap,na.rm=T)-0.41),
            color = "black",
            size = 4,
            label = "East",
@@ -2660,13 +2493,13 @@ Smap_S_mul<-ggplot(data=dataframe_Smap_S_mul, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(min(dataframe_Smap_S_mul$Smap,na.rm=T)-0.925),  # テキストの中心座標位置
+           x = 10, y = c(min(dataframe_Smap_S_mul$Smap,na.rm=T)-0.925), 
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(min(dataframe_Smap_S_mul$Smap,na.rm=T)-0.925),  # テキストの中心座標位置
+           x = 30, y = c(min(dataframe_Smap_S_mul$Smap,na.rm=T)-0.925), 
            color = "black",
            size = 4,
            label = "West",
@@ -2706,7 +2539,7 @@ FigS2<-grid.arrange(Smap_A_dew,
 
 ggsave('FigS2.pdf',FigS2, width=15, height =8, units = "cm", dpi=200)
 
-#それぞれの種に対するSmap係数(cause)の正負の数(TRUE=Positive,FALSE=Negative) 編集:2023/07/31
+#Number of positive and negative Smap coefficients of each species 
 TF_list_all<-list()
 for(i in 1:length(SmapInterOnly)){
   TF_list_all[[i]]<-SmapInterOnly[[i]]>0
@@ -2719,10 +2552,8 @@ for(i in 1:length(TF_list_all)){
 
 names(TF_list_all_summary)<-names(SmapInterOnly)
 
-#$XXXXが受けて側の種,列名が因果関係の原因側の種
 write.csv(capture.output(TF_list_all_summary),"TF_list_all_summary.csv")
 
-#------Smap係数の平均値とその政府判定 2023/08/02編集
 retioCount<-function(x){if(sum(x>0)/38>0.5){
   return(sum(x>0)/38)
 }else{
@@ -2760,7 +2591,7 @@ for(i in 6:17){
   Smap_TF_list[[i]]<-apply(SmapInterOnly[[i]],2,forEdgeGrade)
 }
 
-#--L_labiatus(eff)対L_att(cas)
+#--L_labiatus(eff) L_att(cas)
 summary(SmapInterOnly[[18]]>0)
 Smap_TF_list[[18]]<-rbind("Positive",sum(SmapInterOnly[[18]]>0)/38)
 
@@ -2770,9 +2601,6 @@ for(i in 19:length(SmapInterOnly)){
 
 names(Smap_TF_list)<-names(SmapInterOnly)
 
-
-#編集点2023/07/28---------------------------------------
-#途中でrownameがないもの(cause-effectが1対1のもの)がいるためforが途中で止まる？
 
 
 Smap_TF_list_t<-list()
@@ -2788,7 +2616,7 @@ for(i in 1:length(Smap_TF_list_t)){
   Smap_TF_list_t_for_col<-rbind(Smap_TF_list_t_for_col,Smap_TF_list_t[[i]])
 }
 
-#cause側を挿入
+
 #L_lemairii(eff)-A_dewindti(cau)
 rownames(Smap_TF_list_t_for_col)[33]<-"A_dewindti"
 #L_labiatus(eff)-L_attenuatus(cau)
@@ -2837,11 +2665,6 @@ for(i in 1:length(forGray)){
 }
 
 colnames(forGray_data)<-c("Neg","Pos")
-
-
-#2023/08/27編集
-
-
 
 Smap_cum_sums<-list()
 for(i in 1:4){
@@ -2907,7 +2730,6 @@ Smap_abs_mean[[5]]<-cbind(Smap_abs_mean[[5]][,1],Smap_abs_mean[[5]][,2],Smap_abs
 #L_labiatus(eff)-L_attenuatus(cau)
 Smap_abs_mean[[18]]<-cbind(Smap_abs_mean[[18]][,1],Smap_abs_mean[[18]][,2],Smap_abs_mean[[18]][,3])
 
-#indはeffect_cause
 Smap_abs_mean_with_inds<-list()
 for(i in 1:length(Smap_abs_mean)){
   Smap_abs_mean_with_inds[[i]]<-cbind(Smap_abs_mean[[i]],paste(Smap_abs_mean[[i]][,1],Smap_abs_mean[[i]][,2],sep="_"))
@@ -2918,9 +2740,6 @@ for(i in 1:length(Smap_abs_mean_with_inds)){
   Smap_abs_mean_with_ind<-rbind(Smap_abs_mean_with_ind,Smap_abs_mean_with_inds[[i]])
 }
 
-
-
-#smap_absmeanでNAがいる？使わないので放置
 colnames(Smap_abs_mean_with_ind)<-c("effect","cause","Smap_abs_mean","effect_cause")
 Smap_abs_mean_with_ind<-as.data.frame(Smap_abs_mean_with_ind)
 Smap_abs_mean_with_ind$Smap_abs_mean<-as.numeric(Smap_abs_mean_with_ind$Smap_abs_mean)
@@ -2940,24 +2759,17 @@ Smap_cum_sum_with_ind<-as.data.frame(Smap_cum_sum_with_ind)
 Smap_cum_sum_with_ind$Smap_cum_sum<-as.numeric(Smap_cum_sum_with_ind$Smap_cum_sum)
 
 join_cum_sum_abs_means<-left_join(Smap_cum_sum_with_ind,Smap_abs_mean_with_ind,by="effect_cause")
-
-
 join_cum_sum_abs_mean<-join_cum_sum_abs_means[-c(5,6)]
-
 colnames(join_cum_sum_abs_mean)<-c("effect","cause","Smap_cum_sum","effect_cause","Smap_abs_mean")
 
 Smap_TF_list_t_wKeys<-left_join(Smap_TF_list_t_wKey,join_cum_sum_abs_mean,by="effect_cause")
-
 igraph_allww8s<-cbind(Smap_TF_list_t_wKeys,forGray_data)
-
-
 
 igraph_allww8<-igraph_allww8s[-c(6,7)]
 
 write.csv(igraph_allww8,"igraph_allww8.csv")
 
 colnames(igraph_allww8)<-c("Strength","ratio","effect_cause","effect","cause","Smap_cum_sum","Smap_abs_mean","Neg","Pos")
-
 igraphdatatp0ww8<-graph(t(cbind(igraph_allww8$cause,igraph_allww8$effect)))
 
 
@@ -2997,8 +2809,6 @@ lay.crctp0ww8<-layout_in_circle(igraphdatatp0ww8,order=order(SPORDERtp0ww8))
 
 
 
-#ww8(edgeの色の重みづけ:ratio,矢印の太さ:log(Smap_cum_sum))は3枚とも場所同じ
-#log変換ではなく比率なり割り算で行う?
 
 
 
