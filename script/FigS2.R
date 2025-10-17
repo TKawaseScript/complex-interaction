@@ -22,8 +22,6 @@ names(SmapInterOnly)<-names(SmapInterListWithIntB)
 
 
 
-#------Smap係数描画のためのデータ整形 2023/07/23編集
-
 dataframe_Smap_A_dews<-list()
 
 for(i in 1:ncol(SmapInterOnly$A_dewindti)){
@@ -732,12 +730,9 @@ for_all_L_lem<-cbind(for_all_L_lem,rep(paste(for_all_L_lem$effect,"-",for_all_L_
 colnames(for_all_L_lem)<-c("Smap","cause","index","effect","effect_cause")
 
 
-#個別のggplot-------------
-#凡例の整理2023/09/01編集
-#凡例はSmap係数の平均値で高いものから上に配置
+#ggplot for each species
 
 yearslabel <- c(rep(c(seq(1995,2013,1),NA),2))
-
 
 
 Auldew_leg_orders<-NULL
@@ -782,13 +777,13 @@ Smap_A_dew<-ggplot(data=dataframe_Smap_A_dew, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),plot.background = element_rect(fill = "transparent",color = NA)  #ここを追加
 )+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_A_dew$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_A_dew$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_A_dew$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_A_dew$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -842,13 +837,13 @@ Smap_J_orn<-ggplot(data=dataframe_Smap_J_orn, aes(x = index, y = Smap,  group = 
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 10))+
   theme(legend.text =element_text(family="Times",face = "italic"),plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_J_orn$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_J_orn$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_J_orn$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_J_orn$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -903,13 +898,13 @@ Smap_N_fas<-ggplot(data=dataframe_Smap_N_fas, aes(x = index, y = Smap,  group = 
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 10))+
   theme(legend.text =element_text(family="Times",face = "italic"),plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_N_fas$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_N_fas$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_N_fas$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_N_fas$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -966,13 +961,13 @@ Smap_Par<-ggplot(data=dataframe_Smap_Par, aes(x = index, y = Smap,  group = caus
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 10))+
   theme(legend.text =element_text(family="Times",face = "italic"),plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_Par$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_Par$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_Par$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_Par$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1028,13 +1023,13 @@ Smap_T_moo<-ggplot(data=dataframe_Smap_T_moo, aes(x = index, y = Smap,  group = 
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 10))+
   theme(legend.text =element_text(family="Times",face = "italic"),plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_T_moo$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_T_moo$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_T_moo$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_T_moo$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1151,13 +1146,13 @@ Smap_L_cal<-ggplot(data=dataframe_Smap_L_cal, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_L_cal$Smap,na.rm=T)+0.2),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_L_cal$Smap,na.rm=T)+0.2),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_L_cal$Smap,na.rm=T)+0.2),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_L_cal$Smap,na.rm=T)+0.2),  
            color = "black",
            size = 4,
            label = "West",
@@ -1213,13 +1208,13 @@ Smap_L_elo<-ggplot(data=dataframe_Smap_L_elo, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_L_elo$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_L_elo$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_L_elo$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_L_elo$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1254,13 +1249,13 @@ Smap_L_lem<-ggplot(data=dataframe_Smap_L_lem, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_L_lem$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_L_lem$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_L_lem$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_L_lem$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1315,13 +1310,13 @@ Smap_N_sex<-ggplot(data=dataframe_Smap_N_sex, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_N_sex$Smap,na.rm=T)+0.1),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_N_sex$Smap,na.rm=T)+0.1),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_N_sex$Smap,na.rm=T)+0.1),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_N_sex$Smap,na.rm=T)+0.1),  
            color = "black",
            size = 4,
            label = "West",
@@ -1377,13 +1372,13 @@ Smap_O_ven<-ggplot(data=dataframe_Smap_O_ven, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_O_ven$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_O_ven$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_O_ven$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_O_ven$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1439,13 +1434,13 @@ Smap_P_mic<-ggplot(data=dataframe_Smap_P_mic, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_P_mic$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_P_mic$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_P_mic$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_P_mic$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1501,13 +1496,13 @@ Smap_P_tre<-ggplot(data=dataframe_Smap_P_tre, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_P_tre$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_P_tre$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_P_tre$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_P_tre$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1563,13 +1558,13 @@ Smap_T_vit<-ggplot(data=dataframe_Smap_T_vit, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_T_vit$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_T_vit$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_T_vit$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_T_vit$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1625,13 +1620,13 @@ Smap_L_dar<-ggplot(data=dataframe_Smap_L_dar, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_L_dar$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_L_dar$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_L_dar$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_L_dar$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1687,13 +1682,13 @@ Smap_L_tan<-ggplot(data=dataframe_Smap_L_tan, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_L_tan$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_L_tan$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_L_tan$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_L_tan$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1749,13 +1744,13 @@ Smap_L_att<-ggplot(data=dataframe_Smap_L_atts, aes(x = index, y = Smap,  group =
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_L_atts$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_L_atts$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_L_atts$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_L_atts$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1788,13 +1783,13 @@ Smap_L_lab<-ggplot(data=dataframe_Smap_L_lab, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_L_lab$Smap,na.rm=T)+1),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_L_lab$Smap,na.rm=T)+1),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_L_lab$Smap,na.rm=T)+1),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_L_lab$Smap,na.rm=T)+1),  
            color = "black",
            size = 4,
            label = "West",
@@ -1852,13 +1847,13 @@ Smap_X_pap<-ggplot(data=dataframe_Smap_X_pap, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_X_pap$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_X_pap$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_X_pap$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_X_pap$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1919,13 +1914,13 @@ Smap_V_moo<-ggplot(data=dataframe_Smap_V_moo, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_V_moo$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_V_moo$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_V_moo$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_V_moo$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -1981,13 +1976,13 @@ Smap_P_pol<-ggplot(data=dataframe_Smap_P_pol, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_P_pol$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_P_pol$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_P_pol$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_P_pol$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -2044,13 +2039,13 @@ Smap_S_mul<-ggplot(data=dataframe_Smap_S_mul, aes(x = index, y = Smap,  group = 
   theme(legend.text =element_text(family="Times",face = "italic"),
         plot.background = element_rect(fill = "transparent",color = NA))+
   annotate(geom = "text",
-           x = 10, y = c(max(dataframe_Smap_S_mul$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 10, y = c(max(dataframe_Smap_S_mul$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "East",
            family="Times")+
   annotate(geom = "text",
-           x = 30, y = c(max(dataframe_Smap_S_mul$Smap,na.rm=T)+0.05),  # テキストの中心座標位置
+           x = 30, y = c(max(dataframe_Smap_S_mul$Smap,na.rm=T)+0.05),  
            color = "black",
            size = 4,
            label = "West",
@@ -2097,6 +2092,3 @@ ggsave('FigS2a.pdf',FigS2a,height = 8, width = 15)
 ggsave('FigS2b.pdf',FigS2b,height = 8, width = 15)
 ggsave('FigS2c.pdf',FigS2c,height = 8, width = 15)
 ggsave('FigS2d.pdf',FigS2d,height = 8, width = 15)
-
-
-#west,east記述　縦は線追加すること
