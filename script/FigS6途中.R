@@ -15,7 +15,7 @@ library(reshape2)
 
 renv::restore()
 
-# データの読み込みと整形
+# Read data from input_files and output_files folders
 sp_food_coltp0 <- read.csv("spcollisttp=0.csv", header = TRUE, fileEncoding = "UTF-8")
 strengthtp0<-read.csv("GLMbasedatatp0.csv",header=T)[,-c(1,10:12)]
 colnames(strengthtp0) <- c("cause", "effect", "causepopmean", "effectpopmean", "causepopsd",
@@ -32,7 +32,6 @@ for (i in 1:nrow(strengthtp0)) {
   }
 }
 
-# 原因側と結果側のまとめ
 countcausetp0 <- t(table(intertp0$cause))
 counteffecttp0 <- t(table(intertp0$effect))
 
@@ -50,12 +49,12 @@ colnames(forGray_data) <- c("Neg", "Pos")
 igraph_allww8s <- cbind(intertp0, forGray_data)
 igraphdatatp0ww8 <- graph(t(cbind(igraph_allww8s$cause, igraph_allww8s$effect)))
 
-# 全体の次数分布
+# degree distribution
 degree_dist_All_all_digdis <- igraph::degree(igraphdatatp0ww8, mode = "all")
 write.csv(degree_dist_All_all_digdis,"degree_dist_All_all_digdis.csv")
 degree_freq_all <- as.numeric(degree_dist_All_all_digdis)
 
-#pythonように整形
+#making a dataset for python script
 python_csv_all<-melt(table(degree_freq_all))
 colnames(python_csv_all)<-c("xvalue","counts")
 write.csv(python_csv_all,"python_csv_all.csv")
