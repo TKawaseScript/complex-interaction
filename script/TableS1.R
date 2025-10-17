@@ -18,7 +18,7 @@ colnames(between)<-c("Species.name","Centrality betweenness")
 
 between$`Centrality betweenness`<-round(between$`Centrality betweenness`,digits = 2)
 
-#種名の表記名を統一
+#Abbreviations of species names
 All_sp_list$x<-gsub("Cunningtonia_longiventralis","C_longiventralis",All_sp_list$x)
 All_sp_list$x<-gsub("Mastacembelus_moorii","M_moorii",All_sp_list$x)
 All_sp_list$x<-gsub("Synodontis_multipunctatus","S_multipunctatus",All_sp_list$x)
@@ -27,8 +27,6 @@ All_sp_list$x<-gsub("Xenotilapia_flavipinnis","X_flavipinnis",All_sp_list$x)
 All_sp_list$x<-gsub("Xenotilapia_boulengeri","X_boulengeri",All_sp_list$x)
 All_sp_list$x<-gsub("Xenotilapia_sp","X_sp",All_sp_list$x)
 
-#9個体以下のもの
-#種名の表記名を統一
 less10_sp<-gsub("Variabilichromis_moorii","V_moorii",less10_pop_sp$x)
 less10_sp<-gsub("Cunningtonia_longiventralis","C_longiventralis",less10_sp)
 less10_sp<-gsub("Xenotilapia_flavipinnis","X_flavipinnis",less10_sp)
