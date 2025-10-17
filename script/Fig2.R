@@ -192,12 +192,12 @@ Fig2_a<-ggplot(data = Fig2Dataframe, aes(x = causePosCount,y=effectPosCount, col
     parse = TRUE, 
     size = 5, 
     box.padding = 0.5, 
-    max.overlaps = Inf,     # 全ラベルを描画
-    force = 2,              # ラベルの重なりを少なくする
-    nudge_y = 0.15,         # ラベルの配置をわずかに調整
-    direction = "both"      # 両方向に調整
+    max.overlaps = Inf,     
+    force = 2,              
+    nudge_y = 0.15,        
+    direction = "both"     
   ) +
-  labs(x = "", y = "Positive input", color = "Food Habit") +  # 軸ラベルと凡例タイトル
+  labs(x = "", y = "Positive input", color = "Food Habit") +  
   theme_minimal()+
   theme(
     text = element_text(family = "Times New Roman"),
@@ -633,7 +633,7 @@ Fig2_i<-ggplot(data = Fig2Dataframe, aes(x = causeAllCount,y=effectAllCount, col
     nudge_y = 0.15,         
     direction = "both"     
   ) +
-  labs(x = "Both output", y = "", color = "Food Habit") +  # 軸ラベルと凡例タイトル
+  labs(x = "Both output", y = "", color = "Food Habit") +  
   theme_minimal()+
   theme(
     text = element_text(family = "Times New Roman"),
@@ -687,7 +687,7 @@ Fig2_j<-ggplot(data = Fig2Dataframe, aes(x = causePosCount,y=causeNegCount, colo
     nudge_y = 0.15,       
     direction = "both"      
   ) +
-  labs(x = "Positive output", y = "Negative output", color = "Food Habit") +  # 軸ラベルと凡例タイトル
+  labs(x = "Positive output", y = "Negative output", color = "Food Habit") +  
   theme_minimal()+
   theme(
     text = element_text(family = "Times New Roman"),
