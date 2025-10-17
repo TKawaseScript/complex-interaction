@@ -27,7 +27,7 @@ for(i in 1:length(degree_dist_All_all_digdis$X)){
 
 Each_Other_lm_data<-data.frame("countCause"=degree_dist_out_digdis$x,"counteffect"=degree_dist_in_digdis$x,"popmean"=popmeans,"food"=foods)
 
-#原因側のリンクにおいての平均個体数と食性との関係
+#effects of abundance and guild of causative species
 
 popmeans<-NULL
 for(i in 1:length(degree_dist_out_digdis$X)){
@@ -77,7 +77,7 @@ write.csv(capture.output(summary(glm_Out)),"TableS4_out.csv")
 
 
 
-#結果側のリンクにおいての平均個体数と食性との関係
+#effects of abundance and guild of recipient species
 
 popmeans<-NULL
 for(i in 1:length(degree_dist_in_digdis$X)){
@@ -125,7 +125,7 @@ pdf("FigS8.pdf")
 plot_grid(plotTableS8a,plotTableS8b)
 dev.off()
 
-#TableS5 媒介中心生モデルのものも追加して解析を行う
+#TableS5
 TableS1data<-read.csv("TableS1.csv")
 
 glmdataCen <-subset(TableS1data,TableS1data$Centrality.betweenness!= "-")
@@ -166,10 +166,6 @@ anova_cent<-anova(lm(mergeData_in_out$Centrality.betweenness~mergeData_in_out$me
 
 write.csv(anova_cent,"TableS5.csv")
 
-#VGAM(双方向の因果関係数~popmean+food)
-
-#媒介中心性~popmean*food
-
 FigS6<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Food.habit)) +   # Centrality.betweenness の散布図
   geom_point(aes(y = Centrality.betweenness, color = Food.habit), size = 3,shape=15) +
   labs(x = "Population mean", y = "Centrality betweenness") + 
@@ -179,9 +175,9 @@ FigS6<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Food
                                 'Fry-Feeder' = 'royalblue1', 
                                 'Scale-Eater' = 'blueviolet', 
                                 'Grazer' = 'lightgreen', 
-                                'Browser' = 'darkorange')) +  # foodごとに色を設定
-  theme(panel.background = element_blank(),   # 背景を透明または白に設定
-        plot.background = element_blank(),    # プロットエリアの背景を透明または白に設定
+                                'Browser' = 'darkorange')) +  
+  theme(panel.background = element_blank(), 
+        plot.background = element_blank(),    
         panel.grid = element_blank(),
         axis.line = element_line(color = "black"))
 
