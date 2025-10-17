@@ -9,7 +9,6 @@ colnames(TimeSeries_40a)<-gsub("Variabilichromis_moorii","V_moorii",colnames(Tim
 
 colnames(TimeSeries_40a)<-gsub("Xenotilapia_flavipinnis","X_flavipinnis",colnames(TimeSeries_40a))
 
-#個体数変動のグラフ
 population<-TimeSeries_40a[,CCM_list]
 
 popname<-NULL
@@ -32,7 +31,7 @@ names(populationList)<-colnames(population)
 years <- seq(1995, 2014, by = 1)
 
 
-pdf("FigS1.pdf", width = 8.27, height = 11.69)  # A4サイズ
+pdf("FigS1.pdf", width = 8.27, height = 11.69)  # A4 size
 par(family="Times",mfrow=c(6,3),mar=c(3,3,1,1),oma=c(1.5,1.5,0,0))
 for(i in 1:length(populationList)){
   plot(populationList[[i]],xlab = "Time index",ylab="Population",type="l",ylim=c(0,460),main=bquote(italic(.(names(populationList)[i]))),xaxt = "n")
