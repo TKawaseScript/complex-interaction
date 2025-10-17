@@ -1,62 +1,43 @@
-#libraryの読み込みとデータの読み込み
 library(rEDM)
 library(dplyr)
 
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
 
 #zはdatascale.csvとしてCCM.RScriptにおいて保存している
-#Smapbasedata <- read.csv(datascale.csv,header=T)[-1]
-
-Smapbasedata<-z
+Smapbasedata <- read.csv(datascale.csv,header=T)[-1]
+#Smapbasedata<-z
 par(mfrow=c(1,1))
 
-
-
-
-
-
-#因果関係を持つ種のリスト作成
-#結果側の種名取得
 effectlist000<-unique(listtp0[,2])
 listtp0$effect
 
-#因果関係の種ごとのリスト作成
 effectlist00<-list()
 for(i in 1:length(effectlist000)){
   effectlist00[[i]]<-subset(listtp0,listtp0[,2]==effectlist000[i])
 }
 
-#原因をリストの名前に挿入、原因側だけのこす
 eachunlist0<-list()
 for(i in 1:length(effectlist00)){
   eachunlist0[[i]]<-unique(c(effectlist00[[i]]$effect,effectlist00[[i]]$cause))
 }
 
-#結果側の種の確認
 effectlisttp0<-vector()
 for(i in 1:length(effectlist00)){
   effectlisttp0[i]<-unique(effectlist00[[i]]$effect)
 }
 
-
-#結果側の種名の省略化
 effectlisttp0<-gsub("Cunningtonia_longiventralis","C_longiventralis",effectlisttp0)
-
 effectlisttp0<-gsub("Synodontis_multipunctatus","S_multipunctatus",effectlisttp0)
-
 effectlisttp0<-gsub("Variabilichromis_moorii","V_moorii",effectlisttp0)
-
-#省略された種名の上書き
 names(eachunlist0)<-effectlisttp0
 
-#Smap係数を計算するための標準化された時系列データにおける列名の種名省略化
+#Abbreviations of species names
 colnames(Smapbasedata)<-gsub("Synodontis_multipunctatus","S_multipunctatus",colnames(Smapbasedata))
 
 colnames(Smapbasedata)<-gsub("Cunningtonia_longiventralis","C_longiventralis",colnames(Smapbasedata))
 
 colnames(Smapbasedata)<-gsub("Variabilichromis_moorii","V_moorii",colnames(Smapbasedata))
 
-#結果側の種名の省略化
 for(i in 1:length(names(eachunlist0))){
   eachunlist0[[i]]<-gsub("Synodontis_multipunctatus","S_multipunctatus",eachunlist0[[i]])
   
@@ -65,7 +46,7 @@ for(i in 1:length(names(eachunlist0))){
   eachunlist0[[i]]<-gsub("Variabilichromis_moorii","V_moorii",eachunlist0[[i]])
 }
 
-#結果側の種ごとに時系列データの抽出とリスト化
+#Recipient species
 spdatasmap<-list()
 for(i in 1:length(names(eachunlist0))){
   spdatasmap[[i]]<-Smapbasedata[,eachunlist0[[i]]]
@@ -73,28 +54,25 @@ for(i in 1:length(names(eachunlist0))){
 
 
 
-#Smapを計算するための非線形性指標の計算
+#Smap
 spthetas<-list()
 for(i in 1:length(spdatasmap)){
   spthetas[[i]]<-block_lnlp(spdatasmap[[i]],method="s-map",theta=c(0,1e-04,3e-04,0.001,0.003,0.01,0.03,0.1,0.3,0.5,0.75,1,1.5,2,3,4,6,8),silent=T,lib=c(matrix(c(1,20,21,40),ncol=2, byrow=T)),pred=c(matrix(c(1,20,21,40),ncol=2, byrow=T)))
 }
-#非線形性指標の最大値の抽出
+
 spbesttheta<-list()
 for(i in 1:length(spthetas)){
   spbesttheta[[i]]<-spthetas[[i]][which.max(spthetas[[i]]$rho),]$theta
 }
 
-#Smap係数の計算
 spdatasmaplnlp<-list()
 for(i in 1:length(spdatasmap)){
   spdatasmaplnlp[[i]]<-block_lnlp(spdatasmap[[i]],method="s-map",theta=spbesttheta[[i]],pred = c(matrix(c(1,20,21,40),ncol=2, byrow=T)),lib=c(matrix(c(1,20,21,40),ncol=2, byrow=T)),silent=T,save_smap_coefficients=T)
 }
 
-#Smap係数のリストのrename
 names(spdatasmaplnlp)<-names(eachunlist0)
 
-#SMAP係数のみを抽出
-#20行めは後半の最初のステップなのでNAを入れる
+#SMAP coefficient
 spsmap<-list()
 for(i in 1:length(spdatasmaplnlp)){
   first<-spdatasmaplnlp[[i]]$smap_coefficients[[1]][c(1:19),]
@@ -102,14 +80,10 @@ for(i in 1:length(spdatasmaplnlp)){
   spsmap[[i]]<-rbind(first,NA,end)
 }
 
-
-
-#Smap係数の列名指定
 for(i in 1:length(spdatasmap)){
   colnames(spsmap[[i]])<-c(eachunlist0[[i]],"b")
 }
 
-#listの命名,結果側のものが挿入
 names(spsmap)<-names(eachunlist0)
 names(spthetas)<-names(eachunlist0)
 
@@ -120,9 +94,7 @@ renames<-gsub("_",".",sp_food_coltp0$cause)
 save(spsmap,file="spsmap.Rdata")
 
 
-
-
-#Smap係数のboxplot
+#box plot of smap coefficient
 pdf("S_map_coef_tp0.pdf")
 
 par(mgp=c(4,1,0),family="Times")
