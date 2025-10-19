@@ -82,7 +82,7 @@ background_rects_cause <- data.frame(
   fill_color = c("royalblue1", "blueviolet","pink","red","gray","lightgreen","darkorange")
 )
 
-FigS4a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
+FigS7a<-ggplot(combined_cause_data, aes(x = rename, fill = RecipientFood)) +
   geom_bar(aes(y = Value), stat = "identity", position = "stack") + 
   scale_fill_manual(
     values = c(
@@ -157,7 +157,7 @@ combined_recipient_data$rename<-factor(combined_recipient_data$rename, levels = 
 combined_recipient_data$CauseFood<-factor(combined_recipient_data$CauseFood,levels=cum_order)
 
 
-FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
+FigS7b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
   geom_bar(aes(y = Value), stat = "identity", position = "stack") + 
   scale_fill_manual(
     values = c(
@@ -194,8 +194,8 @@ FigS4b<-ggplot(combined_recipient_data, aes(x = rename, fill = CauseFood)) +
   annotate("rect", xmin = 21.5, xmax = 25, ymin = -8, ymax = -7.8,fill = "orange")
   
 
-pdf("FigS4.pdf",width = 11.9, height = 8.27)
-grid.arrange(FigS4a, FigS4b, ncol = 2)
+pdf("FigS7.pdf",width = 11.9, height = 8.27)
+grid.arrange(FigS7a, FigS7b, ncol = 2)
 dev.off()
 library(dplyr)
 
