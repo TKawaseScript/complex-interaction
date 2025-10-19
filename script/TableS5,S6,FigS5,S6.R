@@ -8,7 +8,7 @@ library(renv)
 renv::restore()
 
 
-#TableS4
+#TableS5
 degree_dist_All_all_digdis<-read.csv("degree_dist_All_all_digdis.csv")
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T,fileEncoding = "UTF-8")
 degree_dist_out_digdis<-read.csv("degree_dist_out_digdis.csv")
@@ -72,8 +72,8 @@ plotTableS8a<-ggplot(Out_lm_data,aes(x=popmean,y=count,color=food))+
 
 summary(glm_Out)
 
-write.csv(anova_out,"TableS4_anova_out.csv")
-write.csv(capture.output(summary(glm_Out)),"TableS4_out.csv")
+write.csv(anova_out,"TableS5_anova_out.csv")
+write.csv(capture.output(summary(glm_Out)),"TableS5_out.csv")
 
 
 
@@ -117,15 +117,15 @@ plotTableS8b<-ggplot(In_lm_data,aes(x=popmean,y=count,color=food))+
   )
 
 
-write.csv(anova_in,"TableS4_anova_in.csv")
+write.csv(anova_in,"TableS5_anova_in.csv")
 
-write.csv(capture.output(summary(glm_In)),"TableS4_in.csv")
+write.csv(capture.output(summary(glm_In)),"TableS5_in.csv")
 
-pdf("FigS8.pdf")
+pdf("FigS5.pdf")
 plot_grid(plotTableS8a,plotTableS8b)
 dev.off()
 
-#TableS5
+#TableS6
 TableS1data<-read.csv("TableS1.csv")
 
 glmdataCen <-subset(TableS1data,TableS1data$Centrality.betweenness!= "-")
@@ -164,7 +164,7 @@ mergeData_in_out$pred_centrality<-lm_pred
 options(na.action="na.fail")
 anova_cent<-anova(lm(mergeData_in_out$Centrality.betweenness~mergeData_in_out$mean*mergeData_in_out$Food.habit))
 
-write.csv(anova_cent,"TableS5.csv")
+write.csv(anova_cent,"TableS6.csv")
 
 FigS6<-ggplot(mergeData_in_out, aes(x = mean,y=Centrality.betweenness,color=Food.habit)) +   # Centrality.betweenness の散布図
   geom_point(aes(y = Centrality.betweenness, color = Food.habit), size = 3,shape=15) +
