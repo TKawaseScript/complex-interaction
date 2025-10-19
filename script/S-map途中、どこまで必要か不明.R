@@ -2,9 +2,9 @@ library(rEDM)
 library(dplyr)
 
 sp_food_coltp0<-read.csv("spcollisttp=0.csv",header=T)
-
-#zはdatascale.csvとしてCCM.RScriptにおいて保存している
 Smapbasedata <- read.csv(datascale.csv,header=T)[-1]
+
+#or use z from CCM.R
 #Smapbasedata<-z
 par(mfrow=c(1,1))
 
@@ -33,16 +33,12 @@ names(eachunlist0)<-effectlisttp0
 
 #Abbreviations of species names
 colnames(Smapbasedata)<-gsub("Synodontis_multipunctatus","S_multipunctatus",colnames(Smapbasedata))
-
 colnames(Smapbasedata)<-gsub("Cunningtonia_longiventralis","C_longiventralis",colnames(Smapbasedata))
-
 colnames(Smapbasedata)<-gsub("Variabilichromis_moorii","V_moorii",colnames(Smapbasedata))
 
 for(i in 1:length(names(eachunlist0))){
   eachunlist0[[i]]<-gsub("Synodontis_multipunctatus","S_multipunctatus",eachunlist0[[i]])
-  
   eachunlist0[[i]]<-gsub("Cunningtonia_longiventralis","C_longiventralis",eachunlist0[[i]])
-  
   eachunlist0[[i]]<-gsub("Variabilichromis_moorii","V_moorii",eachunlist0[[i]])
 }
 
@@ -51,7 +47,6 @@ spdatasmap<-list()
 for(i in 1:length(names(eachunlist0))){
   spdatasmap[[i]]<-Smapbasedata[,eachunlist0[[i]]]
 }
-
 
 
 #Smap
@@ -107,10 +102,7 @@ for(i in 1:length(spsmaptp0)){
 dev.off()
 
 
-
-#Smap係数の代表値の計算(min,max,3rd Qu...)
-
-# 必要な初期化
+#Summarize Smap coefficients (min,max,3rd Qu...)
 d <- data.frame() 
 d1 <- data.frame()  
 d2 <- data.frame() 
@@ -127,27 +119,23 @@ for(i in 1:length(spsmap)) {
   d <- rep(effectlisttp0[[i]], nrow(d1) * ncol(d1))  
   
   for(j in 1:ncol(spsmap[[i]])) {    
-    d3 <- c(d3, rep(colnames(spsmap[[i]])[j], nrow(d1)))  # 各列名のリピート
-    d5 <- c(d5, d1[,j])  # 各列のデータを追加
+    d3 <- c(d3, rep(colnames(spsmap[[i]])[j], nrow(d1)))  
+    d5 <- c(d5, d1[,j]) 
   }
   
-  # `index`のリピート回数を、他の列の長さに合わせる
-  index_length <- length(d)  # 他の列の長さと一致させる
+  index_length <- length(d)  
   d2 <- data.frame(
     "effect" = d,
     "cause" = d3,
-    "index" = rep(d6, length.out = index_length),  # 行数を`length.out`で調整
+    "index" = rep(d6, length.out = index_length),  
     "menas" = d5
   )
   
-  # リストにデータを追加
   d5tp0[[i]] <- d2 
   
-  # 初期化
   d3 <- NULL  
   d5 <- NULL  
 }
-
 
 
 d7<-list()
@@ -162,15 +150,10 @@ for(i in 1:length(d7)){
 }
 bind_rows(d4tp0)
 
-#causeがbのものを削除
 for(i in 1: length(d4tp0)){
   d4tp0[[i]] <- d4tp0[[i]] %>%　filter(cause!="b")
 }
 
-
-
-
-#代表値が格納されたリストのrenameとoutput
 write.csv(as.data.frame(bind_rows(d4tp0)),"Smapbasedatatp0.csv")
 
 #個体数の平均値とsdの計算
